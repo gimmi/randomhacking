@@ -42,7 +42,14 @@ ExtMvc.OrderDetailSearchContainer = Ext.extend(Ext.Container, {
 			labelWidth: 100,
 			border: false,
 			padding: 10,
-			items: [{ name: 'orderId', xtype: 'textfield', fieldLabel: 'orderId', anchor: '100%' }, { name: 'productId', xtype: 'textfield', fieldLabel: 'productId', anchor: '100%' }, { name: 'unitPrice', xtype: 'textfield', fieldLabel: 'unitPrice', anchor: '100%' }, { name: 'quantity', xtype: 'textfield', fieldLabel: 'quantity', anchor: '100%' }, { name: 'discount', xtype: 'textfield', fieldLabel: 'discount', anchor: '100%' }],
+			items: [
+				{ name: 'orderId', xtype: 'numberfield', fieldLabel: 'orderId' },
+				{ name: 'productId', xtype: 'numberfield', fieldLabel: 'productId' },
+				{ name: 'unitPrice', xtype: 'numberfield', fieldLabel: 'unitPrice' },
+				{ name: 'quantity', xtype: 'numberfield', fieldLabel: 'quantity' },
+				{ name: 'discount', xtype: 'numberfield', fieldLabel: 'discount' }
+			],
+			buttonAlign: 'left', 
 			buttons: [{
 				xtype: 'button',
 				text: 'Search',

@@ -42,7 +42,10 @@ ExtMvc.TerritoryNormalSearchContainer = Ext.extend(Ext.Container, {
 			labelWidth: 100,
 			border: false,
 			padding: 10,
-			items: [{ name: 'territoryDescription', xtype: 'textfield', fieldLabel: 'territoryDescription', anchor: '100%' }],
+			items: [
+				{ name: 'territoryDescription', xtype: 'textfield', fieldLabel: 'territoryDescription' }
+			],
+			buttonAlign: 'left', 
 			buttons: [{
 				xtype: 'button',
 				text: 'Search',

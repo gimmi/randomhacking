@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IFactory.cs" />
     <Compile Include="IPresentableSet.cs" />
     <Compile Include="IRepository.cs" />
     <Compile Include="IStringConverter.cs" />

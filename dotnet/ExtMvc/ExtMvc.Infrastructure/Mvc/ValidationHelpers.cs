@@ -14,7 +14,7 @@ namespace Nexida.Infrastructure.Mvc
 			}
 		}
 
-		public object BuildErrorDictionary(ModelStateDictionary modelState)
+		public static object BuildErrorDictionary(ModelStateDictionary modelState)
 		{
 			return BuildErrorDictionary(MakeHierarchical(modelState));
 		}

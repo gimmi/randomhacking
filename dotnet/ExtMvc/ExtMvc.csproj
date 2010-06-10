@@ -1012,6 +1012,9 @@
     <Content Include="ext\resources\images\yourtheme\window\right-corners.png" />
     <Content Include="ext\resources\images\yourtheme\window\top-bottom.png" />
     <Content Include="Global.asax" />
+    <Content Include="images\delete.png" />
+    <Content Include="images\refresh.png" />
+    <Content Include="images\save.png" />
     <Content Include="js\ExtMvc.Category.js" />
     <Content Include="js\ExtMvc.CategoryColumn.js" />
     <Content Include="js\ExtMvc.CategoryField.js" />

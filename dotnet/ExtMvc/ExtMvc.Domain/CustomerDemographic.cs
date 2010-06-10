@@ -22,48 +22,22 @@ namespace ExtMvc.Domain
 		}
 
 
-		public virtual bool Equals(CustomerDemographic other)
+		public override bool Equals(object obj)
 		{
+			if(ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+			var other = obj as CustomerDemographic;
 			if(ReferenceEquals(null, other))
 			{
 				return false;
-			}
-			if(ReferenceEquals(this, other))
-			{
-				return true;
 			}
 			if(CustomerTypeId != default(string))
 			{
 				return other.CustomerTypeId == CustomerTypeId;
 			}
-			return other.CustomerTypeId == CustomerTypeId && other.CustomerDesc == CustomerDesc;
-		}
-
-		public override bool Equals(object obj)
-		{
-			if(ReferenceEquals(null, obj))
-			{
-				return false;
-			}
-			if(ReferenceEquals(this, obj))
-			{
-				return true;
-			}
-			if(obj.GetType() != typeof(CustomerDemographic))
-			{
-				return false;
-			}
-			return Equals((CustomerDemographic)obj);
-		}
-
-		public static bool operator ==(CustomerDemographic left, CustomerDemographic right)
-		{
-			return Equals(left, right);
-		}
-
-		public static bool operator !=(CustomerDemographic left, CustomerDemographic right)
-		{
-			return !Equals(left, right);
+			return base.Equals(obj);
 		}
 
 		public override int GetHashCode()
@@ -77,8 +51,7 @@ namespace ExtMvc.Domain
 				}
 				else
 				{
-					result = (result*397) ^ ((CustomerTypeId != default(string)) ? CustomerTypeId.GetHashCode() : 0);
-					result = (result*397) ^ ((CustomerDesc != default(string)) ? CustomerDesc.GetHashCode() : 0);
+					result = base.GetHashCode();
 				}
 				return result;
 			}

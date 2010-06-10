@@ -20,25 +20,47 @@ ExtMvc.OrderFormPanel = Ext.extend(Ext.form.FormPanel, {
 			padding: 10,
 			items: [
 				{ name: 'StringId', xtype: 'hidden' },
-				{ name: 'OrderId', fieldLabel: 'OrderId', xtype: 'textfield', anchor: '100%' },
-				{ name: 'OrderDate', fieldLabel: 'OrderDate', xtype: 'textfield', anchor: '100%' },
-				{ name: 'RequiredDate', fieldLabel: 'RequiredDate', xtype: 'textfield', anchor: '100%' },
-				{ name: 'ShippedDate', fieldLabel: 'ShippedDate', xtype: 'textfield', anchor: '100%' },
-				{ name: 'Freight', fieldLabel: 'Freight', xtype: 'textfield', anchor: '100%' },
-				{ name: 'ShipName', fieldLabel: 'ShipName', xtype: 'textfield', anchor: '100%' },
-				{ name: 'ShipAddress', fieldLabel: 'ShipAddress', xtype: 'textfield', anchor: '100%' },
-				{ name: 'ShipCity', fieldLabel: 'ShipCity', xtype: 'textfield', anchor: '100%' },
-				{ name: 'ShipRegion', fieldLabel: 'ShipRegion', xtype: 'textfield', anchor: '100%' },
-				{ name: 'ShipPostalCode', fieldLabel: 'ShipPostalCode', xtype: 'textfield', anchor: '100%' },
-				{ name: 'ShipCountry', fieldLabel: 'ShipCountry', xtype: 'textfield', anchor: '100%' },
-				{ name: 'Customer', fieldLabel: 'Customer', xtype: 'ExtMvc.CustomerField', anchor: '100%' },
-				{ name: 'Employee', fieldLabel: 'Employee', xtype: 'ExtMvc.EmployeeField', anchor: '100%' }
+				{ name: 'OrderId', fieldLabel: 'OrderId', xtype: 'numberfield' },
+				{ name: 'OrderDate', fieldLabel: 'OrderDate', xtype: 'datefield' },
+				{ name: 'RequiredDate', fieldLabel: 'RequiredDate', xtype: 'datefield' },
+				{ name: 'ShippedDate', fieldLabel: 'ShippedDate', xtype: 'datefield' },
+				{ name: 'Freight', fieldLabel: 'Freight', xtype: 'numberfield' },
+				{ name: 'ShipName', fieldLabel: 'ShipName', xtype: 'textfield' },
+				{ name: 'ShipAddress', fieldLabel: 'ShipAddress', xtype: 'textfield' },
+				{ name: 'ShipCity', fieldLabel: 'ShipCity', xtype: 'textfield' },
+				{ name: 'ShipRegion', fieldLabel: 'ShipRegion', xtype: 'textfield' },
+				{ name: 'ShipPostalCode', fieldLabel: 'ShipPostalCode', xtype: 'textfield' },
+				{ name: 'ShipCountry', fieldLabel: 'ShipCountry', xtype: 'textfield' },
+				{ name: 'Customer', fieldLabel: 'Customer', xtype: 'ExtMvc.CustomerField' },
+				{ name: 'Employee', fieldLabel: 'Employee', xtype: 'ExtMvc.EmployeeField' }
 			]
 		}];
 
-		this.buttons = [
-			{ text: 'Save', handler: this.saveItemButtonHandler, scope: this }
-		];
+		this.tbar = {
+			xtype: 'toolbar',
+			items: [{
+				xtype: 'button',
+				text: 'Save',
+				icon: '/images/save.png',
+				cls: 'x-btn-text-icon',
+				handler: this.saveItemButtonHandler,
+				scope: this
+			}, {
+				xtype: 'button',
+				text: 'Refresh',
+				icon: '/ext/resources/images/default/grid/refresh.gif',
+				cls: 'x-btn-text-icon',
+				handler: this.refreshItemButtonHandler,
+				scope: this
+			}, {
+				xtype: 'button',
+				text: 'Delete',
+				icon: '/images/delete.png',
+				cls: 'x-btn-text-icon',
+				handler: this.deleteItemButtonHandler,
+				scope: this
+			}]
+		};
 
 		ExtMvc.OrderFormPanel.superclass.initComponent.call(this);
 	},
@@ -46,35 +68,63 @@ ExtMvc.OrderFormPanel = Ext.extend(Ext.form.FormPanel, {
 	loadItem: function (stringId) {
 		this.el.mask('Loading...', 'x-mask-loading');
 		Rpc.call({
-			url: '/Order/Read',
+			url: '/Order/Load',
 			params: { stringId: stringId },
-			success: function (ret) {
-				this.getForm().setValues(ret.data);
-			},
-			callback: function () {
+			scope: this,
+			success: function (item) {
 				this.el.unmask();
-			},
-			scope: this
+				this.setItem(item);
+			}
 		});
 	},
 
+	setItem: function (item) {
+		this.getForm().setValues(item);
+	},
+
 	saveItemButtonHandler: function () {
-		if (!this.getForm().isValid()) {
-			return;
-		}
 		this.el.mask('Saving...', 'x-mask-loading');
 		Rpc.call({
-			url: '/Order/Update',
+			url: '/Order/Save',
 			params: { item: this.getForm().getFieldValues() },
 			scope: this,
 			success: function (result) {
-				if (!result.success) {
-					this.getForm().markInvalid(result.errors.item);
-				}
-			},
-			callback: function () {
 				this.el.unmask();
+				if (result.success) {
+					Ext.MessageBox.show({ msg: 'Changes saved successfully.', icon: Ext.MessageBox.INFO, buttons: Ext.MessageBox.OK });
+				} else {
+					this.getForm().markInvalid(result.errors.item);
+					Ext.MessageBox.show({ msg: 'Error saving data. Correct errors and retry.', icon: Ext.MessageBox.ERROR, buttons: Ext.MessageBox.OK });
+				}
 			}
 		});
+	},
+
+	refreshItemButtonHandler: function () {
+		Ext.MessageBox.confirm('Refresh', 'All modifications will be lost, continue?', function (buttonId) {
+			if (buttonId === 'yes') {
+				var stringId = this.getForm().getFieldValues().StringId;
+				if (Ext.isEmpty(stringId)) {
+					this.getForm().reset();
+				} else {
+					this.loadItem(stringId);
+				}
+			}
+		}, this);
+	},
+
+	deleteItemButtonHandler: function () {
+		Ext.MessageBox.confirm('Delete', 'Are you sure?', function (buttonId) {
+			if (buttonId === 'yes') {
+				Rpc.call({
+					url: '/$name$/Delete',
+					params: { item: this.getForm().getFieldValues() },
+					scope: this,
+					success: function () {
+						this.el.mask('Item deleted');
+					}
+				});
+			}
+		}, this);
 	}
 });

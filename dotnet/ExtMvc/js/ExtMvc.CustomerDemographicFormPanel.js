@@ -20,14 +20,36 @@ ExtMvc.CustomerDemographicFormPanel = Ext.extend(Ext.form.FormPanel, {
 			padding: 10,
 			items: [
 				{ name: 'StringId', xtype: 'hidden' },
-				{ name: 'CustomerTypeId', fieldLabel: 'CustomerTypeId', xtype: 'textfield', anchor: '100%' },
-				{ name: 'CustomerDesc', fieldLabel: 'CustomerDesc', xtype: 'textfield', anchor: '100%' }
+				{ name: 'CustomerTypeId', fieldLabel: 'CustomerTypeId', xtype: 'textfield' },
+				{ name: 'CustomerDesc', fieldLabel: 'CustomerDesc', xtype: 'textfield' }
 			]
 		}];
 
-		this.buttons = [
-			{ text: 'Save', handler: this.saveItemButtonHandler, scope: this }
-		];
+		this.tbar = {
+			xtype: 'toolbar',
+			items: [{
+				xtype: 'button',
+				text: 'Save',
+				icon: '/images/save.png',
+				cls: 'x-btn-text-icon',
+				handler: this.saveItemButtonHandler,
+				scope: this
+			}, {
+				xtype: 'button',
+				text: 'Refresh',
+				icon: '/images/refresh.png',
+				cls: 'x-btn-text-icon',
+				handler: this.refreshItemButtonHandler,
+				scope: this
+			}, {
+				xtype: 'button',
+				text: 'Delete',
+				icon: '/images/delete.png',
+				cls: 'x-btn-text-icon',
+				handler: this.deleteItemButtonHandler,
+				scope: this
+			}]
+		};
 
 		ExtMvc.CustomerDemographicFormPanel.superclass.initComponent.call(this);
 	},
@@ -35,34 +57,55 @@ ExtMvc.CustomerDemographicFormPanel = Ext.extend(Ext.form.FormPanel, {
 	loadItem: function (stringId) {
 		this.el.mask('Loading...', 'x-mask-loading');
 		Rpc.call({
-			url: '/CustomerDemographic/Read',
+			url: '/CustomerDemographic/Load',
 			params: { stringId: stringId },
-			success: function (ret) {
-				this.getForm().setValues(ret.data);
-			},
-			callback: function () {
+			scope: this,
+			success: function (item) {
 				this.el.unmask();
-			},
-			scope: this
+				this.setItem(item);
+			}
 		});
 	},
 
+	setItem: function (item) {
+		this.getForm().setValues(item);
+	},
+
 	saveItemButtonHandler: function () {
-		if (!this.getForm().isValid()) {
-			return;
-		}
 		this.el.mask('Saving...', 'x-mask-loading');
 		Rpc.call({
-			url: '/CustomerDemographic/Update',
+			url: '/CustomerDemographic/Save',
 			params: { item: this.getForm().getFieldValues() },
 			scope: this,
 			success: function (result) {
-				if (!result.success) {
-					this.getForm().markInvalid(result.errors.item);
-				}
-			},
-			callback: function () {
 				this.el.unmask();
+				if (result.success) {
+					Ext.MessageBox.show({ msg: 'Changes saved successfully.', icon: Ext.MessageBox.INFO, buttons: Ext.MessageBox.OK });
+				} else {
+					this.getForm().markInvalid(result.errors.item);
+					Ext.MessageBox.show({ msg: 'Error saving data. Correct errors and retry.', icon: Ext.MessageBox.ERROR, buttons: Ext.MessageBox.OK });
+				}
+			}
+		});
+	},
+
+	refreshItemButtonHandler: function () {
+		Ext.MessageBox.confirm('Refresh', 'All modifications will be lost, continue?', function (buttonId) {
+			if (buttonId === 'yes') {
+				var stringId = this.getForm().getFieldValues().StringId;
+				if (Ext.isEmpty(stringId)) {
+					this.getForm().reset();
+				} else {
+					this.loadItem(stringId);
+				}
+			}
+		}, this);
+	},
+
+	deleteItemButtonHandler: function () {
+		Ext.MessageBox.confirm('Delete', 'Are you sure?', function (buttonId) {
+			if (buttonId === 'yes') {
+				alert('TODO');
 			}
 		});
 	}

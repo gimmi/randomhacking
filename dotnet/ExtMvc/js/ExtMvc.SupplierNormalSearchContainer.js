@@ -42,7 +42,21 @@ ExtMvc.SupplierNormalSearchContainer = Ext.extend(Ext.Container, {
 			labelWidth: 100,
 			border: false,
 			padding: 10,
-			items: [{ name: 'supplierId', xtype: 'textfield', fieldLabel: 'supplierId', anchor: '100%' }, { name: 'companyName', xtype: 'textfield', fieldLabel: 'companyName', anchor: '100%' }, { name: 'contactName', xtype: 'textfield', fieldLabel: 'contactName', anchor: '100%' }, { name: 'contactTitle', xtype: 'textfield', fieldLabel: 'contactTitle', anchor: '100%' }, { name: 'address', xtype: 'textfield', fieldLabel: 'address', anchor: '100%' }, { name: 'city', xtype: 'textfield', fieldLabel: 'city', anchor: '100%' }, { name: 'region', xtype: 'textfield', fieldLabel: 'region', anchor: '100%' }, { name: 'postalCode', xtype: 'textfield', fieldLabel: 'postalCode', anchor: '100%' }, { name: 'country', xtype: 'textfield', fieldLabel: 'country', anchor: '100%' }, { name: 'phone', xtype: 'textfield', fieldLabel: 'phone', anchor: '100%' }, { name: 'fax', xtype: 'textfield', fieldLabel: 'fax', anchor: '100%' }, { name: 'homePage', xtype: 'textfield', fieldLabel: 'homePage', anchor: '100%' }],
+			items: [
+				{ name: 'supplierId', xtype: 'numberfield', fieldLabel: 'supplierId' },
+				{ name: 'companyName', xtype: 'textfield', fieldLabel: 'companyName' },
+				{ name: 'contactName', xtype: 'textfield', fieldLabel: 'contactName' },
+				{ name: 'contactTitle', xtype: 'textfield', fieldLabel: 'contactTitle' },
+				{ name: 'address', xtype: 'textfield', fieldLabel: 'address' },
+				{ name: 'city', xtype: 'textfield', fieldLabel: 'city' },
+				{ name: 'region', xtype: 'textfield', fieldLabel: 'region' },
+				{ name: 'postalCode', xtype: 'textfield', fieldLabel: 'postalCode' },
+				{ name: 'country', xtype: 'textfield', fieldLabel: 'country' },
+				{ name: 'phone', xtype: 'textfield', fieldLabel: 'phone' },
+				{ name: 'fax', xtype: 'textfield', fieldLabel: 'fax' },
+				{ name: 'homePage', xtype: 'textfield', fieldLabel: 'homePage' }
+			],
+			buttonAlign: 'left', 
 			buttons: [{
 				xtype: 'button',
 				text: 'Search',

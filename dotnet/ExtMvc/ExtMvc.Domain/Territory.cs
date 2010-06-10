@@ -36,48 +36,22 @@ namespace ExtMvc.Domain
 		}
 
 
-		public virtual bool Equals(Territory other)
+		public override bool Equals(object obj)
 		{
+			if(ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+			var other = obj as Territory;
 			if(ReferenceEquals(null, other))
 			{
 				return false;
-			}
-			if(ReferenceEquals(this, other))
-			{
-				return true;
 			}
 			if(TerritoryId != default(string))
 			{
 				return other.TerritoryId == TerritoryId;
 			}
-			return other.TerritoryId == TerritoryId && other.TerritoryDescription == TerritoryDescription && 1 == 1 && other.Region == Region;
-		}
-
-		public override bool Equals(object obj)
-		{
-			if(ReferenceEquals(null, obj))
-			{
-				return false;
-			}
-			if(ReferenceEquals(this, obj))
-			{
-				return true;
-			}
-			if(obj.GetType() != typeof(Territory))
-			{
-				return false;
-			}
-			return Equals((Territory)obj);
-		}
-
-		public static bool operator ==(Territory left, Territory right)
-		{
-			return Equals(left, right);
-		}
-
-		public static bool operator !=(Territory left, Territory right)
-		{
-			return !Equals(left, right);
+			return base.Equals(obj);
 		}
 
 		public override int GetHashCode()
@@ -91,10 +65,7 @@ namespace ExtMvc.Domain
 				}
 				else
 				{
-					result = (result*397) ^ ((TerritoryId != default(string)) ? TerritoryId.GetHashCode() : 0);
-					result = (result*397) ^ ((TerritoryDescription != default(string)) ? TerritoryDescription.GetHashCode() : 0);
-
-					result = (result*397) ^ ((Region != default(Region)) ? Region.GetHashCode() : 0);
+					result = base.GetHashCode();
 				}
 				return result;
 			}

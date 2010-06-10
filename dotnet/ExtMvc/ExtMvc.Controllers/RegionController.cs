@@ -29,7 +29,7 @@ namespace ExtMvc.Controllers
 			_stringConverter = stringConverter;
 		}
 
-		public ActionResult Create(RegionDto item)
+		public ActionResult Save(RegionDto item)
 		{
 			using(_conversation.SetAsCurrent())
 			{
@@ -37,35 +37,31 @@ namespace ExtMvc.Controllers
 				ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
 				if(ModelState.IsValid)
 				{
-					_repository.Create(itemMapped);
+					bool isNew = string.IsNullOrEmpty(item.StringId);
+					if(isNew)
+					{
+						_repository.Create(itemMapped);
+					}
+					if(!isNew)
+					{
+						_repository.Update(itemMapped);
+					}
 					_conversation.Flush();
 				}
-				return Json(new{ success = true });
+				return Json(new{
+					success = ModelState.IsValid,
+					errors = ValidationHelpers.BuildErrorDictionary(ModelState),
+				});
 			}
 		}
 
-		public ActionResult Read(string stringId)
+		public ActionResult Load(string stringId)
 		{
 			using(_conversation.SetAsCurrent())
 			{
 				Region item = _stringConverter.FromString(stringId);
 				RegionDto itemDto = _mapper.Map<Region, RegionDto>(item);
 				return Json(itemDto);
-			}
-		}
-
-		public ActionResult Update(RegionDto item)
-		{
-			using(_conversation.SetAsCurrent())
-			{
-				Region itemMapped = _mapper.Map<RegionDto, Region>(item);
-				ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
-				if(ModelState.IsValid)
-				{
-					_repository.Update(itemMapped);
-					_conversation.Flush();
-				}
-				return Json(new{ success = true });
 			}
 		}
 

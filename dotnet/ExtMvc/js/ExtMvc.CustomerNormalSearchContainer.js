@@ -42,7 +42,10 @@ ExtMvc.CustomerNormalSearchContainer = Ext.extend(Ext.Container, {
 			labelWidth: 100,
 			border: false,
 			padding: 10,
-			items: [{ name: 'contactName', xtype: 'textfield', fieldLabel: 'contactName', anchor: '100%' }],
+			items: [
+				{ name: 'contactName', xtype: 'textfield', fieldLabel: 'contactName' }
+			],
+			buttonAlign: 'left', 
 			buttons: [{
 				xtype: 'button',
 				text: 'Search',

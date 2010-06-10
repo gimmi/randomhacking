@@ -32,48 +32,22 @@ namespace ExtMvc.Domain
 		}
 
 
-		public virtual bool Equals(Region other)
+		public override bool Equals(object obj)
 		{
+			if(ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+			var other = obj as Region;
 			if(ReferenceEquals(null, other))
 			{
 				return false;
-			}
-			if(ReferenceEquals(this, other))
-			{
-				return true;
 			}
 			if(RegionId != default(int))
 			{
 				return other.RegionId == RegionId;
 			}
-			return other.RegionId == RegionId && other.RegionDescription == RegionDescription && 1 == 1;
-		}
-
-		public override bool Equals(object obj)
-		{
-			if(ReferenceEquals(null, obj))
-			{
-				return false;
-			}
-			if(ReferenceEquals(this, obj))
-			{
-				return true;
-			}
-			if(obj.GetType() != typeof(Region))
-			{
-				return false;
-			}
-			return Equals((Region)obj);
-		}
-
-		public static bool operator ==(Region left, Region right)
-		{
-			return Equals(left, right);
-		}
-
-		public static bool operator !=(Region left, Region right)
-		{
-			return !Equals(left, right);
+			return base.Equals(obj);
 		}
 
 		public override int GetHashCode()
@@ -87,8 +61,7 @@ namespace ExtMvc.Domain
 				}
 				else
 				{
-					result = (result*397) ^ ((RegionId != default(int)) ? RegionId.GetHashCode() : 0);
-					result = (result*397) ^ ((RegionDescription != default(string)) ? RegionDescription.GetHashCode() : 0);
+					result = base.GetHashCode();
 				}
 				return result;
 			}

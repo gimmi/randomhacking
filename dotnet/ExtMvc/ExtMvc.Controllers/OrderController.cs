@@ -30,7 +30,7 @@ namespace ExtMvc.Controllers
 			_stringConverter = stringConverter;
 		}
 
-		public ActionResult Create(OrderDto item)
+		public ActionResult Save(OrderDto item)
 		{
 			using(_conversation.SetAsCurrent())
 			{
@@ -38,43 +38,31 @@ namespace ExtMvc.Controllers
 				ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
 				if(ModelState.IsValid)
 				{
-					_repository.Create(itemMapped);
+					bool isNew = string.IsNullOrEmpty(item.StringId);
+					if(isNew)
+					{
+						_repository.Create(itemMapped);
+					}
+					if(!isNew)
+					{
+						_repository.Update(itemMapped);
+					}
 					_conversation.Flush();
 				}
-				return Json(new{ success = true });
+				return Json(new{
+					success = ModelState.IsValid,
+					errors = ValidationHelpers.BuildErrorDictionary(ModelState),
+				});
 			}
 		}
 
-		public ActionResult Get(string stringId)
-		{
-			Order item;
-			if(string.IsNullOrEmpty(stringId))
-			{
-				item = new Order();
-			}
-			else
-			{
-				using(_conversation.SetAsCurrent())
-				{
-					item = _stringConverter.FromString(stringId);
-				}
-			}
-			OrderDto itemDto = _mapper.Map<Order, OrderDto>(item);
-			return Json(itemDto);
-		}
-
-		public ActionResult Update(OrderDto item)
+		public ActionResult Load(string stringId)
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				Order itemMapped = _mapper.Map<OrderDto, Order>(item);
-				ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
-				if(ModelState.IsValid)
-				{
-					_repository.Update(itemMapped);
-					_conversation.Flush();
-				}
-				return Json(new{ success = true });
+				Order item = _stringConverter.FromString(stringId);
+				OrderDto itemDto = _mapper.Map<Order, OrderDto>(item);
+				return Json(itemDto);
 			}
 		}
 

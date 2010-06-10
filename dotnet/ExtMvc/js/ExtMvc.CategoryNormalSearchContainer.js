@@ -42,7 +42,9 @@ ExtMvc.CategoryNormalSearchContainer = Ext.extend(Ext.Container, {
 			labelWidth: 100,
 			border: false,
 			padding: 10,
-			items: [],
+			items: [
+			],
+			buttonAlign: 'left', 
 			buttons: [{
 				xtype: 'button',
 				text: 'Search',

@@ -6,7 +6,7 @@ namespace ExtMvc.Data
 {
 	public class OrderStringConverter : IStringConverter<Order>
 	{
-		private const char KeySeparator = '\\';
+		
 		private readonly OrderRepository _repository;
 
 		public OrderStringConverter(OrderRepository repository)
@@ -33,7 +33,8 @@ namespace ExtMvc.Data
 		/// <returns>The array containing the keys.</returns>
 		public static string[] ParseKeys(string keyValues, int expectedNumberOfKeys)
 		{
-			string[] keys = keyValues.Split(KeySeparator);
+			const char keySeparator = '\\';
+			string[] keys = keyValues.Split(keySeparator);
 			foreach(string key in keys)
 			{
 				if(key.Trim() == string.Empty)

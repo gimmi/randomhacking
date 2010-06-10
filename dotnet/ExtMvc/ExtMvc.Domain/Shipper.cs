@@ -34,48 +34,22 @@ namespace ExtMvc.Domain
 		}
 
 
-		public virtual bool Equals(Shipper other)
+		public override bool Equals(object obj)
 		{
+			if(ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+			var other = obj as Shipper;
 			if(ReferenceEquals(null, other))
 			{
 				return false;
-			}
-			if(ReferenceEquals(this, other))
-			{
-				return true;
 			}
 			if(ShipperId != default(int))
 			{
 				return other.ShipperId == ShipperId;
 			}
-			return other.ShipperId == ShipperId && other.CompanyName == CompanyName && other.Phone == Phone && 1 == 1;
-		}
-
-		public override bool Equals(object obj)
-		{
-			if(ReferenceEquals(null, obj))
-			{
-				return false;
-			}
-			if(ReferenceEquals(this, obj))
-			{
-				return true;
-			}
-			if(obj.GetType() != typeof(Shipper))
-			{
-				return false;
-			}
-			return Equals((Shipper)obj);
-		}
-
-		public static bool operator ==(Shipper left, Shipper right)
-		{
-			return Equals(left, right);
-		}
-
-		public static bool operator !=(Shipper left, Shipper right)
-		{
-			return !Equals(left, right);
+			return base.Equals(obj);
 		}
 
 		public override int GetHashCode()
@@ -89,9 +63,7 @@ namespace ExtMvc.Domain
 				}
 				else
 				{
-					result = (result*397) ^ ((ShipperId != default(int)) ? ShipperId.GetHashCode() : 0);
-					result = (result*397) ^ ((CompanyName != default(string)) ? CompanyName.GetHashCode() : 0);
-					result = (result*397) ^ ((Phone != default(string)) ? Phone.GetHashCode() : 0);
+					result = base.GetHashCode();
 				}
 				return result;
 			}

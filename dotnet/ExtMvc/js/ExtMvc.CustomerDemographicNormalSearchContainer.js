@@ -42,7 +42,11 @@ ExtMvc.CustomerDemographicNormalSearchContainer = Ext.extend(Ext.Container, {
 			labelWidth: 100,
 			border: false,
 			padding: 10,
-			items: [{ name: 'customerTypeId', xtype: 'textfield', fieldLabel: 'customerTypeId', anchor: '100%' }, { name: 'customerDesc', xtype: 'textfield', fieldLabel: 'customerDesc', anchor: '100%' }],
+			items: [
+				{ name: 'customerTypeId', xtype: 'textfield', fieldLabel: 'customerTypeId' },
+				{ name: 'customerDesc', xtype: 'textfield', fieldLabel: 'customerDesc' }
+			],
+			buttonAlign: 'left', 
 			buttons: [{
 				xtype: 'button',
 				text: 'Search',

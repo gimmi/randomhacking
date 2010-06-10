@@ -42,7 +42,14 @@ ExtMvc.ProductNormalSearchContainer = Ext.extend(Ext.Container, {
 			labelWidth: 100,
 			border: false,
 			padding: 10,
-			items: [{ name: 'productId', xtype: 'textfield', fieldLabel: 'productId', anchor: '100%' }, { name: 'productName', xtype: 'textfield', fieldLabel: 'productName', anchor: '100%' }, { name: 'discontinued', xtype: 'textfield', fieldLabel: 'discontinued', anchor: '100%' }, { name: 'category', xtype: 'ExtMvc.CategoryField', fieldLabel: 'category', anchor: '100%' }, { name: 'supplier', xtype: 'ExtMvc.SupplierField', fieldLabel: 'supplier', anchor: '100%' }],
+			items: [
+				{ name: 'productId', xtype: 'numberfield', fieldLabel: 'productId' },
+				{ name: 'productName', xtype: 'textfield', fieldLabel: 'productName' },
+				{ name: 'discontinued', xtype: 'checkbox', fieldLabel: 'discontinued' },
+				{ name: 'category', xtype: 'ExtMvc.CategoryField', fieldLabel: 'category' },
+				{ name: 'supplier', xtype: 'ExtMvc.SupplierField', fieldLabel: 'supplier' }
+			],
+			buttonAlign: 'left', 
 			buttons: [{
 				xtype: 'button',
 				text: 'Search',

@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using AutoMapper;
 using Castle.Facilities.FactorySupport;
+using Castle.Facilities.TypedFactory;
 using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
@@ -33,6 +34,7 @@ namespace ExtMvc
 	{
 		public static void RegisterRoutes(RouteCollection routes)
 		{
+			routes.IgnoreRoute("favicon.ico");
 			routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 			routes.MapRoute(
@@ -58,6 +60,7 @@ namespace ExtMvc
 			ioc.Register(Component.For<IMappingEngine>().UsingFactoryMethod(MappingEngineBuilder.Build));
 
 			ioc.Register(AllTypes.FromAssemblyContaining<CustomerStringConverter>().BasedOn(typeof(IStringConverter<>)).WithService.Base());
+			ioc.Register(AllTypes.FromAssemblyContaining<CustomerFactory>().BasedOn(typeof(IFactory<>)).WithService.Base());
 			ioc.Register(AllTypes.FromAssemblyContaining<CustomerRepository>().BasedOn<IRepository>());
 
 			ioc.RegisterControllers(typeof(CustomerController).Assembly);

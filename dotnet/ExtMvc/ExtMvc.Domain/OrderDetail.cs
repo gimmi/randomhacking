@@ -35,48 +35,22 @@ namespace ExtMvc.Domain
 		}
 
 
-		public virtual bool Equals(OrderDetail other)
+		public override bool Equals(object obj)
 		{
+			if(ReferenceEquals(this, obj))
+			{
+				return true;
+			}
+			var other = obj as OrderDetail;
 			if(ReferenceEquals(null, other))
 			{
 				return false;
-			}
-			if(ReferenceEquals(this, other))
-			{
-				return true;
 			}
 			if(OrderId != default(int) && ProductId != default(int))
 			{
 				return other.OrderId == OrderId && other.ProductId == ProductId;
 			}
-			return other.OrderId == OrderId && other.ProductId == ProductId && other.UnitPrice == UnitPrice && other.Quantity == Quantity && other.Discount == Discount;
-		}
-
-		public override bool Equals(object obj)
-		{
-			if(ReferenceEquals(null, obj))
-			{
-				return false;
-			}
-			if(ReferenceEquals(this, obj))
-			{
-				return true;
-			}
-			if(obj.GetType() != typeof(OrderDetail))
-			{
-				return false;
-			}
-			return Equals((OrderDetail)obj);
-		}
-
-		public static bool operator ==(OrderDetail left, OrderDetail right)
-		{
-			return Equals(left, right);
-		}
-
-		public static bool operator !=(OrderDetail left, OrderDetail right)
-		{
-			return !Equals(left, right);
+			return base.Equals(obj);
 		}
 
 		public override int GetHashCode()
@@ -91,11 +65,7 @@ namespace ExtMvc.Domain
 				}
 				else
 				{
-					result = (result*397) ^ ((OrderId != default(int)) ? OrderId.GetHashCode() : 0);
-					result = (result*397) ^ ((ProductId != default(int)) ? ProductId.GetHashCode() : 0);
-					result = (result*397) ^ ((UnitPrice != default(decimal)) ? UnitPrice.GetHashCode() : 0);
-					result = (result*397) ^ ((Quantity != default(short)) ? Quantity.GetHashCode() : 0);
-					result = (result*397) ^ ((Discount != default(float)) ? Discount.GetHashCode() : 0);
+					result = base.GetHashCode();
 				}
 				return result;
 			}

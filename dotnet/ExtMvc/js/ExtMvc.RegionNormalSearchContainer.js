@@ -42,7 +42,11 @@ ExtMvc.RegionNormalSearchContainer = Ext.extend(Ext.Container, {
 			labelWidth: 100,
 			border: false,
 			padding: 10,
-			items: [{ name: 'regionId', xtype: 'textfield', fieldLabel: 'regionId', anchor: '100%' }, { name: 'regionDescription', xtype: 'textfield', fieldLabel: 'regionDescription', anchor: '100%' }],
+			items: [
+				{ name: 'regionId', xtype: 'numberfield', fieldLabel: 'regionId' },
+				{ name: 'regionDescription', xtype: 'textfield', fieldLabel: 'regionDescription' }
+			],
+			buttonAlign: 'left', 
 			buttons: [{
 				xtype: 'button',
 				text: 'Search',

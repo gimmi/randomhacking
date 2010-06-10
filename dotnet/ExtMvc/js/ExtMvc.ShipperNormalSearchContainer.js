@@ -42,7 +42,12 @@ ExtMvc.ShipperNormalSearchContainer = Ext.extend(Ext.Container, {
 			labelWidth: 100,
 			border: false,
 			padding: 10,
-			items: [{ name: 'shipperId', xtype: 'textfield', fieldLabel: 'shipperId', anchor: '100%' }, { name: 'companyName', xtype: 'textfield', fieldLabel: 'companyName', anchor: '100%' }, { name: 'phone', xtype: 'textfield', fieldLabel: 'phone', anchor: '100%' }],
+			items: [
+				{ name: 'shipperId', xtype: 'numberfield', fieldLabel: 'shipperId' },
+				{ name: 'companyName', xtype: 'textfield', fieldLabel: 'companyName' },
+				{ name: 'phone', xtype: 'textfield', fieldLabel: 'phone' }
+			],
+			buttonAlign: 'left', 
 			buttons: [{
 				xtype: 'button',
 				text: 'Search',
