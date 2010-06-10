@@ -65,14 +65,13 @@ namespace ExtMvc.Controllers
 			}
 		}
 
-		public ActionResult Delete(CustomerDto item)
+		public void Delete(string stringId)
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				Customer itemMapped = _mapper.Map<CustomerDto, Customer>(item);
-				_repository.Delete(itemMapped);
+				Customer item = _stringConverter.FromString(stringId);
+				_repository.Delete(item);
 				_conversation.Flush();
-				return Json(new{ success = true });
 			}
 		}
 

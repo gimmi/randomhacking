@@ -72,13 +72,9 @@ ExtMvc.SupplierFormPanel = Ext.extend(Ext.form.FormPanel, {
 			scope: this,
 			success: function (item) {
 				this.el.unmask();
-				this.setItem(item);
+				this.getForm().setValues(item);
 			}
 		});
-	},
-
-	setItem: function (item) {
-		this.getForm().setValues(item);
 	},
 
 	saveItemButtonHandler: function () {
@@ -113,10 +109,20 @@ ExtMvc.SupplierFormPanel = Ext.extend(Ext.form.FormPanel, {
 	},
 
 	deleteItemButtonHandler: function () {
-		Ext.MessageBox.confirm('Delete', 'Are you sure?', function (buttonId) {
-			if (buttonId === 'yes') {
-				alert('TODO');
-			}
-		});
+		var stringId = this.getForm().getFieldValues().StringId;
+		if (!Ext.isEmpty(stringId)) {
+			Ext.MessageBox.confirm('Delete', 'Are you sure?', function (buttonId) {
+				if (buttonId === 'yes') {
+					Rpc.call({
+						url: '/Supplier/Delete',
+						params: { stringId: stringId },
+						scope: this,
+						success: function (result) {
+							this.el.mask('Item deleted');
+						}
+					});
+				}
+			}, this);
+		}
 	}
 });

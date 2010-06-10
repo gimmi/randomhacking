@@ -48,7 +48,7 @@ ExtMvc.OrderFormPanel = Ext.extend(Ext.form.FormPanel, {
 			}, {
 				xtype: 'button',
 				text: 'Refresh',
-				icon: '/ext/resources/images/default/grid/refresh.gif',
+				icon: '/images/refresh.png',
 				cls: 'x-btn-text-icon',
 				handler: this.refreshItemButtonHandler,
 				scope: this
@@ -73,13 +73,9 @@ ExtMvc.OrderFormPanel = Ext.extend(Ext.form.FormPanel, {
 			scope: this,
 			success: function (item) {
 				this.el.unmask();
-				this.setItem(item);
+				this.getForm().setValues(item);
 			}
 		});
-	},
-
-	setItem: function (item) {
-		this.getForm().setValues(item);
 	},
 
 	saveItemButtonHandler: function () {
@@ -114,17 +110,20 @@ ExtMvc.OrderFormPanel = Ext.extend(Ext.form.FormPanel, {
 	},
 
 	deleteItemButtonHandler: function () {
-		Ext.MessageBox.confirm('Delete', 'Are you sure?', function (buttonId) {
-			if (buttonId === 'yes') {
-				Rpc.call({
-					url: '/$name$/Delete',
-					params: { item: this.getForm().getFieldValues() },
-					scope: this,
-					success: function () {
-						this.el.mask('Item deleted');
-					}
-				});
-			}
-		}, this);
+		var stringId = this.getForm().getFieldValues().StringId;
+		if (!Ext.isEmpty(stringId)) {
+			Ext.MessageBox.confirm('Delete', 'Are you sure?', function (buttonId) {
+				if (buttonId === 'yes') {
+					Rpc.call({
+						url: '/Order/Delete',
+						params: { stringId: stringId },
+						scope: this,
+						success: function (result) {
+							this.el.mask('Item deleted');
+						}
+					});
+				}
+			}, this);
+		}
 	}
 });
