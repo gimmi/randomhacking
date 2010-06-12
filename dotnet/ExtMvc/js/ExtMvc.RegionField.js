@@ -18,7 +18,7 @@ ExtMvc.RegionField = Ext.extend(Ext.form.TriggerField, {
 			layout: 'fit',
 			maximizable: true,
 			closeAction: 'hide',
-			items: new ExtMvc.RegionNormalSearchContainer({
+			items: new ExtMvc.RegionNormalSearchPanel({
 				listeners: {
 					itemselected: this.searchPanel_itemSelected,
 					scope: this

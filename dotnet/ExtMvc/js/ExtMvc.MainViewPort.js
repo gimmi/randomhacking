@@ -25,7 +25,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search Category Normal', ExtMvc.CategoryNormalSearchContainer);
+								var searchTab = this.openTab('Search Category Normal', ExtMvc.CategoryNormalSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.Category.toString(item);
@@ -52,7 +52,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search CustomerDemographic Normal', ExtMvc.CustomerDemographicNormalSearchContainer);
+								var searchTab = this.openTab('Search CustomerDemographic Normal', ExtMvc.CustomerDemographicNormalSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.CustomerDemographic.toString(item);
@@ -79,7 +79,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search Customer Normal', ExtMvc.CustomerNormalSearchContainer);
+								var searchTab = this.openTab('Search Customer Normal', ExtMvc.CustomerNormalSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.Customer.toString(item);
@@ -106,7 +106,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search Employee Normal', ExtMvc.EmployeeNormalSearchContainer);
+								var searchTab = this.openTab('Search Employee Normal', ExtMvc.EmployeeNormalSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.Employee.toString(item);
@@ -133,7 +133,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search OrderDetail', ExtMvc.OrderDetailSearchContainer);
+								var searchTab = this.openTab('Search OrderDetail', ExtMvc.OrderDetailSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.OrderDetail.toString(item);
@@ -160,7 +160,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search Order Normal', ExtMvc.OrderNormalSearchContainer);
+								var searchTab = this.openTab('Search Order Normal', ExtMvc.OrderNormalSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.Order.toString(item);
@@ -187,7 +187,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search Product Normal', ExtMvc.ProductNormalSearchContainer);
+								var searchTab = this.openTab('Search Product Normal', ExtMvc.ProductNormalSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.Product.toString(item);
@@ -214,7 +214,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search Region Normal', ExtMvc.RegionNormalSearchContainer);
+								var searchTab = this.openTab('Search Region Normal', ExtMvc.RegionNormalSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.Region.toString(item);
@@ -241,7 +241,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search Shipper Normal', ExtMvc.ShipperNormalSearchContainer);
+								var searchTab = this.openTab('Search Shipper Normal', ExtMvc.ShipperNormalSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.Shipper.toString(item);
@@ -268,7 +268,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search Supplier Normal', ExtMvc.SupplierNormalSearchContainer);
+								var searchTab = this.openTab('Search Supplier Normal', ExtMvc.SupplierNormalSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.Supplier.toString(item);
@@ -295,7 +295,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 						leaf: true,
 						listeners: {
 							click: function () {
-								var searchTab = this.openTab('Search Territory Normal', ExtMvc.TerritoryNormalSearchContainer);
+								var searchTab = this.openTab('Search Territory Normal', ExtMvc.TerritoryNormalSearchPanel);
 								searchTab.on('itemselected', function(sender, item) {
 									var editTab, description;
 									description = ExtMvc.Territory.toString(item);
@@ -331,7 +331,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 		});
 
 		this.items = [this.treePanel, this.tabPanel];
-		ExtMvc.MainViewport.superclass.initComponent.call(this);
+		ExtMvc.MainViewport.superclass.initComponent.apply(this, arguments);
 	},
 	
 	openTab: function (title, Constructor) {

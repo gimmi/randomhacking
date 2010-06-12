@@ -15,7 +15,7 @@ ExtMvc.SupplierListField = Ext.extend(Ext.form.Field, {
 			})
 		}, this.initialConfig, []);
 		this.gridPanel = new ExtMvc.SupplierGridPanel(cfg);
-		ExtMvc.SupplierListField.superclass.initComponent.call(this);
+		ExtMvc.SupplierListField.superclass.initComponent.apply(this, arguments);
 	},
 
 	onRender: function (ct, position) {
@@ -33,29 +33,29 @@ ExtMvc.SupplierListField = Ext.extend(Ext.form.Field, {
 	},
 
 	onResize: function (w, h, aw, ah) {
-		ExtMvc.SupplierListField.superclass.onResize.call(this, w, h, aw, ah);
+		ExtMvc.SupplierListField.superclass.onResize.apply(this, arguments);
 		this.gridPanel.setSize(w, h);
 	},
 
 	onEnable: function () {
-		ExtMvc.SupplierListField.superclass.onEnable.call(this);
+		ExtMvc.SupplierListField.superclass.onEnable.apply(this, arguments);
 		this.gridPanel.enable();
 	},
 
 	onDisable: function () {
-		ExtMvc.SupplierListField.superclass.onDisable.call(this);
+		ExtMvc.SupplierListField.superclass.onDisable.apply(this, arguments);
 		this.gridPanel.disable();
 	},
 
 	beforeDestroy: function () {
 		Ext.destroy(this.gridPanel);
-		ExtMvc.SupplierListField.superclass.beforeDestroy.call(this);
+		ExtMvc.SupplierListField.superclass.beforeDestroy.apply(this, arguments);
 	},
 
 	setValue: function (v) {
 		this.gridPanel.getStore().proxy.data.items = v;
 		this.gridPanel.getStore().load();
-		return ExtMvc.SupplierListField.superclass.setValue.call(this, v);
+		return ExtMvc.SupplierListField.superclass.setValue.apply(this, arguments);
 	},
 
 	getValue: function () {

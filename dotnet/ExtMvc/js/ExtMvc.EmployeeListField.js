@@ -15,7 +15,7 @@ ExtMvc.EmployeeListField = Ext.extend(Ext.form.Field, {
 			})
 		}, this.initialConfig, []);
 		this.gridPanel = new ExtMvc.EmployeeGridPanel(cfg);
-		ExtMvc.EmployeeListField.superclass.initComponent.call(this);
+		ExtMvc.EmployeeListField.superclass.initComponent.apply(this, arguments);
 	},
 
 	onRender: function (ct, position) {
@@ -33,29 +33,29 @@ ExtMvc.EmployeeListField = Ext.extend(Ext.form.Field, {
 	},
 
 	onResize: function (w, h, aw, ah) {
-		ExtMvc.EmployeeListField.superclass.onResize.call(this, w, h, aw, ah);
+		ExtMvc.EmployeeListField.superclass.onResize.apply(this, arguments);
 		this.gridPanel.setSize(w, h);
 	},
 
 	onEnable: function () {
-		ExtMvc.EmployeeListField.superclass.onEnable.call(this);
+		ExtMvc.EmployeeListField.superclass.onEnable.apply(this, arguments);
 		this.gridPanel.enable();
 	},
 
 	onDisable: function () {
-		ExtMvc.EmployeeListField.superclass.onDisable.call(this);
+		ExtMvc.EmployeeListField.superclass.onDisable.apply(this, arguments);
 		this.gridPanel.disable();
 	},
 
 	beforeDestroy: function () {
 		Ext.destroy(this.gridPanel);
-		ExtMvc.EmployeeListField.superclass.beforeDestroy.call(this);
+		ExtMvc.EmployeeListField.superclass.beforeDestroy.apply(this, arguments);
 	},
 
 	setValue: function (v) {
 		this.gridPanel.getStore().proxy.data.items = v;
 		this.gridPanel.getStore().load();
-		return ExtMvc.EmployeeListField.superclass.setValue.call(this, v);
+		return ExtMvc.EmployeeListField.superclass.setValue.apply(this, arguments);
 	},
 
 	getValue: function () {

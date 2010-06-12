@@ -39,33 +39,13 @@ ExtMvc.EmployeeFormPanel = Ext.extend(Ext.form.FormPanel, {
 			]
 		}];
 
-		this.tbar = {
-			xtype: 'toolbar',
-			items: [{
-				xtype: 'button',
-				text: 'Save',
-				icon: '/images/save.png',
-				cls: 'x-btn-text-icon',
-				handler: this.saveItemButtonHandler,
-				scope: this
-			}, {
-				xtype: 'button',
-				text: 'Refresh',
-				icon: '/images/refresh.png',
-				cls: 'x-btn-text-icon',
-				handler: this.refreshItemButtonHandler,
-				scope: this
-			}, {
-				xtype: 'button',
-				text: 'Delete',
-				icon: '/images/delete.png',
-				cls: 'x-btn-text-icon',
-				handler: this.deleteItemButtonHandler,
-				scope: this
-			}]
-		};
+		this.tbar = [
+			{ text: 'Save', handler: this.saveItemButtonHandler, icon: '/images/disk.png', cls: 'x-btn-text-icon', scope: this },
+			{ text: 'Refresh', handler: this.refreshItemButtonHandler, icon: '/images/arrow_refresh.png', cls: 'x-btn-text-icon', scope: this },
+			{ text: 'Delete', handler: this.deleteItemButtonHandler, icon: '/images/delete.png', cls: 'x-btn-text-icon', scope: this }
+		];
 
-		ExtMvc.EmployeeFormPanel.superclass.initComponent.call(this);
+		ExtMvc.EmployeeFormPanel.superclass.initComponent.apply(this, arguments);
 	},
 
 	loadItem: function (stringId) {

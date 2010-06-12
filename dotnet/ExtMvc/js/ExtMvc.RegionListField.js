@@ -15,7 +15,7 @@ ExtMvc.RegionListField = Ext.extend(Ext.form.Field, {
 			})
 		}, this.initialConfig, []);
 		this.gridPanel = new ExtMvc.RegionGridPanel(cfg);
-		ExtMvc.RegionListField.superclass.initComponent.call(this);
+		ExtMvc.RegionListField.superclass.initComponent.apply(this, arguments);
 	},
 
 	onRender: function (ct, position) {
@@ -33,29 +33,29 @@ ExtMvc.RegionListField = Ext.extend(Ext.form.Field, {
 	},
 
 	onResize: function (w, h, aw, ah) {
-		ExtMvc.RegionListField.superclass.onResize.call(this, w, h, aw, ah);
+		ExtMvc.RegionListField.superclass.onResize.apply(this, arguments);
 		this.gridPanel.setSize(w, h);
 	},
 
 	onEnable: function () {
-		ExtMvc.RegionListField.superclass.onEnable.call(this);
+		ExtMvc.RegionListField.superclass.onEnable.apply(this, arguments);
 		this.gridPanel.enable();
 	},
 
 	onDisable: function () {
-		ExtMvc.RegionListField.superclass.onDisable.call(this);
+		ExtMvc.RegionListField.superclass.onDisable.apply(this, arguments);
 		this.gridPanel.disable();
 	},
 
 	beforeDestroy: function () {
 		Ext.destroy(this.gridPanel);
-		ExtMvc.RegionListField.superclass.beforeDestroy.call(this);
+		ExtMvc.RegionListField.superclass.beforeDestroy.apply(this, arguments);
 	},
 
 	setValue: function (v) {
 		this.gridPanel.getStore().proxy.data.items = v;
 		this.gridPanel.getStore().load();
-		return ExtMvc.RegionListField.superclass.setValue.call(this, v);
+		return ExtMvc.RegionListField.superclass.setValue.apply(this, arguments);
 	},
 
 	getValue: function () {

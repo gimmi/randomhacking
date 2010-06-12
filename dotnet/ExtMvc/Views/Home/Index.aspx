@@ -29,17 +29,28 @@
 				<script type="text/javascript" src="/js/ExtMvc.ShipperJsonReader.js"></script>
 				<script type="text/javascript" src="/js/ExtMvc.SupplierJsonReader.js"></script>
 				<script type="text/javascript" src="/js/ExtMvc.TerritoryJsonReader.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.CategoryNormalSearchContainer.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.CustomerDemographicNormalSearchContainer.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.CustomerNormalSearchContainer.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.EmployeeNormalSearchContainer.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.OrderDetailSearchContainer.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.OrderNormalSearchContainer.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.ProductNormalSearchContainer.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.RegionNormalSearchContainer.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.ShipperNormalSearchContainer.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.SupplierNormalSearchContainer.js"></script>
-				<script type="text/javascript" src="/js/ExtMvc.TerritoryNormalSearchContainer.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.CategoryNormalSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.CustomerDemographicNormalSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.CustomerNormalSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.EmployeeNormalSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.OrderDetailSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.OrderNormalSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.ProductNormalSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.RegionNormalSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.ShipperNormalSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.SupplierNormalSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.TerritoryNormalSearchPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.CategoryNormalSearchFormPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.CustomerDemographicNormalSearchFormPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.CustomerNormalSearchFormPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.EmployeeNormalSearchFormPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.OrderDetailSearchFormPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.OrderNormalSearchFormPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.ProductNormalSearchFormPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.RegionNormalSearchFormPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.ShipperNormalSearchFormPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.SupplierNormalSearchFormPanel.js"></script>
+				<script type="text/javascript" src="/js/ExtMvc.TerritoryNormalSearchFormPanel.js"></script>
 				<script type="text/javascript" src="/js/ExtMvc.CategoryField.js"></script>
 				<script type="text/javascript" src="/js/ExtMvc.CustomerDemographicField.js"></script>
 				<script type="text/javascript" src="/js/ExtMvc.CustomerField.js"></script>

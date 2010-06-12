@@ -5,7 +5,7 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.OrderDetailColumn = Ext.extend(Ext.grid.Column, {
     constructor: function(cfg){
-        ExtMvc.OrderDetailColumn.superclass.constructor.call(this, cfg);
+        ExtMvc.OrderDetailColumn.superclass.constructor.apply(this, arguments);
         this.renderer = function(value, metadata, record, rowIndex, colIndex, store) {
             return value.Description;
         };

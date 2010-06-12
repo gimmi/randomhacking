@@ -18,7 +18,7 @@ ExtMvc.CustomerField = Ext.extend(Ext.form.TriggerField, {
 			layout: 'fit',
 			maximizable: true,
 			closeAction: 'hide',
-			items: new ExtMvc.CustomerNormalSearchContainer({
+			items: new ExtMvc.CustomerNormalSearchPanel({
 				listeners: {
 					itemselected: this.searchPanel_itemSelected,
 					scope: this

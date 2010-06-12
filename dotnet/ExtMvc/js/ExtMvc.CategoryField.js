@@ -18,7 +18,7 @@ ExtMvc.CategoryField = Ext.extend(Ext.form.TriggerField, {
 			layout: 'fit',
 			maximizable: true,
 			closeAction: 'hide',
-			items: new ExtMvc.CategoryNormalSearchContainer({
+			items: new ExtMvc.CategoryNormalSearchPanel({
 				listeners: {
 					itemselected: this.searchPanel_itemSelected,
 					scope: this

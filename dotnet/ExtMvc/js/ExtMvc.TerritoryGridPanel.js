@@ -13,6 +13,6 @@ ExtMvc.TerritoryGridPanel = Ext.extend(Ext.grid.GridPanel, {
 				{ dataIndex: 'TerritoryId', header: 'TerritoryId', xtype: 'gridcolumn' }, { dataIndex: 'TerritoryDescription', header: 'TerritoryDescription', xtype: 'gridcolumn' }, { dataIndex: 'Region', header: 'Region', xtype: 'ExtMvc.RegionColumn' }
 			]
 		});
-		ExtMvc.TerritoryGridPanel.superclass.initComponent.call(this);
+		ExtMvc.TerritoryGridPanel.superclass.initComponent.apply(this, arguments);
 	}
 });

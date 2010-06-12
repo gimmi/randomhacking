@@ -5,7 +5,7 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.ShipperColumn = Ext.extend(Ext.grid.Column, {
     constructor: function(cfg){
-        ExtMvc.ShipperColumn.superclass.constructor.call(this, cfg);
+        ExtMvc.ShipperColumn.superclass.constructor.apply(this, arguments);
         this.renderer = function(value, metadata, record, rowIndex, colIndex, store) {
             return value.Description;
         };

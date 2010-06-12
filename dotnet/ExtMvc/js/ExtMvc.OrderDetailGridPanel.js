@@ -13,6 +13,6 @@ ExtMvc.OrderDetailGridPanel = Ext.extend(Ext.grid.GridPanel, {
 				{ dataIndex: 'OrderId', header: 'OrderId', xtype: 'numbercolumn' }, { dataIndex: 'ProductId', header: 'ProductId', xtype: 'numbercolumn' }, { dataIndex: 'UnitPrice', header: 'UnitPrice', xtype: 'numbercolumn' }, { dataIndex: 'Quantity', header: 'Quantity', xtype: 'numbercolumn' }, { dataIndex: 'Discount', header: 'Discount', xtype: 'numbercolumn' }
 			]
 		});
-		ExtMvc.OrderDetailGridPanel.superclass.initComponent.call(this);
+		ExtMvc.OrderDetailGridPanel.superclass.initComponent.apply(this, arguments);
 	}
 });

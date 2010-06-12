@@ -18,7 +18,7 @@ ExtMvc.EmployeeField = Ext.extend(Ext.form.TriggerField, {
 			layout: 'fit',
 			maximizable: true,
 			closeAction: 'hide',
-			items: new ExtMvc.EmployeeNormalSearchContainer({
+			items: new ExtMvc.EmployeeNormalSearchPanel({
 				listeners: {
 					itemselected: this.searchPanel_itemSelected,
 					scope: this

@@ -15,7 +15,7 @@ ExtMvc.CustomerDemographicListField = Ext.extend(Ext.form.Field, {
 			})
 		}, this.initialConfig, []);
 		this.gridPanel = new ExtMvc.CustomerDemographicGridPanel(cfg);
-		ExtMvc.CustomerDemographicListField.superclass.initComponent.call(this);
+		ExtMvc.CustomerDemographicListField.superclass.initComponent.apply(this, arguments);
 	},
 
 	onRender: function (ct, position) {
@@ -33,29 +33,29 @@ ExtMvc.CustomerDemographicListField = Ext.extend(Ext.form.Field, {
 	},
 
 	onResize: function (w, h, aw, ah) {
-		ExtMvc.CustomerDemographicListField.superclass.onResize.call(this, w, h, aw, ah);
+		ExtMvc.CustomerDemographicListField.superclass.onResize.apply(this, arguments);
 		this.gridPanel.setSize(w, h);
 	},
 
 	onEnable: function () {
-		ExtMvc.CustomerDemographicListField.superclass.onEnable.call(this);
+		ExtMvc.CustomerDemographicListField.superclass.onEnable.apply(this, arguments);
 		this.gridPanel.enable();
 	},
 
 	onDisable: function () {
-		ExtMvc.CustomerDemographicListField.superclass.onDisable.call(this);
+		ExtMvc.CustomerDemographicListField.superclass.onDisable.apply(this, arguments);
 		this.gridPanel.disable();
 	},
 
 	beforeDestroy: function () {
 		Ext.destroy(this.gridPanel);
-		ExtMvc.CustomerDemographicListField.superclass.beforeDestroy.call(this);
+		ExtMvc.CustomerDemographicListField.superclass.beforeDestroy.apply(this, arguments);
 	},
 
 	setValue: function (v) {
 		this.gridPanel.getStore().proxy.data.items = v;
 		this.gridPanel.getStore().load();
-		return ExtMvc.CustomerDemographicListField.superclass.setValue.call(this, v);
+		return ExtMvc.CustomerDemographicListField.superclass.setValue.apply(this, arguments);
 	},
 
 	getValue: function () {

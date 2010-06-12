@@ -13,6 +13,6 @@ ExtMvc.RegionGridPanel = Ext.extend(Ext.grid.GridPanel, {
 				{ dataIndex: 'RegionId', header: 'RegionId', xtype: 'numbercolumn' }, { dataIndex: 'RegionDescription', header: 'RegionDescription', xtype: 'gridcolumn' }
 			]
 		});
-		ExtMvc.RegionGridPanel.superclass.initComponent.call(this);
+		ExtMvc.RegionGridPanel.superclass.initComponent.apply(this, arguments);
 	}
 });

@@ -13,6 +13,6 @@ ExtMvc.SupplierGridPanel = Ext.extend(Ext.grid.GridPanel, {
 				{ dataIndex: 'SupplierId', header: 'SupplierId', xtype: 'numbercolumn' }, { dataIndex: 'CompanyName', header: 'CompanyName', xtype: 'gridcolumn' }, { dataIndex: 'ContactName', header: 'ContactName', xtype: 'gridcolumn' }, { dataIndex: 'ContactTitle', header: 'ContactTitle', xtype: 'gridcolumn' }, { dataIndex: 'Address', header: 'Address', xtype: 'gridcolumn' }, { dataIndex: 'City', header: 'City', xtype: 'gridcolumn' }, { dataIndex: 'Region', header: 'Region', xtype: 'gridcolumn' }, { dataIndex: 'PostalCode', header: 'PostalCode', xtype: 'gridcolumn' }, { dataIndex: 'Country', header: 'Country', xtype: 'gridcolumn' }, { dataIndex: 'Phone', header: 'Phone', xtype: 'gridcolumn' }, { dataIndex: 'Fax', header: 'Fax', xtype: 'gridcolumn' }, { dataIndex: 'HomePage', header: 'HomePage', xtype: 'gridcolumn' }
 			]
 		});
-		ExtMvc.SupplierGridPanel.superclass.initComponent.call(this);
+		ExtMvc.SupplierGridPanel.superclass.initComponent.apply(this, arguments);
 	}
 });

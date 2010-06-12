@@ -18,7 +18,7 @@ ExtMvc.TerritoryField = Ext.extend(Ext.form.TriggerField, {
 			layout: 'fit',
 			maximizable: true,
 			closeAction: 'hide',
-			items: new ExtMvc.TerritoryNormalSearchContainer({
+			items: new ExtMvc.TerritoryNormalSearchPanel({
 				listeners: {
 					itemselected: this.searchPanel_itemSelected,
 					scope: this

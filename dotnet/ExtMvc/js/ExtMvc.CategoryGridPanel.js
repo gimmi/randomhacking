@@ -13,6 +13,6 @@ ExtMvc.CategoryGridPanel = Ext.extend(Ext.grid.GridPanel, {
 				{ dataIndex: 'CategoryId', header: 'CategoryId', xtype: 'numbercolumn' }, { dataIndex: 'CategoryName', header: 'CategoryName', xtype: 'gridcolumn' }, { dataIndex: 'Description', header: 'Description', xtype: 'gridcolumn' }
 			]
 		});
-		ExtMvc.CategoryGridPanel.superclass.initComponent.call(this);
+		ExtMvc.CategoryGridPanel.superclass.initComponent.apply(this, arguments);
 	}
 });

@@ -13,6 +13,6 @@ ExtMvc.ShipperGridPanel = Ext.extend(Ext.grid.GridPanel, {
 				{ dataIndex: 'ShipperId', header: 'ShipperId', xtype: 'numbercolumn' }, { dataIndex: 'CompanyName', header: 'CompanyName', xtype: 'gridcolumn' }, { dataIndex: 'Phone', header: 'Phone', xtype: 'gridcolumn' }
 			]
 		});
-		ExtMvc.ShipperGridPanel.superclass.initComponent.call(this);
+		ExtMvc.ShipperGridPanel.superclass.initComponent.apply(this, arguments);
 	}
 });

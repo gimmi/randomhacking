@@ -13,6 +13,6 @@ ExtMvc.CustomerDemographicGridPanel = Ext.extend(Ext.grid.GridPanel, {
 				{ dataIndex: 'CustomerTypeId', header: 'CustomerTypeId', xtype: 'gridcolumn' }, { dataIndex: 'CustomerDesc', header: 'CustomerDesc', xtype: 'gridcolumn' }
 			]
 		});
-		ExtMvc.CustomerDemographicGridPanel.superclass.initComponent.call(this);
+		ExtMvc.CustomerDemographicGridPanel.superclass.initComponent.apply(this, arguments);
 	}
 });

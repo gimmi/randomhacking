@@ -18,7 +18,7 @@ ExtMvc.SupplierField = Ext.extend(Ext.form.TriggerField, {
 			layout: 'fit',
 			maximizable: true,
 			closeAction: 'hide',
-			items: new ExtMvc.SupplierNormalSearchContainer({
+			items: new ExtMvc.SupplierNormalSearchPanel({
 				listeners: {
 					itemselected: this.searchPanel_itemSelected,
 					scope: this

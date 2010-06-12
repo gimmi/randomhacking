@@ -13,6 +13,6 @@ ExtMvc.ProductGridPanel = Ext.extend(Ext.grid.GridPanel, {
 				{ dataIndex: 'ProductId', header: 'ProductId', xtype: 'numbercolumn' }, { dataIndex: 'ProductName', header: 'ProductName', xtype: 'gridcolumn' }, { dataIndex: 'QuantityPerUnit', header: 'QuantityPerUnit', xtype: 'gridcolumn' }, { dataIndex: 'UnitPrice', header: 'UnitPrice', xtype: 'numbercolumn' }, { dataIndex: 'UnitsInStock', header: 'UnitsInStock', xtype: 'numbercolumn' }, { dataIndex: 'UnitsOnOrder', header: 'UnitsOnOrder', xtype: 'numbercolumn' }, { dataIndex: 'ReorderLevel', header: 'ReorderLevel', xtype: 'numbercolumn' }, { dataIndex: 'Discontinued', header: 'Discontinued', xtype: 'booleancolumn' }, { dataIndex: 'Category', header: 'Category', xtype: 'ExtMvc.CategoryColumn' }
 			]
 		});
-		ExtMvc.ProductGridPanel.superclass.initComponent.call(this);
+		ExtMvc.ProductGridPanel.superclass.initComponent.apply(this, arguments);
 	}
 });

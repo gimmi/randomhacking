@@ -15,7 +15,7 @@ ExtMvc.TerritoryListField = Ext.extend(Ext.form.Field, {
 			})
 		}, this.initialConfig, []);
 		this.gridPanel = new ExtMvc.TerritoryGridPanel(cfg);
-		ExtMvc.TerritoryListField.superclass.initComponent.call(this);
+		ExtMvc.TerritoryListField.superclass.initComponent.apply(this, arguments);
 	},
 
 	onRender: function (ct, position) {
@@ -33,29 +33,29 @@ ExtMvc.TerritoryListField = Ext.extend(Ext.form.Field, {
 	},
 
 	onResize: function (w, h, aw, ah) {
-		ExtMvc.TerritoryListField.superclass.onResize.call(this, w, h, aw, ah);
+		ExtMvc.TerritoryListField.superclass.onResize.apply(this, arguments);
 		this.gridPanel.setSize(w, h);
 	},
 
 	onEnable: function () {
-		ExtMvc.TerritoryListField.superclass.onEnable.call(this);
+		ExtMvc.TerritoryListField.superclass.onEnable.apply(this, arguments);
 		this.gridPanel.enable();
 	},
 
 	onDisable: function () {
-		ExtMvc.TerritoryListField.superclass.onDisable.call(this);
+		ExtMvc.TerritoryListField.superclass.onDisable.apply(this, arguments);
 		this.gridPanel.disable();
 	},
 
 	beforeDestroy: function () {
 		Ext.destroy(this.gridPanel);
-		ExtMvc.TerritoryListField.superclass.beforeDestroy.call(this);
+		ExtMvc.TerritoryListField.superclass.beforeDestroy.apply(this, arguments);
 	},
 
 	setValue: function (v) {
 		this.gridPanel.getStore().proxy.data.items = v;
 		this.gridPanel.getStore().load();
-		return ExtMvc.TerritoryListField.superclass.setValue.call(this, v);
+		return ExtMvc.TerritoryListField.superclass.setValue.apply(this, arguments);
 	},
 
 	getValue: function () {

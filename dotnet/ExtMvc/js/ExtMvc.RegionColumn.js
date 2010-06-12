@@ -5,7 +5,7 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.RegionColumn = Ext.extend(Ext.grid.Column, {
     constructor: function(cfg){
-        ExtMvc.RegionColumn.superclass.constructor.call(this, cfg);
+        ExtMvc.RegionColumn.superclass.constructor.apply(this, arguments);
         this.renderer = function(value, metadata, record, rowIndex, colIndex, store) {
             return value.Description;
         };
