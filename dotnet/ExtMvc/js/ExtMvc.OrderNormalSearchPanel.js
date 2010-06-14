@@ -1,4 +1,4 @@
-/*jslint white: true, onevar: true, browser: true, devel: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
+/*jslint white: true, browser: true, devel: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
 /*global Ext, Rpc, ExtMvc */
 "use strict";
 
@@ -77,8 +77,8 @@ ExtMvc.OrderNormalSearchPanel = Ext.extend(Ext.Panel, {
 			}
 		});
 
-		this.addEvents('itemselected');
-
 		ExtMvc.OrderNormalSearchPanel.superclass.initComponent.apply(this, arguments);
+
+		this.addEvents('itemselected');
 	}
 });

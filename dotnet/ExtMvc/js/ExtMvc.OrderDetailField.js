@@ -1,4 +1,4 @@
-/*jslint white: true, browser: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
+/*jslint white: true, browser: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
 /*global Ext, ExtMvc */
 "use strict";
 Ext.namespace('ExtMvc');
@@ -6,64 +6,66 @@ Ext.namespace('ExtMvc');
 ExtMvc.OrderDetailField = Ext.extend(Ext.form.TriggerField, {
 	editable: false,
 	hideTrigger: true,
-	onTriggerClick: function () {
-		this.getWindow().show(this.getEl());
-	},
-
-	getWindow: function () {
-		this.window = this.window || new Ext.Window({
-			title: 'Search OrderDetail',
-			width: 600,
-			height: 300,
-			layout: 'fit',
-			maximizable: true,
-			closeAction: 'hide',
-			items: new ExtMvc.OrderDetailSearchPanel({
+	initComponent: function () {
+		var _this = this,
+		_window,
+		_searchPanel,
+		_selectedItem = null,
+		_onSearchPanelItemSelected = function (sender, item) {
+			_this.setValue(item);
+			_window.hide();
+		},
+		_onSelectNoneButtonClick = function (button, event) {
+			_this.setValue(null);
+			_window.hide();
+		},
+		_onSelectButtonClick = function (button, event) {
+			var selectedItem = _searchPanel.getSelectedItem();
+			_this.setValue(selectedItem);
+			_window.hide();
+		},
+		_onCancelButtonClick = function (button, event) {
+			_window.hide();
+		},
+		_buildWindow = function () {
+			_searchPanel = new ExtMvc.OrderDetailSearchPanel({
 				listeners: {
-					itemselected: this.searchPanel_itemSelected,
-					scope: this
+					itemselected: _onSearchPanelItemSelected
 				}
-			}),
-			buttons: [
-				{ text: 'Select None', handler: this.selectNoneButton_click, scope: this },
-				{ text: 'Select', handler: this.selectButton_click, scope: this },
-				{ text: 'Cancel', handler: this.cancelButton_click, scope: this }
-			]
+			});
+			_window = _window || new Ext.Window({
+				title: 'Search OrderDetail',
+				width: 600,
+				height: 300,
+				layout: 'fit',
+				maximizable: true,
+				closeAction: 'hide',
+				items: _searchPanel,
+				buttons: [
+					{ text: 'Select None', handler: _onSelectNoneButtonClick },
+					{ text: 'Select', handler: _onSelectButtonClick },
+					{ text: 'Cancel', handler: _onCancelButtonClick }
+				]
+			});
+		};
+
+		Ext.apply(_this, {
+			onTriggerClick: function () {
+				if(!_window) {
+					_buildWindow();
+				}
+				_window.show(this.getEl());
+			},
+			setValue: function (v) {
+				_selectedItem = v;
+				return ExtMvc.OrderDetailField.superclass.setValue.call(_this, ExtMvc.OrderDetail.toString(v));
+			},
+			getValue: function () {
+				return _selectedItem;
+			}
 		});
-		return this.window;
-	},
 
-	getSearchPanel: function () {
-		return this.getWindow().get(0);
-	},
-
-	searchPanel_itemSelected: function (sender, item) {
-		this.setValue(item);
-		this.getWindow().hide();
-	},
-
-	selectNoneButton_click: function (button, event) {
-		this.setValue(null);
-		this.getWindow().hide();
-	},
-
-	selectButton_click: function (button, event) {
-		var selectedItem = this.getSearchPanel().getSelectedItem();
-		this.setValue(selectedItem);
-		this.getWindow().hide();
-	},
-
-	cancelButton_click: function (button, event) {
-		this.getWindow().hide();
-	},
-
-	setValue: function (v) {
-		this.selectedItem = v;
-		return ExtMvc.OrderDetailField.superclass.setValue.call(this, ExtMvc.OrderDetail.toString(v));
-	},
-
-	getValue: function () {
-		return this.selectedItem;
+		ExtMvc.OrderDetailField.superclass.initComponent.apply(this, arguments);
 	}
 });
 
