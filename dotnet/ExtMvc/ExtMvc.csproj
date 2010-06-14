@@ -1046,6 +1046,7 @@
     <Content Include="js\ExtMvc.CustomerListField.js" />
     <Content Include="js\ExtMvc.CustomerNormalSearchFormPanel.js" />
     <Content Include="js\ExtMvc.CustomerNormalSearchPanel.js" />
+    <Content Include="js\ExtMvc.CustomerPickerWindow.js" />
     <Content Include="js\ExtMvc.Employee.js" />
     <Content Include="js\ExtMvc.EmployeeColumn.js" />
     <Content Include="js\ExtMvc.EmployeeField.js" />

@@ -23,7 +23,7 @@ ExtMvc.EmployeeNormalSearchPanel = Ext.extend(Ext.Panel, {
 		_store = new Ext.data.Store({
 			autoDestroy: true,
 			proxy: new Rpc.JsonPostHttpProxy({
-				url: '/Employee/SearchNormal'
+				url: 'Employee/SearchNormal'
 			}),
 			remoteSort: true,
 			reader: new ExtMvc.EmployeeJsonReader()
@@ -68,7 +68,7 @@ ExtMvc.EmployeeNormalSearchPanel = Ext.extend(Ext.Panel, {
 					return;
 				}
 				Rpc.call({
-					url: '/Employee/Delete',
+					url: 'Employee/Delete',
 					params: { stringId: selectedItem.StringId },
 					success: function (result) {
 						_pagingToolbar.doRefresh();
@@ -82,10 +82,10 @@ ExtMvc.EmployeeNormalSearchPanel = Ext.extend(Ext.Panel, {
 			border: false,
 			items: [_searchFormPanel, _gridPanel],
 			tbar: [
-				{ text: 'Search', handler: _onSearchButtonClick, icon: '/images/zoom.png', cls: 'x-btn-text-icon' },
-				{ text: 'New', handler: _onNewButtonClick, icon: '/images/add.png', cls: 'x-btn-text-icon' },
-				{ text: 'Edit', handler: _onEditButtonClick, icon: '/images/pencil.png', cls: 'x-btn-text-icon' },
-				{ text: 'Delete', handler: _onDeleteButtonClick, icon: '/images/delete.png', cls: 'x-btn-text-icon' }
+				{ text: 'Search', handler: _onSearchButtonClick, icon: 'images/zoom.png', cls: 'x-btn-text-icon' },
+				{ text: 'New', handler: _onNewButtonClick, icon: 'images/add.png', cls: 'x-btn-text-icon' },
+				{ text: 'Edit', handler: _onEditButtonClick, icon: 'images/pencil.png', cls: 'x-btn-text-icon' },
+				{ text: 'Delete', handler: _onDeleteButtonClick, icon: 'images/delete.png', cls: 'x-btn-text-icon' }
 			],
 			getSelectedItem: function () {
 				var sm = _gridPanel.getSelectionModel();

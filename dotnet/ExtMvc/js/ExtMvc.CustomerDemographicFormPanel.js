@@ -26,8 +26,8 @@ ExtMvc.CustomerDemographicFormPanel = Ext.extend(Ext.form.FormPanel, {
 		}];
 
 		this.tbar = [
-			{ text: 'Save', handler: this.saveItemButtonHandler, icon: '/images/disk.png', cls: 'x-btn-text-icon', scope: this },
-			{ text: 'Refresh', handler: this.refreshItemButtonHandler, icon: '/images/arrow_refresh.png', cls: 'x-btn-text-icon', scope: this }
+			{ text: 'Save', handler: this.saveItemButtonHandler, icon: 'images/disk.png', cls: 'x-btn-text-icon', scope: this },
+			{ text: 'Refresh', handler: this.refreshItemButtonHandler, icon: 'images/arrow_refresh.png', cls: 'x-btn-text-icon', scope: this }
 		];
 
 		ExtMvc.CustomerDemographicFormPanel.superclass.initComponent.apply(this, arguments);
@@ -36,7 +36,7 @@ ExtMvc.CustomerDemographicFormPanel = Ext.extend(Ext.form.FormPanel, {
 	loadItem: function (stringId) {
 		this.el.mask('Loading...', 'x-mask-loading');
 		Rpc.call({
-			url: '/CustomerDemographic/Load',
+			url: 'CustomerDemographic/Load',
 			params: { stringId: stringId },
 			scope: this,
 			success: function (item) {
@@ -49,7 +49,7 @@ ExtMvc.CustomerDemographicFormPanel = Ext.extend(Ext.form.FormPanel, {
 	saveItemButtonHandler: function () {
 		this.el.mask('Saving...', 'x-mask-loading');
 		Rpc.call({
-			url: '/CustomerDemographic/Save',
+			url: 'CustomerDemographic/Save',
 			params: { item: this.getForm().getFieldValues() },
 			scope: this,
 			success: function (result) {
