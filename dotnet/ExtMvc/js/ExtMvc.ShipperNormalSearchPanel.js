@@ -6,9 +6,10 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.ShipperNormalSearchPanel = Ext.extend(Ext.Panel, {
 	initComponent: function () {
-		var _onGridPanelRowDblClick = function (grid, rowIndex, event) {
+		var _this = this,
+		_onGridPanelRowDblClick = function (grid, rowIndex, event) {
 			var item = grid.getStore().getAt(rowIndex).data;
-			this.fireEvent('itemselected', this, item);
+			_this.fireEvent('itemselected', _this, item);
 		},
 		_searchFormPanel = new ExtMvc.ShipperNormalSearchFormPanel({
 			title: 'Search Filters',
@@ -27,18 +28,18 @@ ExtMvc.ShipperNormalSearchPanel = Ext.extend(Ext.Panel, {
 			remoteSort: true,
 			reader: new ExtMvc.ShipperJsonReader()
 		}),
+		_pagingToolbar = new Ext.PagingToolbar({
+			store: _store,
+			displayInfo: true,
+			pageSize: 25,
+			prependButtons: true
+		}),
 		_gridPanel = new ExtMvc.ShipperGridPanel({
 			region: 'center',
 			store: _store,
-			bbar: new Ext.PagingToolbar({
-				store: _store,
-				displayInfo: true,
-				pageSize: 25,
-				prependButtons: true
-			}),
+			bbar: _pagingToolbar,
 			listeners: {
-				rowdblclick: _onGridPanelRowDblClick,
-				scope: this
+				rowdblclick: _onGridPanelRowDblClick
 			}
 		}),
 		_onSearchButtonClick = function (b, e) {
@@ -47,7 +48,7 @@ ExtMvc.ShipperNormalSearchPanel = Ext.extend(Ext.Panel, {
 			_gridPanel.getStore().load({
 				params: {
 					start: 0,
-					limit: _gridPanel.getBottomToolbar().pageSize
+					limit: _pagingToolbar.pageSize
 				}
 			});
 		},
@@ -58,18 +59,33 @@ ExtMvc.ShipperNormalSearchPanel = Ext.extend(Ext.Panel, {
 			alert('onEditButtonClick');
 		},
 		_onDeleteButtonClick = function () {
-			alert('onDeleteButtonClick');
+			var selectedItem = _this.getSelectedItem();
+			if (!selectedItem) {
+				return;
+			}
+			Ext.MessageBox.confirm('Delete', 'Are you sure?', function (buttonId) {
+				if (buttonId !== 'yes') {
+					return;
+				}
+				Rpc.call({
+					url: '/Shipper/Delete',
+					params: { stringId: selectedItem.StringId },
+					success: function (result) {
+						_pagingToolbar.doRefresh();
+					}
+				});
+			});
 		};
 
-		Ext.apply(this, {
+		Ext.apply(_this, {
 			layout: 'border',
 			border: false,
 			items: [_searchFormPanel, _gridPanel],
 			tbar: [
-				{ text: 'Search', handler: _onSearchButtonClick, icon: '/images/zoom.png', cls: 'x-btn-text-icon', scope: this },
-				{ text: 'New', handler: _onNewButtonClick, icon: '/images/add.png', cls: 'x-btn-text-icon', scope: this },
-				{ text: 'Edit', handler: _onEditButtonClick, icon: '/images/pencil.png', cls: 'x-btn-text-icon', scope: this },
-				{ text: 'Delete', handler: _onDeleteButtonClick, icon: '/images/delete.png', cls: 'x-btn-text-icon', scope: this }
+				{ text: 'Search', handler: _onSearchButtonClick, icon: '/images/zoom.png', cls: 'x-btn-text-icon' },
+				{ text: 'New', handler: _onNewButtonClick, icon: '/images/add.png', cls: 'x-btn-text-icon' },
+				{ text: 'Edit', handler: _onEditButtonClick, icon: '/images/pencil.png', cls: 'x-btn-text-icon' },
+				{ text: 'Delete', handler: _onDeleteButtonClick, icon: '/images/delete.png', cls: 'x-btn-text-icon' }
 			],
 			getSelectedItem: function () {
 				var sm = _gridPanel.getSelectionModel();
@@ -77,8 +93,8 @@ ExtMvc.ShipperNormalSearchPanel = Ext.extend(Ext.Panel, {
 			}
 		});
 
-		ExtMvc.ShipperNormalSearchPanel.superclass.initComponent.apply(this, arguments);
+		ExtMvc.ShipperNormalSearchPanel.superclass.initComponent.apply(_this, arguments);
 
-		this.addEvents('itemselected');
+		_this.addEvents('itemselected');
 	}
 });

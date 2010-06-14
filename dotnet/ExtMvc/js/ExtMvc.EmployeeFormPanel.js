@@ -41,8 +41,7 @@ ExtMvc.EmployeeFormPanel = Ext.extend(Ext.form.FormPanel, {
 
 		this.tbar = [
 			{ text: 'Save', handler: this.saveItemButtonHandler, icon: '/images/disk.png', cls: 'x-btn-text-icon', scope: this },
-			{ text: 'Refresh', handler: this.refreshItemButtonHandler, icon: '/images/arrow_refresh.png', cls: 'x-btn-text-icon', scope: this },
-			{ text: 'Delete', handler: this.deleteItemButtonHandler, icon: '/images/delete.png', cls: 'x-btn-text-icon', scope: this }
+			{ text: 'Refresh', handler: this.refreshItemButtonHandler, icon: '/images/arrow_refresh.png', cls: 'x-btn-text-icon', scope: this }
 		];
 
 		ExtMvc.EmployeeFormPanel.superclass.initComponent.apply(this, arguments);
@@ -90,23 +89,5 @@ ExtMvc.EmployeeFormPanel = Ext.extend(Ext.form.FormPanel, {
 				}
 			}
 		}, this);
-	},
-
-	deleteItemButtonHandler: function () {
-		var stringId = this.getForm().getFieldValues().StringId;
-		if (!Ext.isEmpty(stringId)) {
-			Ext.MessageBox.confirm('Delete', 'Are you sure?', function (buttonId) {
-				if (buttonId === 'yes') {
-					Rpc.call({
-						url: '/Employee/Delete',
-						params: { stringId: stringId },
-						scope: this,
-						success: function (result) {
-							this.el.mask('Item deleted');
-						}
-					});
-				}
-			}, this);
-		}
 	}
 });

@@ -51,7 +51,7 @@ ExtMvc.SupplierField = Ext.extend(Ext.form.TriggerField, {
 
 		Ext.apply(_this, {
 			onTriggerClick: function () {
-				if(!_window) {
+				if (!_window) {
 					_buildWindow();
 				}
 				_window.show(this.getEl());
