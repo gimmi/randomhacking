@@ -1,4 +1,4 @@
-<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage" %>
+﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage" %>
 <!doctype html>
 <html>
 	<head>
@@ -54,6 +54,7 @@
 				<script type="text/javascript" src="js/ExtMvc.CategoryField.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.CustomerDemographicField.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.CustomerField.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.CustomerPickerWindow.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.EmployeeField.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.OrderDetailField.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.OrderField.js"></script>

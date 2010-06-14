@@ -6,11 +6,14 @@ Ext.namespace('ExtMvc');
 ExtMvc.CustomerPickerWindow = Ext.extend(Ext.Window, {
 	initComponent: function () {
 		var _this = this,
-		_onGridPanelRowDblClick = function (grid, rowIndex, event) {
-			var item = grid.getStore().getAt(rowIndex).data;
+		_fireItemSelectedEvent = function (item) {
 			_this.fireEvent('itemselected', _this, item);
 		},
-		_searchFormPanel = new ExtMvc.CustomerNormalSearchFormPanel({
+		_onGridPanelRowDblClick = function (grid, rowIndex, event) {
+			var item = grid.getStore().getAt(rowIndex).data;
+			_fireItemSelectedEvent(item);
+		},
+		_searchFormPanel = new ExtMvc.EmployeeNormalSearchFormPanel({
 			title: 'Search Filters',
 			region: 'north',
 			autoHeight: true,
@@ -22,10 +25,10 @@ ExtMvc.CustomerPickerWindow = Ext.extend(Ext.Window, {
 		_store = new Ext.data.Store({
 			autoDestroy: true,
 			proxy: new Rpc.JsonPostHttpProxy({
-				url: '/Customer/SearchNormal'
+				url: 'Employee/SearchNormal'
 			}),
 			remoteSort: true,
-			reader: new ExtMvc.CustomerJsonReader()
+			reader: new ExtMvc.EmployeeJsonReader()
 		}),
 		_pagingToolbar = new Ext.PagingToolbar({
 			store: _store,
@@ -33,7 +36,7 @@ ExtMvc.CustomerPickerWindow = Ext.extend(Ext.Window, {
 			pageSize: 25,
 			prependButtons: true
 		}),
-		_gridPanel = new ExtMvc.CustomerGridPanel({
+		_gridPanel = new ExtMvc.EmployeeGridPanel({
 			region: 'center',
 			store: _store,
 			bbar: _pagingToolbar,
@@ -51,45 +54,30 @@ ExtMvc.CustomerPickerWindow = Ext.extend(Ext.Window, {
 				}
 			});
 		},
-		_onNewButtonClick = function () {
-			alert('onNewButtonClick');
+		_onSelectNoneButtonClick = function (button, event) {
+			_fireItemSelectedEvent(null);
 		},
-		_onEditButtonClick = function () {
-			alert('onEditButtonClick');
-		},
-		_onDeleteButtonClick = function () {
-			var selectedItem = _this.getSelectedItem();
-			if (!selectedItem) {
-				return;
-			}
-			Ext.MessageBox.confirm('Delete', 'Are you sure?', function (buttonId) {
-				if (buttonId !== 'yes') {
-					return;
-				}
-				Rpc.call({
-					url: '/Customer/Delete',
-					params: { stringId: selectedItem.StringId },
-					success: function (result) {
-						_pagingToolbar.doRefresh();
-					}
-				});
-			});
+		_onSelectButtonClick = function (button, event) {
+			var sm = _gridPanel.getSelectionModel();
+			var selectedItem = sm.getCount() > 0 ? sm.getSelected().data : null;
+			_fireItemSelectedEvent(selectedItem);
 		};
 
 		Ext.apply(_this, {
+			title: 'Search Customer',
+			width: 600,
+			height: 300,
 			layout: 'border',
-			border: false,
+			maximizable: true,
+			closeAction: 'hide',
 			items: [_searchFormPanel, _gridPanel],
 			tbar: [
-				{ text: 'Search', handler: _onSearchButtonClick, icon: '/images/zoom.png', cls: 'x-btn-text-icon' },
-				{ text: 'New', handler: _onNewButtonClick, icon: '/images/add.png', cls: 'x-btn-text-icon' },
-				{ text: 'Edit', handler: _onEditButtonClick, icon: '/images/pencil.png', cls: 'x-btn-text-icon' },
-				{ text: 'Delete', handler: _onDeleteButtonClick, icon: '/images/delete.png', cls: 'x-btn-text-icon' }
+				{ text: 'Search', handler: _onSearchButtonClick, icon: 'images/zoom.png', cls: 'x-btn-text-icon' }
 			],
-			getSelectedItem: function () {
-				var sm = _gridPanel.getSelectionModel();
-				return sm.getCount() > 0 ? sm.getSelected().data : null;
-			}
+			buttons: [
+				{ text: 'Select None', handler: _onSelectNoneButtonClick },
+				{ text: 'Select', handler: _onSelectButtonClick }
+			]
 		});
 
 		ExtMvc.CustomerPickerWindow.superclass.initComponent.apply(_this, arguments);
