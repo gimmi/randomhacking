@@ -1159,6 +1159,9 @@
     <None Include="ext\resources\images\yourtheme\window\top-bottom.psd" />
     <None Include="ext\resources\resources.jsb" />
     <Content Include="Views\Shared\Site.Master" />
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Conversation\Conversation.csproj">
