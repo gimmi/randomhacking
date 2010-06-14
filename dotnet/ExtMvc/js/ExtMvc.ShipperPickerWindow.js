@@ -3,7 +3,7 @@
 "use strict";
 Ext.namespace('ExtMvc');
 
-ExtMvc.CustomerPickerWindow = Ext.extend(Ext.Window, {
+ExtMvc.ShipperPickerWindow = Ext.extend(Ext.Window, {
 	initComponent: function () {
 		var _this = this,
 		_fireItemSelectedEvent = function (item) {
@@ -13,7 +13,7 @@ ExtMvc.CustomerPickerWindow = Ext.extend(Ext.Window, {
 			var item = grid.getStore().getAt(rowIndex).data;
 			_fireItemSelectedEvent(item);
 		},
-		_searchFormPanel = new ExtMvc.CustomerNormalSearchFormPanel({
+		_searchFormPanel = new ExtMvc.ShipperNormalSearchFormPanel({
 			title: 'Search Filters',
 			region: 'north',
 			autoHeight: true,
@@ -25,10 +25,10 @@ ExtMvc.CustomerPickerWindow = Ext.extend(Ext.Window, {
 		_store = new Ext.data.Store({
 			autoDestroy: true,
 			proxy: new Rpc.JsonPostHttpProxy({
-				url: 'Customer/SearchNormal'
+				url: 'Shipper/SearchNormal'
 			}),
 			remoteSort: true,
-			reader: new ExtMvc.CustomerJsonReader()
+			reader: new ExtMvc.ShipperJsonReader()
 		}),
 		_pagingToolbar = new Ext.PagingToolbar({
 			store: _store,
@@ -36,7 +36,7 @@ ExtMvc.CustomerPickerWindow = Ext.extend(Ext.Window, {
 			pageSize: 25,
 			prependButtons: true
 		}),
-		_gridPanel = new ExtMvc.CustomerGridPanel({
+		_gridPanel = new ExtMvc.ShipperGridPanel({
 			region: 'center',
 			store: _store,
 			bbar: _pagingToolbar,
@@ -64,7 +64,7 @@ ExtMvc.CustomerPickerWindow = Ext.extend(Ext.Window, {
 		};
 
 		Ext.apply(_this, {
-			title: 'Pick a Customer',
+			title: 'Pick a Shipper',
 			width: 600,
 			height: 300,
 			layout: 'border',
@@ -80,7 +80,7 @@ ExtMvc.CustomerPickerWindow = Ext.extend(Ext.Window, {
 			]
 		});
 
-		ExtMvc.CustomerPickerWindow.superclass.initComponent.apply(_this, arguments);
+		ExtMvc.ShipperPickerWindow.superclass.initComponent.apply(_this, arguments);
 
 		_this.addEvents('itemselected');
 	}

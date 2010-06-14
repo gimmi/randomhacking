@@ -9,51 +9,19 @@ ExtMvc.OrderDetailField = Ext.extend(Ext.form.TriggerField, {
 	initComponent: function () {
 		var _this = this,
 		_window,
-		_searchPanel,
 		_selectedItem = null,
-		_onSearchPanelItemSelected = function (sender, item) {
+		_onItemSelected = function (sender, item) {
 			_this.setValue(item);
 			_window.hide();
-		},
-		_onSelectNoneButtonClick = function (button, event) {
-			_this.setValue(null);
-			_window.hide();
-		},
-		_onSelectButtonClick = function (button, event) {
-			var selectedItem = _searchPanel.getSelectedItem();
-			_this.setValue(selectedItem);
-			_window.hide();
-		},
-		_onCancelButtonClick = function (button, event) {
-			_window.hide();
-		},
-		_buildWindow = function () {
-			_searchPanel = new ExtMvc.OrderDetailSearchPanel({
-				listeners: {
-					itemselected: _onSearchPanelItemSelected
-				}
-			});
-			_window = _window || new Ext.Window({
-				title: 'Search OrderDetail',
-				width: 600,
-				height: 300,
-				layout: 'fit',
-				maximizable: true,
-				closeAction: 'hide',
-				items: _searchPanel,
-				buttons: [
-					{ text: 'Select None', handler: _onSelectNoneButtonClick },
-					{ text: 'Select', handler: _onSelectButtonClick },
-					{ text: 'Cancel', handler: _onCancelButtonClick }
-				]
-			});
 		};
 
 		Ext.apply(_this, {
 			onTriggerClick: function () {
-				if (!_window) {
-					_buildWindow();
-				}
+				_window = _window || new ExtMvc.OrderDetailPickerWindow({
+					listeners: {
+						itemselected: _onItemSelected
+					}
+				});
 				_window.show(this.getEl());
 			},
 			setValue: function (v) {
