@@ -5,8 +5,6 @@
 Ext.namespace('ExtMvc');
 
 ExtMvc.OrderNormalSearchPanel = Ext.extend(Ext.Panel, {
-	layout: 'border',
-	border: false,
 	initComponent: function () {
 		var _onGridPanelRowDblClick = function (grid, rowIndex, event) {
 			var item = grid.getStore().getAt(rowIndex).data;
@@ -63,19 +61,21 @@ ExtMvc.OrderNormalSearchPanel = Ext.extend(Ext.Panel, {
 			alert('onDeleteButtonClick');
 		};
 
-		this.items = [_searchFormPanel, _gridPanel];
-
-		this.tbar = [
-			{ text: 'Search', handler: _onSearchButtonClick, icon: '/images/zoom.png', cls: 'x-btn-text-icon', scope: this },
-			{ text: 'New', handler: _onNewButtonClick, icon: '/images/add.png', cls: 'x-btn-text-icon', scope: this },
-			{ text: 'Edit', handler: _onEditButtonClick, icon: '/images/pencil.png', cls: 'x-btn-text-icon', scope: this },
-			{ text: 'Delete', handler: _onDeleteButtonClick, icon: '/images/delete.png', cls: 'x-btn-text-icon', scope: this }
-		];
-
-		this.getSelectedItem = function () {
-			var sm = _gridPanel.getSelectionModel();
-			return sm.getCount() > 0 ? sm.getSelected().data : null;
-		};
+		Ext.apply(this, {
+			layout: 'border',
+			border: false,
+			items: [_searchFormPanel, _gridPanel],
+			tbar: [
+				{ text: 'Search', handler: _onSearchButtonClick, icon: '/images/zoom.png', cls: 'x-btn-text-icon', scope: this },
+				{ text: 'New', handler: _onNewButtonClick, icon: '/images/add.png', cls: 'x-btn-text-icon', scope: this },
+				{ text: 'Edit', handler: _onEditButtonClick, icon: '/images/pencil.png', cls: 'x-btn-text-icon', scope: this },
+				{ text: 'Delete', handler: _onDeleteButtonClick, icon: '/images/delete.png', cls: 'x-btn-text-icon', scope: this }
+			],
+			getSelectedItem: function () {
+				var sm = _gridPanel.getSelectionModel();
+				return sm.getCount() > 0 ? sm.getSelected().data : null;
+			}
+		});
 
 		this.addEvents('itemselected');
 
