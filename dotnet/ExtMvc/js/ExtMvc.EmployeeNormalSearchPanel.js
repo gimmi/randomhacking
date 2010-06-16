@@ -7,9 +7,19 @@ Ext.namespace('ExtMvc');
 ExtMvc.EmployeeNormalSearchPanel = Ext.extend(Ext.Panel, {
 	initComponent: function () {
 		var _this = this,
+		_fireEditItemEvent = function (item) {
+			_this.fireEvent('edititem', _this, item);
+		},
+		_fireNewItemEvent = function () {
+			_this.fireEvent('newitem', _this);
+		},
 		_onGridPanelRowDblClick = function (grid, rowIndex, event) {
 			var item = grid.getStore().getAt(rowIndex).data;
-			_this.fireEvent('itemselected', _this, item);
+			_fireEditItemEvent(item);
+		},
+		_getSelectedItem = function () {
+			var sm = _gridPanel.getSelectionModel();
+			return sm.getCount() > 0 ? sm.getSelected().data : null;
 		},
 		_searchFormPanel = new ExtMvc.EmployeeNormalSearchFormPanel({
 			title: 'Search Filters',
@@ -53,13 +63,17 @@ ExtMvc.EmployeeNormalSearchPanel = Ext.extend(Ext.Panel, {
 			});
 		},
 		_onNewButtonClick = function () {
-			alert('onNewButtonClick');
+			_fireNewItemEvent();
 		},
 		_onEditButtonClick = function () {
-			alert('onEditButtonClick');
+			var selectedItem = _getSelectedItem();
+			if (!selectedItem) {
+				return;
+			}
+			_fireEditItemEvent(selectedItem);
 		},
 		_onDeleteButtonClick = function () {
-			var selectedItem = _this.getSelectedItem();
+			var selectedItem = _getSelectedItem();
 			if (!selectedItem) {
 				return;
 			}
@@ -86,15 +100,11 @@ ExtMvc.EmployeeNormalSearchPanel = Ext.extend(Ext.Panel, {
 				{ text: 'New', handler: _onNewButtonClick, icon: 'images/add.png', cls: 'x-btn-text-icon' },
 				{ text: 'Edit', handler: _onEditButtonClick, icon: 'images/pencil.png', cls: 'x-btn-text-icon' },
 				{ text: 'Delete', handler: _onDeleteButtonClick, icon: 'images/delete.png', cls: 'x-btn-text-icon' }
-			],
-			getSelectedItem: function () {
-				var sm = _gridPanel.getSelectionModel();
-				return sm.getCount() > 0 ? sm.getSelected().data : null;
-			}
+			]
 		});
 
 		ExtMvc.EmployeeNormalSearchPanel.superclass.initComponent.apply(_this, arguments);
 
-		_this.addEvents('itemselected');
+		_this.addEvents('edititem', 'newitem');
 	}
 });

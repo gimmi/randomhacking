@@ -73,17 +73,18 @@
 				<script type="text/javascript" src="js/ExtMvc.ShipperFormPanel.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.SupplierFormPanel.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.TerritoryFormPanel.js"></script>
-				<script type="text/javascript" src="js/ExtMvc.CategoryListField.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.CategoryContainer.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.CustomerDemographicContainer.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.CustomerContainer.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.EmployeeContainer.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.OrderDetailContainer.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.OrderContainer.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.ProductContainer.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.RegionContainer.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.ShipperContainer.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.SupplierContainer.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.TerritoryContainer.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.CustomerDemographicListField.js"></script>
-				<script type="text/javascript" src="js/ExtMvc.CustomerListField.js"></script>
-				<script type="text/javascript" src="js/ExtMvc.EmployeeListField.js"></script>
-				<script type="text/javascript" src="js/ExtMvc.OrderDetailListField.js"></script>
-				<script type="text/javascript" src="js/ExtMvc.OrderListField.js"></script>
-				<script type="text/javascript" src="js/ExtMvc.ProductListField.js"></script>
-				<script type="text/javascript" src="js/ExtMvc.RegionListField.js"></script>
-				<script type="text/javascript" src="js/ExtMvc.ShipperListField.js"></script>
-				<script type="text/javascript" src="js/ExtMvc.SupplierListField.js"></script>
-				<script type="text/javascript" src="js/ExtMvc.TerritoryListField.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.MainViewPort.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.CategoryColumn.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.CustomerDemographicColumn.js"></script>
@@ -118,6 +119,7 @@
 				<script type="text/javascript" src="js/ExtMvc.ShipperPickerWindow.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.SupplierPickerWindow.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.TerritoryPickerWindow.js"></script>
+				<script type="text/javascript" src="js/ExtMvc.CustomerDemographicEditWindow.js"></script>
 				
 		<script type="text/javascript">
 			"use strict";
