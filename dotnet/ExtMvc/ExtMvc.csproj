@@ -1036,6 +1036,7 @@
     <Content Include="js\ExtMvc.CustomerDemographic.js" />
     <Content Include="js\ExtMvc.CustomerDemographicColumn.js" />
     <Content Include="js\ExtMvc.CustomerDemographicContainer.js" />
+    <Content Include="js\ExtMvc.CustomerDemographicEditWindow.js" />
     <Content Include="js\ExtMvc.CustomerDemographicField.js" />
     <Content Include="js\ExtMvc.CustomerDemographicFormPanel.js" />
     <Content Include="js\ExtMvc.CustomerDemographicGridPanel.js" />

@@ -40,7 +40,6 @@ ExtMvc.OrderFormPanel = Ext.extend(Ext.form.FormPanel, {
 			border: false,
 			layout: 'fit',
 			items: new ExtMvc.OrderContainer(),
-
 			tbar: [
 				{ text: 'Save', handler: _saveItemButtonHandler, icon: 'images/disk.png', cls: 'x-btn-text-icon' },
 				{ text: 'Refresh', handler: _refreshItemButtonHandler, icon: 'images/arrow_refresh.png', cls: 'x-btn-text-icon' }
@@ -56,7 +55,6 @@ ExtMvc.OrderFormPanel = Ext.extend(Ext.form.FormPanel, {
 					}
 				});
 			}
-
 		});
 
 		ExtMvc.OrderFormPanel.superclass.initComponent.apply(_this, arguments);

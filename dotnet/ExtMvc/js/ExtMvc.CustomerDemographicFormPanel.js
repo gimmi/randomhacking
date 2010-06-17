@@ -11,15 +11,7 @@ ExtMvc.CustomerDemographicFormPanel = Ext.extend(Ext.form.FormPanel, {
 		Ext.apply(_this, {
 			border: false,
 			layout: 'fit',
-			items: new ExtMvc.CustomerDemographicContainer(),
-
-			setItem: function (item) {
-				_this.getForm().setValues(item);
-			},
-			getUpdatedItem: function () {
-				return _this.getForm().getFieldValues();
-			}
-
+			items: new ExtMvc.CustomerDemographicContainer()
 		});
 
 		ExtMvc.CustomerDemographicFormPanel.superclass.initComponent.apply(_this, arguments);

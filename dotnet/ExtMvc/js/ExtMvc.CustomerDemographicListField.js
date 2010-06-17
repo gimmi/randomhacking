@@ -7,17 +7,50 @@ Ext.namespace('ExtMvc');
 ExtMvc.CustomerDemographicListField = Ext.extend(Ext.form.Field, {
 	initComponent: function () {
 		var _this = this,
-		_onNewButtonClick = function () {
-			alert('click');
+		_gridPanel,
+		_getSelectedRecord = function () {
+			var sm = _gridPanel.getSelectionModel();
+			return sm.getCount() > 0 ? sm.getSelected() : null;
 		},
-		_onEditButtonClick = function () {
-			alert('click');
+		_onItemAccepted = function (window, item) {
+			// var selectedRecord = _getSelectedRecord();
+			// Ext.apply(_getSelectedRecord().data, item);
+			window.close();
+			_gridPanel.getStore().load();
+		},
+		_buildWindow = function () {
+			return new ExtMvc.CustomerDemographicEditWindow({
+				listeners: {
+					itemaccepted: _onItemAccepted
+				}
+			});
+		},
+		_onNewButtonClick = function (button) {
+			var window = _buildWindow();
+			window.show(button.getEl());
+		},
+		_onEditButtonClick = function (button) {
+			var selectedRecord, window;
+			selectedRecord = _getSelectedRecord();
+			if (selectedRecord) {
+				window = _buildWindow();
+				window.setItem(selectedRecord.data);
+				window.show(button.getEl());
+			}
 		},
 		_onDeleteButtonClick = function () {
-			alert('click');
+			// TODO
 		},
-		_cfg = Ext.copyTo({
-			id: this.id + '-gridpanel',
+		_onGridPanelRowDblClick = function (grid, rowIndex, event) {
+			var selectedItem, window;
+			selectedItem = grid.getStore().getAt(rowIndex).data;
+			window = _buildWindow();
+			window.setItem(selectedItem);
+			window.show();
+		};
+
+		_gridPanel = new ExtMvc.CustomerDemographicGridPanel(Ext.copyTo({
+			id: _this.id + '-gridpanel',
 			store: new Ext.data.Store({
 				autoDestroy: true,
 				proxy: new Ext.data.MemoryProxy({ items: [] }),
@@ -28,8 +61,7 @@ ExtMvc.CustomerDemographicListField = Ext.extend(Ext.form.Field, {
 				{ text: 'Edit', handler: _onEditButtonClick, icon: 'images/pencil.png', cls: 'x-btn-text-icon' },
 				{ text: 'Delete', handler: _onDeleteButtonClick, icon: 'images/delete.png', cls: 'x-btn-text-icon' }
 			]
-		}, _this.initialConfig, []),
-		_gridPanel = new ExtMvc.CustomerDemographicGridPanel(_cfg);
+		}, _this.initialConfig, []));
 
 		Ext.apply(_this, {
 			onRender: function (ct, position) {

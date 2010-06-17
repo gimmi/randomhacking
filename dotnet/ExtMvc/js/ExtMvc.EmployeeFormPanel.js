@@ -40,7 +40,6 @@ ExtMvc.EmployeeFormPanel = Ext.extend(Ext.form.FormPanel, {
 			border: false,
 			layout: 'fit',
 			items: new ExtMvc.EmployeeContainer(),
-
 			tbar: [
 				{ text: 'Save', handler: _saveItemButtonHandler, icon: 'images/disk.png', cls: 'x-btn-text-icon' },
 				{ text: 'Refresh', handler: _refreshItemButtonHandler, icon: 'images/arrow_refresh.png', cls: 'x-btn-text-icon' }
@@ -56,7 +55,6 @@ ExtMvc.EmployeeFormPanel = Ext.extend(Ext.form.FormPanel, {
 					}
 				});
 			}
-
 		});
 
 		ExtMvc.EmployeeFormPanel.superclass.initComponent.apply(_this, arguments);

@@ -11,7 +11,7 @@ ExtMvc.CustomerDemographicEditWindow = Ext.extend(Ext.Window, {
 			_this.fireEvent('itemaccepted', _this, item);
 		},
 		_onOkButtonClick = function () {
-			var item = _formPanel.getUpdatedItem();
+			var item = _formPanel.getForm().getFieldValues();
 			_fireItemAcceptedEvent(item);
 		};
 
@@ -21,11 +21,14 @@ ExtMvc.CustomerDemographicEditWindow = Ext.extend(Ext.Window, {
 			height: 300,
 			layout: 'fit',
 			maximizable: true,
-			closeAction: 'hide',
+			modal: true,
 			items: _formPanel,
 			buttons: [
 				{ text: 'Ok', handler: _onOkButtonClick }
-			]
+			],
+			setItem: function (item) {
+				_formPanel.getForm().setValues(item);
+			}
 		});
 
 		ExtMvc.CustomerDemographicEditWindow.superclass.initComponent.apply(_this, arguments);
