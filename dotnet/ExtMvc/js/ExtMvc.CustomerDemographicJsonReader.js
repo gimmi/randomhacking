@@ -10,7 +10,12 @@ ExtMvc.CustomerDemographicJsonReader = Ext.extend(Rpc.JsonReader, {
 			root: 'items',
 			idProperty: 'StringId',
 			totalProperty: 'count',
-			fields: ['StringId', 'CustomerTypeId', 'CustomerDesc']
+			fields: [
+				{ name: '$ref', convert: function (v, r) { return r; } },
+				'StringId',
+				'CustomerTypeId',
+				'CustomerDesc'
+			]
 		};
 		ExtMvc.CustomerDemographicJsonReader.superclass.constructor.call(this, Ext.apply(meta || {}, cfg), recordType);
 	}

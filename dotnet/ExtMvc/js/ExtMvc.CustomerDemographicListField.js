@@ -1,4 +1,4 @@
-/*jslint white: true, browser: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
+/*jslint nomen: false, white: true, browser: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
 /*global Ext, ExtMvc */
 "use strict";
 
@@ -8,13 +8,13 @@ ExtMvc.CustomerDemographicListField = Ext.extend(Ext.form.Field, {
 	initComponent: function () {
 		var _this = this,
 		_gridPanel,
-		_getSelectedRecord = function () {
-			var sm = _gridPanel.getSelectionModel();
-			return sm.getCount() > 0 ? sm.getSelected() : null;
-		},
+		_selectedItem = null,
 		_onItemAccepted = function (window, item) {
-			// var selectedRecord = _getSelectedRecord();
-			// Ext.apply(_getSelectedRecord().data, item);
+			if (_selectedItem) {
+				Ext.apply(_selectedItem, item);
+			} else {
+				_this.getValue()[_this.getValue().length] = item;
+			}
 			window.close();
 			_gridPanel.getStore().load();
 		},
@@ -26,27 +26,22 @@ ExtMvc.CustomerDemographicListField = Ext.extend(Ext.form.Field, {
 			});
 		},
 		_onNewButtonClick = function (button) {
+			_selectedItem = null;
 			var window = _buildWindow();
 			window.show(button.getEl());
 		},
 		_onEditButtonClick = function (button) {
-			var selectedRecord, window;
-			selectedRecord = _getSelectedRecord();
-			if (selectedRecord) {
+			var sm, window;
+			sm = _gridPanel.getSelectionModel();
+			if (sm.getCount() > 0) {
+				_selectedItem = sm.getSelected().data.$ref;
 				window = _buildWindow();
-				window.setItem(selectedRecord.data);
+				window.setItem(_selectedItem);
 				window.show(button.getEl());
 			}
 		},
 		_onDeleteButtonClick = function () {
 			// TODO
-		},
-		_onGridPanelRowDblClick = function (grid, rowIndex, event) {
-			var selectedItem, window;
-			selectedItem = grid.getStore().getAt(rowIndex).data;
-			window = _buildWindow();
-			window.setItem(selectedItem);
-			window.show();
 		};
 
 		_gridPanel = new ExtMvc.CustomerDemographicGridPanel(Ext.copyTo({
