@@ -10,7 +10,11 @@ ExtMvc.TerritoryJsonReader = Ext.extend(Rpc.JsonReader, {
 			root: 'items',
 			idProperty: 'StringId',
 			totalProperty: 'count',
-			fields: ['StringId', 'TerritoryId', 'TerritoryDescription', 'Region']
+			fields: [
+				'StringId', 
+				'TerritoryId',
+				'TerritoryDescription',
+				'Region']
 		};
 		ExtMvc.TerritoryJsonReader.superclass.constructor.call(this, Ext.apply(meta || {}, cfg), recordType);
 	}

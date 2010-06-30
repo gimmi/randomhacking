@@ -10,7 +10,17 @@ ExtMvc.ProductJsonReader = Ext.extend(Rpc.JsonReader, {
 			root: 'items',
 			idProperty: 'StringId',
 			totalProperty: 'count',
-			fields: ['StringId', 'ProductId', 'ProductName', 'QuantityPerUnit', 'UnitPrice', 'UnitsInStock', 'UnitsOnOrder', 'ReorderLevel', 'Discontinued', 'Category']
+			fields: [
+				'StringId', 
+				'ProductId',
+				'ProductName',
+				'QuantityPerUnit',
+				'UnitPrice',
+				'UnitsInStock',
+				'UnitsOnOrder',
+				'ReorderLevel',
+				'Discontinued',
+				'Category']
 		};
 		ExtMvc.ProductJsonReader.superclass.constructor.call(this, Ext.apply(meta || {}, cfg), recordType);
 	}

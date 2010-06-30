@@ -10,7 +10,21 @@ ExtMvc.OrderJsonReader = Ext.extend(Rpc.JsonReader, {
 			root: 'items',
 			idProperty: 'StringId',
 			totalProperty: 'count',
-			fields: ['StringId', 'OrderId', 'OrderDate', 'RequiredDate', 'ShippedDate', 'Freight', 'ShipName', 'ShipAddress', 'ShipCity', 'ShipRegion', 'ShipPostalCode', 'ShipCountry', 'Customer', 'Employee']
+			fields: [
+				'StringId', 
+				'OrderId',
+				'OrderDate',
+				'RequiredDate',
+				'ShippedDate',
+				'Freight',
+				'ShipName',
+				'ShipAddress',
+				'ShipCity',
+				'ShipRegion',
+				'ShipPostalCode',
+				'ShipCountry',
+				'Customer',
+				'Employee']
 		};
 		ExtMvc.OrderJsonReader.superclass.constructor.call(this, Ext.apply(meta || {}, cfg), recordType);
 	}

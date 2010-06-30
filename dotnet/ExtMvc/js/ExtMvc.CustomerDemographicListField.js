@@ -1,4 +1,4 @@
-/*jslint nomen: false, white: true, browser: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
+/*jslint white: true, browser: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
 /*global Ext, ExtMvc */
 "use strict";
 
@@ -41,7 +41,11 @@ ExtMvc.CustomerDemographicListField = Ext.extend(Ext.form.Field, {
 			}
 		},
 		_onDeleteButtonClick = function () {
-			// TODO
+			var sm = _gridPanel.getSelectionModel();
+			if (sm.getCount() > 0) {
+				_gridPanel.getStore().proxy.data.items.remove(sm.getSelected().data.$ref);
+				_gridPanel.getStore().load();
+			}
 		};
 
 		_gridPanel = new ExtMvc.CustomerDemographicGridPanel(Ext.copyTo({
