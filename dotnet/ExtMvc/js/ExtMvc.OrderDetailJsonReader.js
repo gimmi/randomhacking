@@ -1,5 +1,5 @@
 /*jslint white: true, browser: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
-/*global Ext, ExtMvc */
+/*global Ext, Rpc, ExtMvc */
 "use strict";
 
 Ext.namespace('ExtMvc');
@@ -16,7 +16,8 @@ ExtMvc.OrderDetailJsonReader = Ext.extend(Rpc.JsonReader, {
 				'ProductId',
 				'UnitPrice',
 				'Quantity',
-				'Discount']
+				'Discount'
+			]
 		};
 		ExtMvc.OrderDetailJsonReader.superclass.constructor.call(this, Ext.apply(meta || {}, cfg), recordType);
 	}

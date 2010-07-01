@@ -1,6 +1,8 @@
+using Nexida.Infrastructure;
+
 namespace ExtMvc.Domain
 {
-	public class ShipperFactory : Nexida.Infrastructure.IFactory<Shipper>
+	public class ShipperFactory : IFactory<Shipper>
 	{
 		public Shipper Create()
 		{

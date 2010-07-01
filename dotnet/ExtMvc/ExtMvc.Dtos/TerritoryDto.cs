@@ -5,12 +5,11 @@ namespace ExtMvc.Dtos
 		public string StringId { get; set; }
 
 		public string TerritoryId { get; set; }
-				
+
 		public string TerritoryDescription { get; set; }
-				
+
 		// public ExtMvc.Dtos.EmployeeReferenceDto[] Employees { get; set; }
-				
-		public ExtMvc.Dtos.RegionReferenceDto Region { get; set; }
-				
+
+		public RegionReferenceDto Region { get; set; }
 	}
 }
