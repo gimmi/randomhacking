@@ -17,10 +17,6 @@ ExtMvc.EmployeeNormalSearchPanel = Ext.extend(Ext.Panel, {
 			var item = grid.getStore().getAt(rowIndex).data;
 			_fireEditItemEvent(item);
 		},
-		_getSelectedItem = function () {
-			var sm = _gridPanel.getSelectionModel();
-			return sm.getCount() > 0 ? sm.getSelected().data : null;
-		},
 		_searchFormPanel = new ExtMvc.EmployeeNormalSearchFormPanel({
 			title: 'Search Filters',
 			region: 'north',
@@ -30,13 +26,24 @@ ExtMvc.EmployeeNormalSearchPanel = Ext.extend(Ext.Panel, {
 			titleCollapse: true,
 			floatable: false
 		}),
+		_onStartLoad = function () {
+			_this.el.mask('Loading...', 'x-mask-loading');
+		},
+		_onEndLoad = function () {
+			_this.el.unmask();
+		},
 		_store = new Ext.data.Store({
 			autoDestroy: true,
 			proxy: new Rpc.JsonPostHttpProxy({
 				url: 'Employee/SearchNormal'
 			}),
 			remoteSort: true,
-			reader: new ExtMvc.EmployeeJsonReader()
+			reader: new ExtMvc.EmployeeJsonReader(),
+			listeners: {
+				beforeload: _onStartLoad,
+				load: _onEndLoad,
+				exception: _onEndLoad
+			}
 		}),
 		_pagingToolbar = new Ext.PagingToolbar({
 			store: _store,
@@ -52,6 +59,10 @@ ExtMvc.EmployeeNormalSearchPanel = Ext.extend(Ext.Panel, {
 				rowdblclick: _onGridPanelRowDblClick
 			}
 		}),
+		_getSelectedItem = function () {
+			var sm = _gridPanel.getSelectionModel();
+			return sm.getCount() > 0 ? sm.getSelected().data : null;
+		},
 		_onSearchButtonClick = function (b, e) {
 			var params = _searchFormPanel.getForm().getFieldValues();
 			Ext.apply(_gridPanel.getStore().baseParams, params);
