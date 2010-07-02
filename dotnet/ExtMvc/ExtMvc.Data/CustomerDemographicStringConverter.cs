@@ -1,30 +1,32 @@
 using System;
-using ExtMvc.Domain;
-using Nexida.Infrastructure;
 
 namespace ExtMvc.Data
 {
-	public class CustomerDemographicStringConverter : IStringConverter<CustomerDemographic>
+	public class CustomerDemographicStringConverter : Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.CustomerDemographic>
 	{
-		private const char KeySeparator = '\\';
-		private readonly CustomerDemographicRepository _repository;
+		const char KeySeparator = '\\';
+		private readonly ExtMvc.Data.CustomerDemographicRepository _repository;
 
-		public CustomerDemographicStringConverter(CustomerDemographicRepository repository)
+		public CustomerDemographicStringConverter(ExtMvc.Data.CustomerDemographicRepository repository)
 		{
 			_repository = repository;
 		}
 
-		public string ToString(CustomerDemographic obj)
+		public string ToString(ExtMvc.Domain.CustomerDemographic obj)
 		{
-			return obj.CustomerTypeId;
+			return obj.CustomerTypeId.ToString();
 		}
 
-		public CustomerDemographic FromString(string str)
+		public ExtMvc.Domain.CustomerDemographic FromString(string str)
 		{
+			if(string.IsNullOrEmpty(str))
+			{
+				throw new ArgumentException("Must be a non null, non empty value", "str");
+			}
 			string[] keys = ParseKeys(str, 1);
 			return _repository.Read(keys[0]);
 		}
-
+		
 		/// <summary>
 		/// Parses the keys.
 		/// </summary>
@@ -34,18 +36,14 @@ namespace ExtMvc.Data
 		public static string[] ParseKeys(string keyValues, int expectedNumberOfKeys)
 		{
 			string[] keys = keyValues.Split(KeySeparator);
-			foreach(string key in keys)
+			foreach (string key in keys)
 			{
-				if(key.Trim() == string.Empty)
-				{
+				if (key.Trim() == string.Empty)
 					throw new ArgumentException("One of the provided keys is empty.", "keyValues");
-				}
 			}
 
-			if(keys.Length != expectedNumberOfKeys)
-			{
+			if (keys.Length != expectedNumberOfKeys)
 				throw new ArgumentException("The number of keys provided does not match the number of expected keys for this object.", "keyValues");
-			}
 
 			return keys;
 		}

@@ -6,8 +6,8 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.Order = {
 	toString: function (o) {
-		if(o) {
-			return o.Description || o.StringId || 'Not a ExtMvc.Order';
+		if (o) {
+			return o.Description || o.StringId || '[some value]';
 		}
 		return '';
 	}

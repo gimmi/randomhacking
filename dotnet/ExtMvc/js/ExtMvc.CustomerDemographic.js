@@ -6,8 +6,8 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.CustomerDemographic = {
 	toString: function (o) {
-		if(o) {
-			return o.Description || o.StringId || 'Not a ExtMvc.CustomerDemographic';
+		if (o) {
+			return o.Description || o.StringId || '[some value]';
 		}
 		return '';
 	}

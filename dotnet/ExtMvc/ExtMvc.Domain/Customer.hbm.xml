@@ -1,27 +1,43 @@
 <?xml version="1.0"?>
-
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
 	<class name="ExtMvc.Domain.Customer, ExtMvc.Domain" table="`Customers`" schema="`dbo`">
-		<id name="CustomerId" column="`CustomerID`" type="String">
+
+		<id name="CustomerId" column="`CustomerID`" type="String" >
 			<generator class="assigned" />
 		</id>
+
+
 		<property name="CompanyName" column="`CompanyName`" type="String" not-null="true" />
+
 		<property name="ContactName" column="`ContactName`" type="String" not-null="false" />
+
 		<property name="ContactTitle" column="`ContactTitle`" type="String" not-null="false" />
+
 		<property name="Address" column="`Address`" type="String" not-null="false" />
+
 		<property name="City" column="`City`" type="String" not-null="false" />
+
 		<property name="Region" column="`Region`" type="String" not-null="false" />
+
 		<property name="PostalCode" column="`PostalCode`" type="String" not-null="false" />
+
 		<property name="Country" column="`Country`" type="String" not-null="false" />
+
 		<property name="Phone" column="`Phone`" type="String" not-null="false" />
+
 		<property name="Fax" column="`Fax`" type="String" not-null="false" />
+
+
 		<set name="Orders" inverse="true" cascade="save-update" lazy="true">
-			<key column="`CustomerID`" />
-			<one-to-many class="ExtMvc.Domain.Order, ExtMvc.Domain" />
+			<key column="`CustomerID`"/>
+			<one-to-many class="ExtMvc.Domain.Order, ExtMvc.Domain"/>
 		</set>
+
+
 		<set name="Customerdemographics" table="`CustomerCustomerDemo`" schema="`dbo`" inverse="false" cascade="save-update" lazy="true">
-			<key column="`CustomerID`" />
+			<key column="`CustomerID`"/>
 			<many-to-many class="ExtMvc.Domain.CustomerDemographic, ExtMvc.Domain" column="`CustomerTypeID`" />
 		</set>
+
 	</class>
 </hibernate-mapping>

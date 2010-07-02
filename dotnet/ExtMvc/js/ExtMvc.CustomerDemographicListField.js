@@ -9,7 +9,7 @@ ExtMvc.CustomerDemographicListField = Ext.extend(Ext.form.Field, {
 		var _this = this,
 		_gridPanel,
 		_selectedItem = null,
-		_onItemAccepted = function (window, item) {
+		_onEditEnded = function (window, item) {
 			if (_selectedItem) {
 				Ext.apply(_selectedItem, item);
 			} else {
@@ -21,7 +21,7 @@ ExtMvc.CustomerDemographicListField = Ext.extend(Ext.form.Field, {
 		_buildWindow = function () {
 			return new ExtMvc.CustomerDemographicEditWindow({
 				listeners: {
-					itemaccepted: _onItemAccepted
+					editended: _onEditEnded
 				}
 			});
 		},

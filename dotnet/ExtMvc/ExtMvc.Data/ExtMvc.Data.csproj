@@ -48,6 +48,7 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressStringConverter.cs" />
     <Compile Include="CategoryRepository.cs" />
     <Compile Include="CategoryStringConverter.cs" />
     <Compile Include="CustomerDemographicRepository.cs" />

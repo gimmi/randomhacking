@@ -6,55 +6,27 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.OrderFormPanel = Ext.extend(Ext.form.FormPanel, {
 	initComponent: function () {
-		var _this = this,
-		_saveItemButtonHandler = function () {
-			_this.el.mask('Saving...', 'x-mask-loading');
-			Rpc.call({
-				url: 'Order/Save',
-				params: { item: _this.getForm().getFieldValues() },
-				success: function (result) {
-					_this.el.unmask();
-					if (result.success) {
-						Ext.MessageBox.show({ msg: 'Changes saved successfully.', icon: Ext.MessageBox.INFO, buttons: Ext.MessageBox.OK });
-					} else {
-						_this.getForm().markInvalid(result.errors.item);
-						Ext.MessageBox.show({ msg: 'Error saving data. Correct errors and retry.', icon: Ext.MessageBox.ERROR, buttons: Ext.MessageBox.OK });
-					}
-				}
-			});
-		},
-		_refreshItemButtonHandler = function () {
-			Ext.MessageBox.confirm('Refresh', 'All modifications will be lost, continue?', function (buttonId) {
-				if (buttonId === 'yes') {
-					var stringId = _this.getForm().getFieldValues().StringId;
-					if (Ext.isEmpty(stringId)) {
-						_this.getForm().reset();
-					} else {
-						_this.loadItem(stringId);
-					}
-				}
-			});
-		};
+		var _this = this;
 
 		Ext.apply(_this, {
 			border: false,
-			layout: 'fit',
-			items: new ExtMvc.OrderContainer(),
-			tbar: [
-				{ text: 'Save', handler: _saveItemButtonHandler, icon: 'images/disk.png', cls: 'x-btn-text-icon' },
-				{ text: 'Refresh', handler: _refreshItemButtonHandler, icon: 'images/arrow_refresh.png', cls: 'x-btn-text-icon' }
-			],
-			loadItem: function (stringId) {
-				_this.el.mask('Loading...', 'x-mask-loading');
-				Rpc.call({
-					url: 'Order/Load',
-					params: { stringId: stringId },
-					success: function (item) {
-						_this.el.unmask();
-						_this.getForm().setValues(item);
-					}
-				});
-			}
+			padding: 10,
+			items: [
+				{ name: 'StringId', xtype: 'hidden' },
+				{ name: 'OrderId', fieldLabel: 'OrderId', xtype: 'numberfield' },
+				{ name: 'OrderDate', fieldLabel: 'OrderDate', xtype: 'datefield' },
+				{ name: 'RequiredDate', fieldLabel: 'RequiredDate', xtype: 'datefield' },
+				{ name: 'ShippedDate', fieldLabel: 'ShippedDate', xtype: 'datefield' },
+				{ name: 'Freight', fieldLabel: 'Freight', xtype: 'numberfield' },
+				{ name: 'ShipName', fieldLabel: 'ShipName', xtype: 'textfield' },
+				{ name: 'ShipAddress', fieldLabel: 'ShipAddress', xtype: 'textfield' },
+				{ name: 'ShipCity', fieldLabel: 'ShipCity', xtype: 'textfield' },
+				{ name: 'ShipRegion', fieldLabel: 'ShipRegion', xtype: 'textfield' },
+				{ name: 'ShipPostalCode', fieldLabel: 'ShipPostalCode', xtype: 'textfield' },
+				{ name: 'ShipCountry', fieldLabel: 'ShipCountry', xtype: 'textfield' },
+				{ name: 'Customer', fieldLabel: 'Customer', xtype: 'ExtMvc.CustomerField' },
+				{ name: 'Employee', fieldLabel: 'Employee', xtype: 'ExtMvc.EmployeeField' }
+			]
 		});
 
 		ExtMvc.OrderFormPanel.superclass.initComponent.apply(_this, arguments);

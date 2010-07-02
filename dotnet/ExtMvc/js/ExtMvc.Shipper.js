@@ -6,8 +6,8 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.Shipper = {
 	toString: function (o) {
-		if(o) {
-			return o.Description || o.StringId || 'Not a ExtMvc.Shipper';
+		if (o) {
+			return o.Description || o.StringId || '[some value]';
 		}
 		return '';
 	}

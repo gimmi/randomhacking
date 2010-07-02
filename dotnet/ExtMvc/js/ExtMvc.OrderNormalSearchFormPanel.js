@@ -15,12 +15,7 @@ ExtMvc.OrderNormalSearchFormPanel = Ext.extend(Ext.form.FormPanel, {
 			{ name: 'requiredDate', xtype: 'datefield', fieldLabel: 'requiredDate' },
 			{ name: 'shippedDate', xtype: 'datefield', fieldLabel: 'shippedDate' },
 			{ name: 'freight', xtype: 'numberfield', fieldLabel: 'freight' },
-			{ name: 'shipName', xtype: 'textfield', fieldLabel: 'shipName' },
-			{ name: 'shipAddress', xtype: 'textfield', fieldLabel: 'shipAddress' },
-			{ name: 'shipCity', xtype: 'textfield', fieldLabel: 'shipCity' },
-			{ name: 'shipRegion', xtype: 'textfield', fieldLabel: 'shipRegion' },
-			{ name: 'shipPostalCode', xtype: 'textfield', fieldLabel: 'shipPostalCode' },
-			{ name: 'shipCountry', xtype: 'textfield', fieldLabel: 'shipCountry' },
+			{ name: 'address', xtype: 'ExtMvc.AddressField', fieldLabel: 'address' },
 			{ name: 'customer', xtype: 'ExtMvc.CustomerField', fieldLabel: 'customer' },
 			{ name: 'employee', xtype: 'ExtMvc.EmployeeField', fieldLabel: 'employee' },
 			{ name: 'shipper', xtype: 'ExtMvc.ShipperField', fieldLabel: 'shipper' }

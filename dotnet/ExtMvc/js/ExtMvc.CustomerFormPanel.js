@@ -6,55 +6,44 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.CustomerFormPanel = Ext.extend(Ext.form.FormPanel, {
 	initComponent: function () {
-		var _this = this,
-		_saveItemButtonHandler = function () {
-			_this.el.mask('Saving...', 'x-mask-loading');
-			Rpc.call({
-				url: 'Customer/Save',
-				params: { item: _this.getForm().getFieldValues() },
-				success: function (result) {
-					_this.el.unmask();
-					if (result.success) {
-						Ext.MessageBox.show({ msg: 'Changes saved successfully.', icon: Ext.MessageBox.INFO, buttons: Ext.MessageBox.OK });
-					} else {
-						_this.getForm().markInvalid(result.errors.item);
-						Ext.MessageBox.show({ msg: 'Error saving data. Correct errors and retry.', icon: Ext.MessageBox.ERROR, buttons: Ext.MessageBox.OK });
-					}
-				}
-			});
-		},
-		_refreshItemButtonHandler = function () {
-			Ext.MessageBox.confirm('Refresh', 'All modifications will be lost, continue?', function (buttonId) {
-				if (buttonId === 'yes') {
-					var stringId = _this.getForm().getFieldValues().StringId;
-					if (Ext.isEmpty(stringId)) {
-						_this.getForm().reset();
-					} else {
-						_this.loadItem(stringId);
-					}
-				}
-			});
-		};
+		var _this = this;
 
 		Ext.apply(_this, {
 			border: false,
-			layout: 'fit',
-			items: new ExtMvc.CustomerContainer(),
-			tbar: [
-				{ text: 'Save', handler: _saveItemButtonHandler, icon: 'images/disk.png', cls: 'x-btn-text-icon' },
-				{ text: 'Refresh', handler: _refreshItemButtonHandler, icon: 'images/arrow_refresh.png', cls: 'x-btn-text-icon' }
-			],
-			loadItem: function (stringId) {
-				_this.el.mask('Loading...', 'x-mask-loading');
-				Rpc.call({
-					url: 'Customer/Load',
-					params: { stringId: stringId },
-					success: function (item) {
-						_this.el.unmask();
-						_this.getForm().setValues(item);
-					}
-				});
-			}
+			layout: 'vbox',
+			layoutConfig: {
+				align: 'stretch',
+				pack: 'start'
+			},
+			items: [{
+				layout: 'form',
+				border: false,
+				padding: 10,
+				items: [
+					{ name: 'StringId', xtype: 'hidden' },
+					{ name: 'CustomerId', fieldLabel: 'CustomerId', xtype: 'textfield' },
+					{ name: 'CompanyName', fieldLabel: 'CompanyName', xtype: 'textfield' },
+					{ name: 'ContactName', fieldLabel: 'ContactName', xtype: 'textfield' },
+					{ name: 'ContactTitle', fieldLabel: 'ContactTitle', xtype: 'textfield' },
+					{ name: 'Address', fieldLabel: 'Address', xtype: 'textfield' },
+					{ name: 'City', fieldLabel: 'City', xtype: 'textfield' },
+					{ name: 'Region', fieldLabel: 'Region', xtype: 'textfield' },
+					{ name: 'PostalCode', fieldLabel: 'PostalCode', xtype: 'textfield' },
+					{ name: 'Country', fieldLabel: 'Country', xtype: 'textfield' },
+					{ name: 'Phone', fieldLabel: 'Phone', xtype: 'textfield' },
+					{ name: 'Fax', fieldLabel: 'Fax', xtype: 'textfield' }
+				]
+			}, {
+				flex: 1,
+				xtype: 'tabpanel',
+				plain: true,
+				border: false,
+				activeTab: 0,
+				deferredRender: false, // IMPORTANT! See http://www.extjs.com/deploy/dev/examples/form/dynamic.js
+				items: [
+					{ name: 'Customerdemographics', title: 'Customerdemographics', xtype: 'ExtMvc.CustomerDemographicListField' }
+				]
+			}]
 		});
 
 		ExtMvc.CustomerFormPanel.superclass.initComponent.apply(_this, arguments);

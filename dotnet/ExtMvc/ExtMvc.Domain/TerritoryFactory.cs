@@ -1,8 +1,6 @@
-using Nexida.Infrastructure;
-
 namespace ExtMvc.Domain
 {
-	public class TerritoryFactory : IFactory<Territory>
+	public class TerritoryFactory : Nexida.Infrastructure.IFactory<Territory>
 	{
 		public Territory Create()
 		{

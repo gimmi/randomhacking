@@ -10,8 +10,12 @@ ExtMvc.CustomerDemographicFormPanel = Ext.extend(Ext.form.FormPanel, {
 
 		Ext.apply(_this, {
 			border: false,
-			layout: 'fit',
-			items: new ExtMvc.CustomerDemographicContainer()
+			padding: 10,
+			items: [
+				{ name: 'StringId', xtype: 'hidden' },
+				{ name: 'CustomerTypeId', fieldLabel: 'CustomerTypeId', xtype: 'textfield' },
+				{ name: 'CustomerDesc', fieldLabel: 'CustomerDesc', xtype: 'textfield' }
+			]
 		});
 
 		ExtMvc.CustomerDemographicFormPanel.superclass.initComponent.apply(_this, arguments);

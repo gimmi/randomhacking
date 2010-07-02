@@ -6,8 +6,8 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.Territory = {
 	toString: function (o) {
-		if(o) {
-			return o.Description || o.StringId || 'Not a ExtMvc.Territory';
+		if (o) {
+			return o.Description || o.StringId || '[some value]';
 		}
 		return '';
 	}

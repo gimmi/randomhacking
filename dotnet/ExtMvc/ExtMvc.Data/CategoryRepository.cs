@@ -1,45 +1,47 @@
 using System.Linq;
-using ExtMvc.Domain;
-using Nexida.Infrastructure;
-using NHibernate;
 using NHibernate.Linq;
+using Nexida.Infrastructure;
 
 namespace ExtMvc.Data
 {
-	public class CategoryRepository : IRepository
+	public class CategoryRepository : Nexida.Infrastructure.IRepository
 	{
-		private readonly ISessionFactory _northwind;
 
+				private NHibernate.ISessionFactory _northwind;
+				
 
-		public CategoryRepository(ISessionFactory northwind)
+		public CategoryRepository(NHibernate.ISessionFactory northwind)	
 		{
-			_northwind = northwind;
-		}
 
-		public void Create(Category v)
+						_northwind = northwind;
+						
+		}
+		
+		public void Create(ExtMvc.Domain.Category v)
 		{
 			_northwind.GetCurrentSession().Save(v);
 		}
 
-		public Category Read(int categoryId)
+		public ExtMvc.Domain.Category Read(int categoryId)
 		{
-			return _northwind.GetCurrentSession().Load<Category>(categoryId);
+			return _northwind.GetCurrentSession().Load<ExtMvc.Domain.Category>(categoryId);
 		}
 
-		public void Update(Category v)
+		public void Update(ExtMvc.Domain.Category v)
 		{
 			_northwind.GetCurrentSession().Update(v);
 		}
 
-		public void Delete(Category v)
+		public void Delete(ExtMvc.Domain.Category v)
 		{
 			_northwind.GetCurrentSession().Delete(v);
 		}
 
-		public IPresentableSet<Category> SearchNormal()
-		{
-			IQueryable<Category> queryable = _northwind.GetCurrentSession().Linq<Category>();
-			return new QueryablePresentableSet<Category>(queryable);
-		}
+				public IPresentableSet<ExtMvc.Domain.Category> SearchNormal()
+				{
+					IQueryable<ExtMvc.Domain.Category> queryable = _northwind.GetCurrentSession().Linq<ExtMvc.Domain.Category>();
+					return new Nexida.Infrastructure.QueryablePresentableSet<ExtMvc.Domain.Category>(queryable);
+				}
+				
 	}
 }

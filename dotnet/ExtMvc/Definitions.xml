@@ -2071,6 +2071,86 @@
         <deleteToken>Editors</deleteToken>
       </security>
     </type>
+    <type id="887d54e44748452ea277950575ad559e">
+      <name>Address</name>
+      <namespace />
+      <isDetail>true</isDetail>
+      <fields>
+        <field id="bca2fe6620ee448894ae12a9348f9287">
+          <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
+          <canBeEmpty>false</canBeEmpty>
+          <many>false</many>
+          <name>Name</name>
+          <isInverseAssociation>false</isInverseAssociation>
+          <presentation>
+            <orderInInstanceDescription xsi:nil="true" />
+            <orderInDetailView>1</orderInDetailView>
+            <orderInGridView>1</orderInGridView>
+          </presentation>
+        </field>
+        <field id="bc2e4f3331c94a0c9f21bb61e1a64a00">
+          <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
+          <canBeEmpty>false</canBeEmpty>
+          <many>false</many>
+          <name>AddressString</name>
+          <isInverseAssociation>false</isInverseAssociation>
+          <presentation>
+            <orderInInstanceDescription xsi:nil="true" />
+            <orderInDetailView>1</orderInDetailView>
+            <orderInGridView>1</orderInGridView>
+          </presentation>
+        </field>
+        <field id="d7fbb0209d6141baa2b3c634f2332f57">
+          <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
+          <canBeEmpty>false</canBeEmpty>
+          <many>false</many>
+          <name>City</name>
+          <isInverseAssociation>false</isInverseAssociation>
+          <presentation>
+            <orderInInstanceDescription xsi:nil="true" />
+            <orderInDetailView>1</orderInDetailView>
+            <orderInGridView>1</orderInGridView>
+          </presentation>
+        </field>
+        <field id="07f2c34e33684cfeafd3d4070fbde2b4">
+          <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
+          <canBeEmpty>false</canBeEmpty>
+          <many>false</many>
+          <name>Region</name>
+          <isInverseAssociation>false</isInverseAssociation>
+          <presentation>
+            <orderInInstanceDescription xsi:nil="true" />
+            <orderInDetailView>1</orderInDetailView>
+            <orderInGridView>1</orderInGridView>
+          </presentation>
+        </field>
+        <field id="887f9df91a0246ebaaddace64f47905c">
+          <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
+          <canBeEmpty>false</canBeEmpty>
+          <many>false</many>
+          <name>PostalCode</name>
+          <isInverseAssociation>false</isInverseAssociation>
+          <presentation>
+            <orderInInstanceDescription xsi:nil="true" />
+            <orderInDetailView>1</orderInDetailView>
+            <orderInGridView>1</orderInGridView>
+          </presentation>
+        </field>
+        <field id="5a30cbbd21af45558a7158c6a43dba67">
+          <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
+          <canBeEmpty>false</canBeEmpty>
+          <many>false</many>
+          <name>Country</name>
+          <isInverseAssociation>false</isInverseAssociation>
+          <presentation>
+            <orderInInstanceDescription xsi:nil="true" />
+            <orderInDetailView>1</orderInDetailView>
+            <orderInGridView>1</orderInGridView>
+          </presentation>
+        </field>
+      </fields>
+      <security />
+    </type>
   </types>
   <services>
     <service id="Northwind">
@@ -2634,82 +2714,10 @@
               </relationalMapping>
             </parameter>
             <parameter id="ShipName">
-              <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
+              <typeId>887d54e44748452ea277950575ad559e</typeId>
               <canBeEmpty>true</canBeEmpty>
               <many>false</many>
-              <name>shipName</name>
-              <fieldReference>
-                <typeId>Northwind.dbo.Orders</typeId>
-                <fieldId>ShipName</fieldId>
-              </fieldReference>
-              <relationalMapping>
-                <compareOperator>Equal</compareOperator>
-              </relationalMapping>
-            </parameter>
-            <parameter id="ShipAddress">
-              <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
-              <canBeEmpty>true</canBeEmpty>
-              <many>false</many>
-              <name>shipAddress</name>
-              <fieldReference>
-                <typeId>Northwind.dbo.Orders</typeId>
-                <fieldId>ShipAddress</fieldId>
-              </fieldReference>
-              <relationalMapping>
-                <compareOperator>Equal</compareOperator>
-              </relationalMapping>
-            </parameter>
-            <parameter id="ShipCity">
-              <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
-              <canBeEmpty>true</canBeEmpty>
-              <many>false</many>
-              <name>shipCity</name>
-              <fieldReference>
-                <typeId>Northwind.dbo.Orders</typeId>
-                <fieldId>ShipCity</fieldId>
-              </fieldReference>
-              <relationalMapping>
-                <compareOperator>Equal</compareOperator>
-              </relationalMapping>
-            </parameter>
-            <parameter id="ShipRegion">
-              <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
-              <canBeEmpty>true</canBeEmpty>
-              <many>false</many>
-              <name>shipRegion</name>
-              <fieldReference>
-                <typeId>Northwind.dbo.Orders</typeId>
-                <fieldId>ShipRegion</fieldId>
-              </fieldReference>
-              <relationalMapping>
-                <compareOperator>Equal</compareOperator>
-              </relationalMapping>
-            </parameter>
-            <parameter id="ShipPostalCode">
-              <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
-              <canBeEmpty>true</canBeEmpty>
-              <many>false</many>
-              <name>shipPostalCode</name>
-              <fieldReference>
-                <typeId>Northwind.dbo.Orders</typeId>
-                <fieldId>ShipPostalCode</fieldId>
-              </fieldReference>
-              <relationalMapping>
-                <compareOperator>Equal</compareOperator>
-              </relationalMapping>
-            </parameter>
-            <parameter id="ShipCountry">
-              <typeId>http://www.w3.org/2001/XMLSchema string</typeId>
-              <canBeEmpty>true</canBeEmpty>
-              <many>false</many>
-              <name>shipCountry</name>
-              <fieldReference>
-                <typeId>Northwind.dbo.Orders</typeId>
-                <fieldId>ShipCountry</fieldId>
-              </fieldReference>
-              <relationalMapping>
-                <compareOperator>Equal</compareOperator>
-              </relationalMapping>
+              <name>address</name>
             </parameter>
             <parameter id="CustomerID">
               <typeId>Northwind.dbo.Customers</typeId>

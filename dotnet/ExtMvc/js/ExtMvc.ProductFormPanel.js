@@ -6,55 +6,23 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.ProductFormPanel = Ext.extend(Ext.form.FormPanel, {
 	initComponent: function () {
-		var _this = this,
-		_saveItemButtonHandler = function () {
-			_this.el.mask('Saving...', 'x-mask-loading');
-			Rpc.call({
-				url: 'Product/Save',
-				params: { item: _this.getForm().getFieldValues() },
-				success: function (result) {
-					_this.el.unmask();
-					if (result.success) {
-						Ext.MessageBox.show({ msg: 'Changes saved successfully.', icon: Ext.MessageBox.INFO, buttons: Ext.MessageBox.OK });
-					} else {
-						_this.getForm().markInvalid(result.errors.item);
-						Ext.MessageBox.show({ msg: 'Error saving data. Correct errors and retry.', icon: Ext.MessageBox.ERROR, buttons: Ext.MessageBox.OK });
-					}
-				}
-			});
-		},
-		_refreshItemButtonHandler = function () {
-			Ext.MessageBox.confirm('Refresh', 'All modifications will be lost, continue?', function (buttonId) {
-				if (buttonId === 'yes') {
-					var stringId = _this.getForm().getFieldValues().StringId;
-					if (Ext.isEmpty(stringId)) {
-						_this.getForm().reset();
-					} else {
-						_this.loadItem(stringId);
-					}
-				}
-			});
-		};
+		var _this = this;
 
 		Ext.apply(_this, {
 			border: false,
-			layout: 'fit',
-			items: new ExtMvc.ProductContainer(),
-			tbar: [
-				{ text: 'Save', handler: _saveItemButtonHandler, icon: 'images/disk.png', cls: 'x-btn-text-icon' },
-				{ text: 'Refresh', handler: _refreshItemButtonHandler, icon: 'images/arrow_refresh.png', cls: 'x-btn-text-icon' }
-			],
-			loadItem: function (stringId) {
-				_this.el.mask('Loading...', 'x-mask-loading');
-				Rpc.call({
-					url: 'Product/Load',
-					params: { stringId: stringId },
-					success: function (item) {
-						_this.el.unmask();
-						_this.getForm().setValues(item);
-					}
-				});
-			}
+			padding: 10,
+			items: [
+				{ name: 'StringId', xtype: 'hidden' },
+				{ name: 'ProductId', fieldLabel: 'ProductId', xtype: 'numberfield' },
+				{ name: 'ProductName', fieldLabel: 'ProductName', xtype: 'textfield' },
+				{ name: 'QuantityPerUnit', fieldLabel: 'QuantityPerUnit', xtype: 'textfield' },
+				{ name: 'UnitPrice', fieldLabel: 'UnitPrice', xtype: 'numberfield' },
+				{ name: 'UnitsInStock', fieldLabel: 'UnitsInStock', xtype: 'numberfield' },
+				{ name: 'UnitsOnOrder', fieldLabel: 'UnitsOnOrder', xtype: 'numberfield' },
+				{ name: 'ReorderLevel', fieldLabel: 'ReorderLevel', xtype: 'numberfield' },
+				{ name: 'Discontinued', fieldLabel: 'Discontinued', xtype: 'checkbox' },
+				{ name: 'Category', fieldLabel: 'Category', xtype: 'ExtMvc.CategoryField' }
+			]
 		});
 
 		ExtMvc.ProductFormPanel.superclass.initComponent.apply(_this, arguments);

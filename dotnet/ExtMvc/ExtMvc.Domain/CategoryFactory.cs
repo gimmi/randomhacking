@@ -1,8 +1,6 @@
-using Nexida.Infrastructure;
-
 namespace ExtMvc.Domain
 {
-	public class CategoryFactory : IFactory<Category>
+	public class CategoryFactory : Nexida.Infrastructure.IFactory<Category>
 	{
 		public Category Create()
 		{

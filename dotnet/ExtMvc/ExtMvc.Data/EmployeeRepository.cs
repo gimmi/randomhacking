@@ -1,45 +1,47 @@
 using System.Linq;
-using ExtMvc.Domain;
-using Nexida.Infrastructure;
-using NHibernate;
 using NHibernate.Linq;
+using Nexida.Infrastructure;
 
 namespace ExtMvc.Data
 {
-	public class EmployeeRepository : IRepository
+	public class EmployeeRepository : Nexida.Infrastructure.IRepository
 	{
-		private readonly ISessionFactory _northwind;
 
+				private NHibernate.ISessionFactory _northwind;
+				
 
-		public EmployeeRepository(ISessionFactory northwind)
+		public EmployeeRepository(NHibernate.ISessionFactory northwind)	
 		{
-			_northwind = northwind;
-		}
 
-		public void Create(Employee v)
+						_northwind = northwind;
+						
+		}
+		
+		public void Create(ExtMvc.Domain.Employee v)
 		{
 			_northwind.GetCurrentSession().Save(v);
 		}
 
-		public Employee Read(int employeeId)
+		public ExtMvc.Domain.Employee Read(int employeeId)
 		{
-			return _northwind.GetCurrentSession().Load<Employee>(employeeId);
+			return _northwind.GetCurrentSession().Load<ExtMvc.Domain.Employee>(employeeId);
 		}
 
-		public void Update(Employee v)
+		public void Update(ExtMvc.Domain.Employee v)
 		{
 			_northwind.GetCurrentSession().Update(v);
 		}
 
-		public void Delete(Employee v)
+		public void Delete(ExtMvc.Domain.Employee v)
 		{
 			_northwind.GetCurrentSession().Delete(v);
 		}
 
-		public IPresentableSet<Employee> SearchNormal()
-		{
-			IQueryable<Employee> queryable = _northwind.GetCurrentSession().Linq<Employee>();
-			return new QueryablePresentableSet<Employee>(queryable);
-		}
+				public IPresentableSet<ExtMvc.Domain.Employee> SearchNormal()
+				{
+					IQueryable<ExtMvc.Domain.Employee> queryable = _northwind.GetCurrentSession().Linq<ExtMvc.Domain.Employee>();
+					return new Nexida.Infrastructure.QueryablePresentableSet<ExtMvc.Domain.Employee>(queryable);
+				}
+				
 	}
 }

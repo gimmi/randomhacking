@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressDto.cs" />
+    <Compile Include="AddressReferenceDto.cs" />
     <Compile Include="CategoryDto.cs" />
     <Compile Include="CategoryReferenceDto.cs" />
     <Compile Include="CustomerDemographicDto.cs" />

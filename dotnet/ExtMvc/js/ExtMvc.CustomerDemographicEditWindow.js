@@ -6,13 +6,15 @@ Ext.namespace('ExtMvc');
 ExtMvc.CustomerDemographicEditWindow = Ext.extend(Ext.Window, {
 	initComponent: function () {
 		var _this = this,
+		_item = null,
 		_formPanel = new ExtMvc.CustomerDemographicFormPanel(),
-		_fireItemAcceptedEvent = function (item) {
-			_this.fireEvent('itemaccepted', _this, item);
+		_fireEditEndedEvent = function (item) {
+			_this.fireEvent('editended', _this, item);
 		},
 		_onOkButtonClick = function () {
-			var item = _formPanel.getForm().getFieldValues();
-			_fireItemAcceptedEvent(item);
+			var fieldValues = _formPanel.getForm().getFieldValues();
+			_item = Ext.apply(_item || {}, fieldValues);
+			_fireEditEndedEvent(_item);
 		};
 
 		Ext.apply(_this, {
@@ -27,12 +29,13 @@ ExtMvc.CustomerDemographicEditWindow = Ext.extend(Ext.Window, {
 				{ text: 'Ok', handler: _onOkButtonClick }
 			],
 			setItem: function (item) {
-				_formPanel.getForm().setValues(item);
+				_item = item;
+				_formPanel.getForm().setValues(_item);
 			}
 		});
 
 		ExtMvc.CustomerDemographicEditWindow.superclass.initComponent.apply(_this, arguments);
 
-		_this.addEvents('itemaccepted');
+		_this.addEvents('editended');
 	}
 });

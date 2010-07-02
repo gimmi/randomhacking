@@ -6,8 +6,8 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.Category = {
 	toString: function (o) {
-		if(o) {
-			return o.Description || o.StringId || 'Not a ExtMvc.Category';
+		if (o) {
+			return o.Description || o.StringId || '[some value]';
 		}
 		return '';
 	}

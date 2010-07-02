@@ -1,67 +1,69 @@
 using System.Linq;
-using ExtMvc.Domain;
-using Nexida.Infrastructure;
-using NHibernate;
 using NHibernate.Linq;
+using Nexida.Infrastructure;
 
 namespace ExtMvc.Data
 {
-	public class OrderDetailRepository : IRepository
+	public class OrderDetailRepository : Nexida.Infrastructure.IRepository
 	{
-		private readonly ISessionFactory _northwind;
 
+				private NHibernate.ISessionFactory _northwind;
+				
 
-		public OrderDetailRepository(ISessionFactory northwind)
+		public OrderDetailRepository(NHibernate.ISessionFactory northwind)	
 		{
-			_northwind = northwind;
-		}
 
-		public void Create(OrderDetail v)
+						_northwind = northwind;
+						
+		}
+		
+		public void Create(ExtMvc.Domain.OrderDetail v)
 		{
 			_northwind.GetCurrentSession().Save(v);
 		}
 
-		public OrderDetail Read(int orderId, int productId)
+		public ExtMvc.Domain.OrderDetail Read(int orderId, int productId)
 		{
-			var keyObject = new OrderDetail{ OrderId = orderId, ProductId = productId };
-			return _northwind.GetCurrentSession().Load<OrderDetail>(keyObject);
+			var keyObject = new ExtMvc.Domain.OrderDetail {OrderId = orderId, ProductId = productId};
+			return _northwind.GetCurrentSession().Load<ExtMvc.Domain.OrderDetail>(keyObject);
 		}
 
-		public void Update(OrderDetail v)
+		public void Update(ExtMvc.Domain.OrderDetail v)
 		{
 			_northwind.GetCurrentSession().Update(v);
 		}
 
-		public void Delete(OrderDetail v)
+		public void Delete(ExtMvc.Domain.OrderDetail v)
 		{
 			_northwind.GetCurrentSession().Delete(v);
 		}
 
-		public IPresentableSet<OrderDetail> Search(int? orderId, int? productId, decimal? unitPrice, short? quantity, float? discount)
-		{
-			IQueryable<OrderDetail> queryable = _northwind.GetCurrentSession().Linq<OrderDetail>();
-			if(orderId != default(int?))
-			{
-				queryable = queryable.Where(x => x.OrderId == orderId);
-			}
-			if(productId != default(int?))
-			{
-				queryable = queryable.Where(x => x.ProductId == productId);
-			}
-			if(unitPrice != default(decimal?))
-			{
-				queryable = queryable.Where(x => x.UnitPrice == unitPrice);
-			}
-			if(quantity != default(short?))
-			{
-				queryable = queryable.Where(x => x.Quantity == quantity);
-			}
-			if(discount != default(float?))
-			{
-				queryable = queryable.Where(x => x.Discount == discount);
-			}
-
-			return new QueryablePresentableSet<OrderDetail>(queryable);
-		}
+				public IPresentableSet<ExtMvc.Domain.OrderDetail> Search(int? orderId, int? productId, decimal? unitPrice, short? quantity, float? discount)
+				{
+					IQueryable<ExtMvc.Domain.OrderDetail> queryable = _northwind.GetCurrentSession().Linq<ExtMvc.Domain.OrderDetail>();
+								if(orderId != default(int?))
+								{
+									queryable = queryable.Where(x => x.OrderId == orderId);
+								}
+											if(productId != default(int?))
+								{
+									queryable = queryable.Where(x => x.ProductId == productId);
+								}
+											if(unitPrice != default(decimal?))
+								{
+									queryable = queryable.Where(x => x.UnitPrice == unitPrice);
+								}
+											if(quantity != default(short?))
+								{
+									queryable = queryable.Where(x => x.Quantity == quantity);
+								}
+											if(discount != default(float?))
+								{
+									queryable = queryable.Where(x => x.Discount == discount);
+								}
+								
+					return new Nexida.Infrastructure.QueryablePresentableSet<ExtMvc.Domain.OrderDetail>(queryable);
+				}
+				
 	}
 }

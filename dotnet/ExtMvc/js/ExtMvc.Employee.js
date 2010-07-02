@@ -6,8 +6,8 @@ Ext.namespace('ExtMvc');
 
 ExtMvc.Employee = {
 	toString: function (o) {
-		if(o) {
-			return o.Description || o.StringId || 'Not a ExtMvc.Employee';
+		if (o) {
+			return o.Description || o.StringId || '[some value]';
 		}
 		return '';
 	}

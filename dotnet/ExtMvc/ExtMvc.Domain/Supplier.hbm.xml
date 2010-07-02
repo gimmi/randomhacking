@@ -1,24 +1,39 @@
 <?xml version="1.0"?>
-
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
 	<class name="ExtMvc.Domain.Supplier, ExtMvc.Domain" table="`Suppliers`" schema="`dbo`">
+
 		<id name="SupplierId" column="`SupplierID`" type="Int32" unsaved-value="0">
 			<generator class="native" />
 		</id>
+
+
 		<property name="CompanyName" column="`CompanyName`" type="String" not-null="true" />
+
 		<property name="ContactName" column="`ContactName`" type="String" not-null="false" />
+
 		<property name="ContactTitle" column="`ContactTitle`" type="String" not-null="false" />
+
 		<property name="Address" column="`Address`" type="String" not-null="false" />
+
 		<property name="City" column="`City`" type="String" not-null="false" />
+
 		<property name="Region" column="`Region`" type="String" not-null="false" />
+
 		<property name="PostalCode" column="`PostalCode`" type="String" not-null="false" />
+
 		<property name="Country" column="`Country`" type="String" not-null="false" />
+
 		<property name="Phone" column="`Phone`" type="String" not-null="false" />
+
 		<property name="Fax" column="`Fax`" type="String" not-null="false" />
+
 		<property name="HomePage" column="`HomePage`" type="String" not-null="false" />
+
+
 		<set name="Products" inverse="true" cascade="save-update" lazy="true">
-			<key column="`SupplierID`" />
-			<one-to-many class="ExtMvc.Domain.Product, ExtMvc.Domain" />
+			<key column="`SupplierID`"/>
+			<one-to-many class="ExtMvc.Domain.Product, ExtMvc.Domain"/>
 		</set>
+
 	</class>
 </hibernate-mapping>

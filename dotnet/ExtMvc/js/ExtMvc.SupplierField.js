@@ -10,19 +10,27 @@ ExtMvc.SupplierField = Ext.extend(Ext.form.TriggerField, {
 		var _this = this,
 		_window,
 		_selectedItem = null,
-		_onItemSelected = function (sender, item) {
+		_onEditEnded = function (sender, item) {
 			_this.setValue(item);
 			_window.hide();
 		};
 
 		Ext.apply(_this, {
 			onTriggerClick: function () {
-				_window = _window || new ExtMvc.SupplierPickerWindow({
+				_window = _window || new ExtMvc.SupplierEditWindow({
+					closeAction: 'hide',
 					listeners: {
-						itemselected: _onItemSelected
+						editended: _onEditEnded
 					}
 				});
+				_window.setItem(_selectedItem);
 				_window.show(this.getEl());
+			},
+			beforeDestroy: function () {
+				if (_window) {
+					_window.close();
+				}
+				return ExtMvc.SupplierField.superclass.beforeDestroy.apply(_this, arguments);
 			},
 			setValue: function (v) {
 				_selectedItem = v;
@@ -33,7 +41,7 @@ ExtMvc.SupplierField = Ext.extend(Ext.form.TriggerField, {
 			}
 		});
 
-		ExtMvc.SupplierField.superclass.initComponent.apply(this, arguments);
+		ExtMvc.SupplierField.superclass.initComponent.apply(_this, arguments);
 	}
 });
 

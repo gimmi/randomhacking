@@ -1,50 +1,52 @@
 using System.Linq;
-using ExtMvc.Domain;
-using Nexida.Infrastructure;
-using NHibernate;
 using NHibernate.Linq;
+using Nexida.Infrastructure;
 
 namespace ExtMvc.Data
 {
-	public class TerritoryRepository : IRepository
+	public class TerritoryRepository : Nexida.Infrastructure.IRepository
 	{
-		private readonly ISessionFactory _northwind;
 
+				private NHibernate.ISessionFactory _northwind;
+				
 
-		public TerritoryRepository(ISessionFactory northwind)
+		public TerritoryRepository(NHibernate.ISessionFactory northwind)	
 		{
-			_northwind = northwind;
-		}
 
-		public void Create(Territory v)
+						_northwind = northwind;
+						
+		}
+		
+		public void Create(ExtMvc.Domain.Territory v)
 		{
 			_northwind.GetCurrentSession().Save(v);
 		}
 
-		public Territory Read(string territoryId)
+		public ExtMvc.Domain.Territory Read(string territoryId)
 		{
-			return _northwind.GetCurrentSession().Load<Territory>(territoryId);
+			return _northwind.GetCurrentSession().Load<ExtMvc.Domain.Territory>(territoryId);
 		}
 
-		public void Update(Territory v)
+		public void Update(ExtMvc.Domain.Territory v)
 		{
 			_northwind.GetCurrentSession().Update(v);
 		}
 
-		public void Delete(Territory v)
+		public void Delete(ExtMvc.Domain.Territory v)
 		{
 			_northwind.GetCurrentSession().Delete(v);
 		}
 
-		public IPresentableSet<Territory> SearchNormal(string territoryDescription)
-		{
-			IQueryable<Territory> queryable = _northwind.GetCurrentSession().Linq<Territory>();
-			if(!string.IsNullOrEmpty(territoryDescription))
-			{
-				queryable = queryable.Where(x => x.TerritoryDescription.StartsWith(territoryDescription));
-			}
-
-			return new QueryablePresentableSet<Territory>(queryable);
-		}
+				public IPresentableSet<ExtMvc.Domain.Territory> SearchNormal(string territoryDescription)
+				{
+					IQueryable<ExtMvc.Domain.Territory> queryable = _northwind.GetCurrentSession().Linq<ExtMvc.Domain.Territory>();
+								if(!string.IsNullOrEmpty(territoryDescription))
+								{
+									queryable = queryable.Where(x => x.TerritoryDescription.StartsWith(territoryDescription));
+								}
+								
+					return new Nexida.Infrastructure.QueryablePresentableSet<ExtMvc.Domain.Territory>(queryable);
+				}
+				
 	}
 }
