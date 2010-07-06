@@ -1138,6 +1138,7 @@
     <Content Include="js\ExtMvc.TerritoryJsonReader.js" />
     <Content Include="js\ExtMvc.TerritoryNormalSearchFormPanel.js" />
     <Content Include="js\ExtMvc.TerritoryNormalSearchPanel.js" />
+    <Content Include="js\json2.js" />
     <Content Include="js\Rpc.js" />
     <Content Include="Views\Test\Index.aspx" />
     <Content Include="Web.config">

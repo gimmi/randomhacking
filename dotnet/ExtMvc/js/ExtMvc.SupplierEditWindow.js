@@ -22,13 +22,24 @@ ExtMvc.SupplierEditWindow = Ext.extend(Ext.Window, {
 			titleCollapse: true,
 			floatable: false
 		}),
+		_onStartLoad = function () {
+			_this.el.mask('Loading...', 'x-mask-loading');
+		},
+		_onEndLoad = function () {
+			_this.el.unmask();
+		},
 		_store = new Ext.data.Store({
 			autoDestroy: true,
 			proxy: new Rpc.JsonPostHttpProxy({
 				url: 'Supplier/SearchNormal'
 			}),
 			remoteSort: true,
-			reader: new ExtMvc.SupplierJsonReader()
+			reader: new ExtMvc.SupplierJsonReader(),
+			listeners: {
+				beforeload: _onStartLoad,
+				load: _onEndLoad,
+				exception: _onEndLoad
+			}
 		}),
 		_pagingToolbar = new Ext.PagingToolbar({
 			store: _store,

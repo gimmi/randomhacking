@@ -1,9 +1,10 @@
-<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage" %>
+﻿<%@ Page Language="C#" Inherits="System.Web.Mvc.ViewPage" %>
 <!doctype html>
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<link rel="stylesheet" type="text/css" href="ext/resources/css/ext-all.css" />
+		<script src="js/json2.js" type="text/javascript"></script>
 		<script type="text/javascript" src="ext/adapter/ext/ext-base-debug-w-comments.js"></script>
 		<script type="text/javascript" src="ext/ext-all-debug-w-comments.js"></script>
 		<script type="text/javascript" src="js/Rpc.js"></script>

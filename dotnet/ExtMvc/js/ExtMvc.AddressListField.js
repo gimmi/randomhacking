@@ -8,12 +8,10 @@ ExtMvc.AddressListField = Ext.extend(Ext.form.Field, {
 	initComponent: function () {
 		var _this = this,
 		_gridPanel,
-		_selectedItem = null,
 		_onEditEnded = function (window, item) {
-			if (_selectedItem) {
-				Ext.apply(_selectedItem, item);
-			} else {
-				_this.getValue()[_this.getValue().length] = item;
+			var value = _this.getValue();
+			if (value.indexOf(item) === -1) {
+				value[value.length] = item;
 			}
 			window.close();
 			_gridPanel.getStore().load();
@@ -26,7 +24,6 @@ ExtMvc.AddressListField = Ext.extend(Ext.form.Field, {
 			});
 		},
 		_onNewButtonClick = function (button) {
-			_selectedItem = null;
 			var window = _buildWindow();
 			window.show(button.getEl());
 		},
@@ -34,9 +31,8 @@ ExtMvc.AddressListField = Ext.extend(Ext.form.Field, {
 			var sm, window;
 			sm = _gridPanel.getSelectionModel();
 			if (sm.getCount() > 0) {
-				_selectedItem = sm.getSelected().data.$ref;
 				window = _buildWindow();
-				window.setItem(_selectedItem);
+				window.setItem(sm.getSelected().data.$ref);
 				window.show(button.getEl());
 			}
 		},

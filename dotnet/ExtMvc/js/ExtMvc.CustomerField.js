@@ -3,42 +3,25 @@
 "use strict";
 Ext.namespace('ExtMvc');
 
-ExtMvc.CustomerField = Ext.extend(Ext.form.TriggerField, {
-	editable: false,
-	hideTrigger: true,
+ExtMvc.CustomerField = Ext.extend(Ext.form.ComboBox, {
 	initComponent: function () {
 		var _this = this,
-		_window,
-		_selectedItem = null,
-		_onEditEnded = function (sender, item) {
-			_this.setValue(item);
-			_window.hide();
-		};
+		_store = new Ext.data.Store({
+			autoDestroy: true,
+			proxy: new Rpc.JsonPostHttpProxy({
+				url: 'Customer/AutocompleteSearch'
+			}),
+			reader: new Rpc.JsonReader({
+				root: 'items',
+				idProperty: 'StringId',
+				fields: [ 'StringId', 'Description' ]
+			})
+		});
 
 		Ext.apply(_this, {
-			onTriggerClick: function () {
-				_window = _window || new ExtMvc.CustomerEditWindow({
-					closeAction: 'hide',
-					listeners: {
-						editended: _onEditEnded
-					}
-				});
-				_window.setItem(_selectedItem);
-				_window.show(this.getEl());
-			},
-			beforeDestroy: function () {
-				if (_window) {
-					_window.close();
-				}
-				return ExtMvc.CustomerField.superclass.beforeDestroy.apply(_this, arguments);
-			},
-			setValue: function (v) {
-				_selectedItem = v;
-				return ExtMvc.CustomerField.superclass.setValue.call(_this, ExtMvc.Customer.toString(v));
-			},
-			getValue: function () {
-				return _selectedItem;
-			}
+			store: _store,
+			displayField: 'Description',
+			pageSize: 10
 		});
 
 		ExtMvc.CustomerField.superclass.initComponent.apply(_this, arguments);
