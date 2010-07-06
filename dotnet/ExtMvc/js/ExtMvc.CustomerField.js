@@ -17,7 +17,7 @@ ExtMvc.CustomerField = Ext.extend(Ext.form.ComboBox, {
 				fields: [ 'StringId', 'Description' ]
 			})
 		});
-
+// Test
 		Ext.apply(_this, {
 			store: _store,
 			displayField: 'Description',
