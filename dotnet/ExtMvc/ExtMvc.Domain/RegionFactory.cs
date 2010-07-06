@@ -1,6 +1,8 @@
+using Nexida.Infrastructure;
+
 namespace ExtMvc.Domain
 {
-	public class RegionFactory : Nexida.Infrastructure.IFactory<Region>
+	public class RegionFactory : IFactory<Region>
 	{
 		public Region Create()
 		{

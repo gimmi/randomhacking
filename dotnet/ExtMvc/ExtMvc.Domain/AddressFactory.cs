@@ -1,6 +1,8 @@
+using Nexida.Infrastructure;
+
 namespace ExtMvc.Domain
 {
-	public class AddressFactory : Nexida.Infrastructure.IFactory<Address>
+	public class AddressFactory : IFactory<Address>
 	{
 		public Address Create()
 		{

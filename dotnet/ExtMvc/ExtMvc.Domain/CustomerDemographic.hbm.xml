@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
+
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
 	<class name="ExtMvc.Domain.CustomerDemographic, ExtMvc.Domain" table="`CustomerDemographics`" schema="`dbo`">
-
-		<id name="CustomerTypeId" column="`CustomerTypeID`" type="String" >
+		<id name="CustomerTypeId" column="`CustomerTypeID`" type="String">
 			<generator class="assigned" />
 		</id>
-
-
 		<property name="CustomerDesc" column="`CustomerDesc`" type="String" not-null="false" />
-
+		<set name="Customers" table="`CustomerCustomerDemo`" schema="`dbo`" inverse="true" cascade="save-update" lazy="true">
+			<key column="`CustomerTypeID`" />
+			<many-to-many class="ExtMvc.Domain.Customer, ExtMvc.Domain" column="`CustomerID`" />
+		</set>
 	</class>
 </hibernate-mapping>

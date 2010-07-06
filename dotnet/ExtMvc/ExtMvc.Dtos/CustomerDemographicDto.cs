@@ -5,8 +5,9 @@ namespace ExtMvc.Dtos
 		public string StringId { get; set; }
 
 		public string CustomerTypeId { get; set; }
-				
+
 		public string CustomerDesc { get; set; }
-				
+
+		// public ExtMvc.Dtos.CustomerReferenceDto[] Customers { get; set; }
 	}
 }

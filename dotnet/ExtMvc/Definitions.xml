@@ -169,6 +169,26 @@
             <orderInGridView>1</orderInGridView>
           </presentation>
         </field>
+        <field id="Northwind.dbo.CustomerCustomerDemo.CustomerTypeID">
+          <typeId>Northwind.dbo.Customers</typeId>
+          <canBeEmpty>false</canBeEmpty>
+          <many>true</many>
+          <name>Customers</name>
+          <associationIdentifier>CustomerCustomerDemo</associationIdentifier>
+          <isInverseAssociation>true</isInverseAssociation>
+          <relationalMapping>
+            <readOnly>false</readOnly>
+            <columnName>CustomerTypeID</columnName>
+            <manyToManyTableName>CustomerCustomerDemo</manyToManyTableName>
+            <manyToManyOtherFkColumnName>CustomerID</manyToManyOtherFkColumnName>
+            <manyToManySchemaName>dbo</manyToManySchemaName>
+          </relationalMapping>
+          <presentation>
+            <orderInInstanceDescription xsi:nil="true" />
+            <orderInDetailView>1</orderInDetailView>
+            <orderInGridView xsi:nil="true" />
+          </presentation>
+        </field>
       </fields>
       <repository>
         <create>

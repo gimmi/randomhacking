@@ -1,6 +1,8 @@
+using Nexida.Infrastructure;
+
 namespace ExtMvc.Domain
 {
-	public class CustomerDemographicFactory : Nexida.Infrastructure.IFactory<CustomerDemographic>
+	public class CustomerDemographicFactory : IFactory<CustomerDemographic>
 	{
 		public CustomerDemographic Create()
 		{

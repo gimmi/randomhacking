@@ -1,63 +1,38 @@
 <?xml version="1.0"?>
+
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
 	<class name="ExtMvc.Domain.Employee, ExtMvc.Domain" table="`Employees`" schema="`dbo`">
-
 		<id name="EmployeeId" column="`EmployeeID`" type="Int32" unsaved-value="0">
 			<generator class="native" />
 		</id>
-
-
 		<property name="LastName" column="`LastName`" type="String" not-null="true" />
-
 		<property name="FirstName" column="`FirstName`" type="String" not-null="true" />
-
 		<property name="Title" column="`Title`" type="String" not-null="false" />
-
 		<property name="TitleOfCourtesy" column="`TitleOfCourtesy`" type="String" not-null="false" />
-
 		<property name="BirthDate" column="`BirthDate`" type="DateTime" not-null="false" />
-
 		<property name="HireDate" column="`HireDate`" type="DateTime" not-null="false" />
-
 		<property name="Address" column="`Address`" type="String" not-null="false" />
-
 		<property name="City" column="`City`" type="String" not-null="false" />
-
 		<property name="Region" column="`Region`" type="String" not-null="false" />
-
 		<property name="PostalCode" column="`PostalCode`" type="String" not-null="false" />
-
 		<property name="Country" column="`Country`" type="String" not-null="false" />
-
 		<property name="HomePhone" column="`HomePhone`" type="String" not-null="false" />
-
 		<property name="Extension" column="`Extension`" type="String" not-null="false" />
-
 		<property name="Photo" column="`Photo`" type="BinaryBlob" not-null="false" />
-
 		<property name="Notes" column="`Notes`" type="String" not-null="false" />
-
 		<property name="PhotoPath" column="`PhotoPath`" type="String" not-null="false" />
-
-
 		<many-to-one name="RelatedEmployee" column="`ReportsTo`" class="ExtMvc.Domain.Employee, ExtMvc.Domain" />
-
-
 		<set name="Employees" inverse="true" cascade="save-update" lazy="true">
-			<key column="`ReportsTo`"/>
-			<one-to-many class="ExtMvc.Domain.Employee, ExtMvc.Domain"/>
+			<key column="`ReportsTo`" />
+			<one-to-many class="ExtMvc.Domain.Employee, ExtMvc.Domain" />
 		</set>
-
 		<set name="Orders" inverse="true" cascade="save-update" lazy="true">
-			<key column="`EmployeeID`"/>
-			<one-to-many class="ExtMvc.Domain.Order, ExtMvc.Domain"/>
+			<key column="`EmployeeID`" />
+			<one-to-many class="ExtMvc.Domain.Order, ExtMvc.Domain" />
 		</set>
-
-
 		<set name="Territories" table="`EmployeeTerritories`" schema="`dbo`" inverse="true" cascade="save-update" lazy="true">
-			<key column="`EmployeeID`"/>
+			<key column="`EmployeeID`" />
 			<many-to-many class="ExtMvc.Domain.Territory, ExtMvc.Domain" column="`TerritoryID`" />
 		</set>
-
 	</class>
 </hibernate-mapping>

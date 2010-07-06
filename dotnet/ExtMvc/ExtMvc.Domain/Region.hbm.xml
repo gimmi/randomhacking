@@ -1,19 +1,14 @@
 <?xml version="1.0"?>
+
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
 	<class name="ExtMvc.Domain.Region, ExtMvc.Domain" table="`Region`" schema="`dbo`">
-
 		<id name="RegionId" column="`RegionID`" type="Int32" unsaved-value="0">
 			<generator class="assigned" />
 		</id>
-
-
 		<property name="RegionDescription" column="`RegionDescription`" type="String" not-null="true" />
-
-
 		<set name="Territories" inverse="true" cascade="save-update" lazy="true">
-			<key column="`RegionID`"/>
-			<one-to-many class="ExtMvc.Domain.Territory, ExtMvc.Domain"/>
+			<key column="`RegionID`" />
+			<one-to-many class="ExtMvc.Domain.Territory, ExtMvc.Domain" />
 		</set>
-
 	</class>
 </hibernate-mapping>

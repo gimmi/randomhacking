@@ -1,19 +1,13 @@
 <?xml version="1.0"?>
+
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
 	<class name="ExtMvc.Domain.OrderDetail, ExtMvc.Domain" table="`Order Details`" schema="`dbo`">
 		<composite-id>
-
 			<key-property name="OrderId" column="`OrderID`" type="Int32" />
-
 			<key-property name="ProductId" column="`ProductID`" type="Int32" />
-
 		</composite-id>
-
 		<property name="UnitPrice" column="`UnitPrice`" type="Decimal" not-null="true" />
-
 		<property name="Quantity" column="`Quantity`" type="Int16" not-null="true" />
-
 		<property name="Discount" column="`Discount`" type="Single" not-null="true" />
-
 	</class>
 </hibernate-mapping>
