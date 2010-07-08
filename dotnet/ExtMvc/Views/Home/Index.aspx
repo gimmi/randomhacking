@@ -137,6 +137,7 @@
 
 			Ext.onReady(function () {
 				Ext.QuickTips.init();
+				Rpc.init();
 				var mainViewport = new ExtMvc.MainViewport();
 			});
 		</script>

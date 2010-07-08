@@ -9,7 +9,7 @@ ExtMvc.CustomerField = Ext.extend(Ext.ux.ProxyField, {
 		_store = new Ext.data.Store({
 			autoDestroy: true,
 			proxy: new Rpc.JsonPostHttpProxy({
-				url: 'Customer/AutocompleteSearch'
+				url: 'Customer/ComboSearch'
 			}),
 			reader: new Rpc.JsonReader({
 				root: 'items',
@@ -30,7 +30,7 @@ ExtMvc.CustomerField = Ext.extend(Ext.ux.ProxyField, {
 				minChars: 0,
 				displayField: 'Description',
 				valueField: '$ref',
-				store: _store //,mode: 'local'
+				store: _store
 			}),
 			setValue: function (v) {
 				_this.item.setValue(v.Description);
@@ -44,7 +44,6 @@ ExtMvc.CustomerField = Ext.extend(Ext.ux.ProxyField, {
 
 		ExtMvc.CustomerField.superclass.initComponent.apply(_this, arguments);
 
-		//_store.load();
 	}
 });
 

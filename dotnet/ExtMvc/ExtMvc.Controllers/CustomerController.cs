@@ -82,9 +82,9 @@ namespace ExtMvc.Controllers
 				
 
 
-				public ActionResult AutocompleteSearch(string query)
+				public ActionResult ComboSearch(string query)
 				{
-					Log.DebugFormat("AutocompleteSearch called with: " + query);
+					Log.DebugFormat("ComboSearch called");
 					using(_conversation.SetAsCurrent())
 					{
 						var items = _repository.SearchNormal(query).AsEnumerable();
@@ -93,5 +93,6 @@ namespace ExtMvc.Controllers
 					}
 				}
 				
+
 	}
 }

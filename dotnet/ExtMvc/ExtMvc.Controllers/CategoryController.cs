@@ -80,5 +80,18 @@ namespace ExtMvc.Controllers
 				}
 				
 
+
+
+				public ActionResult ComboSearch()
+				{
+					Log.DebugFormat("ComboSearch called");
+					using(_conversation.SetAsCurrent())
+					{
+						var items = _repository.SearchNormal().AsEnumerable();
+						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Category>, ExtMvc.Dtos.CategoryReferenceDto[]>(items);
+						return Json(new{ items = dtos });
+					}
+				}
+				
 	}
 }

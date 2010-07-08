@@ -1,8 +1,14 @@
-/*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
+/*jslint white: true, browser: true, devel: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
 /*global Ext, Rpc: true */
 "use strict";
 
 Rpc = {
+	init: function () {
+		Ext.data.DataProxy.on('exception', function (proxy, type, action) {
+			alert('Error occured while trying to interact with the server.');
+		});
+	},
+
 	call: function (opts) {
 		opts = Ext.apply({
 			params: {},
@@ -49,6 +55,39 @@ Rpc = {
 			return this.readRecords(o);
 		}
 	}),
+
+	LoadableValue: function (config) {
+		var _this = this,
+		_valueWhileLoading = null,
+		_setValueOnLoadComplete = false,
+		_loaded = false,
+		_getValue = config.getValue,
+		_setValue = config.setValue;
+
+		Ext.apply(_this, {
+			getValue: function () {
+				if (_loaded) {
+					return _getValue();
+				} else {
+					return _valueWhileLoading;
+				}
+			},
+			setValue: function (v) {
+				if (_loaded) {
+					_setValue(v);
+				} else {
+					_valueWhileLoading = v;
+					_setValueOnLoadComplete = true;
+				}
+			},
+			notifyLoadComplete: function () {
+				_loaded = true;
+				if (_setValueOnLoadComplete) {
+					_setValue(_valueWhileLoading);
+				}
+			}
+		});
+	},
 
 	parseResponse: function (response) {
 		var reviver, isJson;

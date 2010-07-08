@@ -1,3 +1,4 @@
+using System;
 using System.Web.Mvc;
 using System.Collections.Generic;
 
@@ -80,5 +81,18 @@ namespace ExtMvc.Controllers
 				}
 				
 
+
+
+				public ActionResult ComboSearch()
+				{
+					Log.DebugFormat("ComboSearch called");
+					using(_conversation.SetAsCurrent())
+					{
+						var items = _repository.SearchNormal().AsEnumerable();
+						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Employee>, ExtMvc.Dtos.EmployeeReferenceDto[]>(items);
+						return Json(new{ items = dtos });
+					}
+				}
+				
 	}
 }

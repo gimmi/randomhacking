@@ -1,0 +1,25 @@
+﻿/*jslint white: true, browser: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
+/*global Ext, Rpc, ExtMvc */
+"use strict";
+Ext.namespace('ExtMvc');
+
+ExtMvc.LoadableValue = function (config) {
+	var _this = this,
+	_value = null,
+	_getValue = config.getValue,
+	_setValue = config.setValue;
+
+	Ext.apply(_this, {
+		getValue: function () {
+			return _value;
+		},
+		setValue: function (v) {
+			_value = v;
+		},
+		notifyLoadComplete: function () {
+			_this.getValue = _getValue;
+			_this.setValue = _setValue;
+		},
+		load: config.load
+	});
+}
