@@ -1,9 +1,9 @@
 /*jslint white: true, browser: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
-/*global Ext, ExtMvc */
+/*global Ext, Rpc, ExtMvc */
 "use strict";
 Ext.namespace('ExtMvc');
 
-ExtMvc.CustomerField = Ext.extend(Ext.form.ComboBox, {
+ExtMvc.CustomerField = Ext.extend(Ext.ux.ProxyField, {
 	initComponent: function () {
 		var _this = this,
 		_store = new Ext.data.Store({
@@ -14,17 +14,37 @@ ExtMvc.CustomerField = Ext.extend(Ext.form.ComboBox, {
 			reader: new Rpc.JsonReader({
 				root: 'items',
 				idProperty: 'StringId',
-				fields: [ 'StringId', 'Description' ]
+				fields: ['StringId', 'Description', {
+					name: '$ref',
+					convert: function (v, r) {
+						return r;
+					}
+				}]
 			})
 		});
-// Test
+
 		Ext.apply(_this, {
-			store: _store,
-			displayField: 'Description',
-			pageSize: 10
+			item: new Ext.form.ComboBox({
+				forceSelection: true,
+				typeAhead: true,
+				minChars: 0,
+				displayField: 'Description',
+				valueField: '$ref',
+				store: _store //,mode: 'local'
+			}),
+			setValue: function (v) {
+				_this.item.setValue(v.Description);
+				return ExtMvc.CustomerField.superclass.setValue.apply(_this, arguments);
+			},
+			getValue: function () {
+				var value = _this.item.getValue();
+				return Ext.isEmpty(value) ? null : value;
+			}
 		});
 
 		ExtMvc.CustomerField.superclass.initComponent.apply(_this, arguments);
+
+		//_store.load();
 	}
 });
 

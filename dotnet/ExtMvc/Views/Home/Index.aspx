@@ -8,6 +8,7 @@
 		<script type="text/javascript" src="ext/adapter/ext/ext-base-debug-w-comments.js"></script>
 		<script type="text/javascript" src="ext/ext-all-debug-w-comments.js"></script>
 		<script type="text/javascript" src="js/Rpc.js"></script>
+		<script type="text/javascript" src="js/Ext.ux.ProxyField.js"></script>
 		<script type="text/javascript" src="js/ExtMvc.CategoryGridPanel.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.CustomerDemographicGridPanel.js"></script>
 				<script type="text/javascript" src="js/ExtMvc.CustomerGridPanel.js"></script>

@@ -39,7 +39,7 @@ ExtMvc.AddressListField = Ext.extend(Ext.form.Field, {
 		_onDeleteButtonClick = function () {
 			var sm = _gridPanel.getSelectionModel();
 			if (sm.getCount() > 0) {
-				_gridPanel.getStore().proxy.data.items.remove(sm.getSelected().data.$ref);
+				_this.getValue().remove(sm.getSelected().data.$ref);
 				_gridPanel.getStore().load();
 			}
 		};

@@ -1,48 +1,51 @@
 /*jslint white: true, browser: true, onevar: true, undef: true, eqeqeq: true, plusplus: true, bitwise: true, regexp: true, strict: true, newcap: true, immed: true */
-/*global Ext, ExtMvc */
+/*global Ext, Rpc, ExtMvc */
 "use strict";
 Ext.namespace('ExtMvc');
 
-ExtMvc.TerritoryField = Ext.extend(Ext.form.TriggerField, {
-	editable: false,
-	hideTrigger: true,
+ExtMvc.TerritoryField = Ext.extend(Ext.ux.ProxyField, {
 	initComponent: function () {
 		var _this = this,
-		_window,
-		_selectedItem = null,
-		_onEditEnded = function (sender, item) {
-			_this.setValue(item);
-			_window.hide();
-		};
+		_store = new Ext.data.Store({
+			autoDestroy: true,
+			proxy: new Rpc.JsonPostHttpProxy({
+				url: 'Territory/AutocompleteSearch'
+			}),
+			reader: new Rpc.JsonReader({
+				root: 'items',
+				idProperty: 'StringId',
+				fields: ['StringId', 'Description', {
+					name: '$ref',
+					convert: function (v, r) {
+						return r;
+					}
+				}]
+			})
+		});
 
 		Ext.apply(_this, {
-			onTriggerClick: function () {
-				_window = _window || new ExtMvc.TerritoryEditWindow({
-					closeAction: 'hide',
-					listeners: {
-						editended: _onEditEnded
-					}
-				});
-				_window.setItem(_selectedItem);
-				_window.show(this.getEl());
-			},
-			beforeDestroy: function () {
-				if (_window) {
-					_window.close();
-				}
-				return ExtMvc.TerritoryField.superclass.beforeDestroy.apply(_this, arguments);
-			},
+			item: new Ext.form.ComboBox({
+				forceSelection: true,
+				typeAhead: true,
+				minChars: 0,
+				displayField: 'Description',
+				valueField: '$ref',
+				store: _store //,mode: 'local'
+			}),
 			setValue: function (v) {
-				_selectedItem = v;
-				return ExtMvc.TerritoryField.superclass.setValue.call(_this, ExtMvc.Territory.toString(v));
+				_this.item.setValue(v.Description);
+				return ExtMvc.TerritoryField.superclass.setValue.apply(_this, arguments);
 			},
 			getValue: function () {
-				return _selectedItem;
+				var value = _this.item.getValue();
+				return Ext.isEmpty(value) ? null : value;
 			}
 		});
 
-		ExtMvc.TerritoryField.superclass.initComponent.apply(_this, arguments);
+		ExtMvc.CustomerField.superclass.initComponent.apply(_this, arguments);
+
+		//_store.load();
 	}
 });
 
-Ext.reg('ExtMvc.TerritoryField', ExtMvc.TerritoryField);
+Ext.reg('ExtMvc.CustomerField', ExtMvc.CustomerField);

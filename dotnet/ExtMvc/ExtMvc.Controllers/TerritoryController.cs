@@ -80,5 +80,18 @@ namespace ExtMvc.Controllers
 					}
 				}
 				
+
+
+				public ActionResult AutocompleteSearch(string query)
+				{
+					Log.DebugFormat("AutocompleteSearch called");
+					using(_conversation.SetAsCurrent())
+					{
+						var items = _repository.SearchNormal(query).AsEnumerable();
+						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Territory>, ExtMvc.Dtos.TerritoryReferenceDto[]>(items);
+						return Json(new{ items = dtos });
+					}
+				}
+				
 	}
 }

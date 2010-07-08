@@ -1019,6 +1019,7 @@
     <Content Include="images\pencil.png" />
     <Content Include="images\refresh.png" />
     <Content Include="images\zoom.png" />
+    <Content Include="js\Ext.ux.ProxyField.js" />
     <Content Include="js\ExtMvc.Address.js" />
     <Content Include="js\ExtMvc.AddressColumn.js" />
     <Content Include="js\ExtMvc.AddressEditWindow.js" />

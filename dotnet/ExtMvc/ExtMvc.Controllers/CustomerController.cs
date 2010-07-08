@@ -1,26 +1,18 @@
-using System.Collections.Generic;
 using System.Web.Mvc;
-using AutoMapper;
-using Conversation;
-using ExtMvc.Data;
-using ExtMvc.Domain;
-using ExtMvc.Dtos;
-using log4net;
-using Nexida.Infrastructure;
-using Nexida.Infrastructure.Mvc;
+using System.Collections.Generic;
 
 namespace ExtMvc.Controllers
 {
 	public class CustomerController : Controller
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(CustomerController));
-		private readonly CustomerRepository _repository;
-		private readonly IMappingEngine _mapper;
-		private readonly IValidator _validator;
-		private readonly IConversation _conversation;
-		private readonly IStringConverter<Customer> _stringConverter;
+		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ExtMvc.Controllers.CustomerController));
+		private readonly ExtMvc.Data.CustomerRepository _repository;
+		private readonly AutoMapper.IMappingEngine _mapper;
+		private readonly Nexida.Infrastructure.IValidator _validator;
+		private readonly Conversation.IConversation _conversation;
+		private readonly Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.Customer> _stringConverter;
 
-		public CustomerController(IConversation conversation, IMappingEngine mapper, CustomerRepository repository, IValidator validator, IStringConverter<Customer> stringConverter)
+		public CustomerController(Conversation.IConversation conversation, AutoMapper.IMappingEngine mapper, ExtMvc.Data.CustomerRepository repository, Nexida.Infrastructure.IValidator validator, Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.Customer> stringConverter)
 		{
 			_conversation = conversation;
 			_mapper = mapper;
@@ -29,15 +21,15 @@ namespace ExtMvc.Controllers
 			_stringConverter = stringConverter;
 		}
 
-		public ActionResult Save(CustomerDto item)
+		public ActionResult Save(ExtMvc.Dtos.CustomerDto item)
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				Customer itemMapped = _mapper.Map<CustomerDto, Customer>(item);
-				ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
-				if(ModelState.IsValid)
+				var itemMapped = _mapper.Map<ExtMvc.Dtos.CustomerDto, ExtMvc.Domain.Customer>(item);
+				Nexida.Infrastructure.Mvc.ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
+				if (ModelState.IsValid)
 				{
-					bool isNew = string.IsNullOrEmpty(item.StringId);
+					var isNew = string.IsNullOrEmpty(item.StringId);
 					if(isNew)
 					{
 						_repository.Create(itemMapped);
@@ -50,7 +42,7 @@ namespace ExtMvc.Controllers
 				}
 				return Json(new{
 					success = ModelState.IsValid,
-					errors = ValidationHelpers.BuildErrorDictionary(ModelState),
+					errors = Nexida.Infrastructure.Mvc.ValidationHelpers.BuildErrorDictionary(ModelState),
 				});
 			}
 		}
@@ -59,8 +51,8 @@ namespace ExtMvc.Controllers
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				Customer item = _stringConverter.FromString(stringId);
-				CustomerDto itemDto = _mapper.Map<Customer, CustomerDto>(item);
+				var item = _stringConverter.FromString(stringId);
+				var itemDto = _mapper.Map<ExtMvc.Domain.Customer, ExtMvc.Dtos.CustomerDto>(item);
 				return Json(itemDto);
 			}
 		}
@@ -69,33 +61,37 @@ namespace ExtMvc.Controllers
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				Customer item = _stringConverter.FromString(stringId);
+				var item = _stringConverter.FromString(stringId);
 				_repository.Delete(item);
 				_conversation.Flush();
 			}
 		}
 
-		public ActionResult SearchNormal(string contactName, int start, int limit, string sort, string dir)
-		{
-			Log.DebugFormat("SearchNormal called");
-			using(_conversation.SetAsCurrent())
-			{
-				IPresentableSet<Customer> set = _repository.SearchNormal(contactName);
-				IEnumerable<Customer> items = set.Skip(start).Take(limit).Sort(sort, dir == "ASC").AsEnumerable();
-				CustomerDto[] dtos = _mapper.Map<IEnumerable<Customer>, CustomerDto[]>(items);
-				return Json(new{ items = dtos, count = set.Count() });
-			}
-		}
+				public ActionResult SearchNormal(string contactName, int start, int limit, string sort, string dir)
+				{
+					Log.DebugFormat("SearchNormal called");
+					using(_conversation.SetAsCurrent())
+					{
+										
+						var set = _repository.SearchNormal(contactName);
+						var items = set.Skip(start).Take(limit).Sort(sort, dir == "ASC").AsEnumerable();
+						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Customer>, ExtMvc.Dtos.CustomerDto[]>(items);
+						return Json(new{ items = dtos, count = set.Count() });
+					}
+				}
+				
 
-		public ActionResult AutocompleteSearch(string query, int start, int limit)
-		{
-			Log.DebugFormat("AutocompleteSearch called");
-			using(_conversation.SetAsCurrent())
-			{
-				IEnumerable<Customer> items = _repository.SearchNormal(query).AsEnumerable();
-				CustomerReferenceDto[] dtos = _mapper.Map<IEnumerable<Customer>, CustomerReferenceDto[]>(items);
-				return Json(new{ items = dtos });
-			}
-		}
+
+				public ActionResult AutocompleteSearch(string query)
+				{
+					Log.DebugFormat("AutocompleteSearch called with: " + query);
+					using(_conversation.SetAsCurrent())
+					{
+						var items = _repository.SearchNormal(query).AsEnumerable();
+						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Customer>, ExtMvc.Dtos.CustomerReferenceDto[]>(items);
+						return Json(new{ items = dtos });
+					}
+				}
+				
 	}
 }

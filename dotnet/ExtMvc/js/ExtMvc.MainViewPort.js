@@ -18,7 +18,7 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 			}]
 		});
 
-		function _openTab(title, Constructor) {
+		function _openTab (title, Constructor) {
 			var tab;
 
 			Ext.each(_tabPanel.items.items, function (item) {
@@ -37,157 +37,157 @@ ExtMvc.MainViewport = Ext.extend(Ext.Viewport, {
 			return tab;
 		}
 
-		function _onCategoryNormalEditItem(sender, item) {
-			var editTab, description;
-			description = ExtMvc.Category.toString(item);
-			editTab = _openTab('Category ' + description, ExtMvc.CategoryEditPanel);
-			editTab.loadItem(item.StringId);
-		}
-		function _onCategoryNewItem(sender) {
-			_openTab('New Category', ExtMvc.CategoryEditPanel);
-		}
-		function _onCategoryNormalClick(sender, item) {
-			var searchTab = _openTab('Search Category Normal', ExtMvc.CategoryNormalSearchPanel);
-			searchTab.on('edititem', _onCategoryNormalEditItem);
-			searchTab.on('newitem', _onCategoryNewItem);
-		}
-
-		function _onCustomerNormalEditItem(sender, item) {
-			var editTab, description;
-			description = ExtMvc.Customer.toString(item);
-			editTab = _openTab('Customer ' + description, ExtMvc.CustomerEditPanel);
-			editTab.loadItem(item.StringId);
-		}
-		function _onCustomerNewItem(sender) {
-			_openTab('New Customer', ExtMvc.CustomerEditPanel);
-		}
-		function _onCustomerNormalClick(sender, item) {
-			var searchTab = _openTab('Search Customer Normal', ExtMvc.CustomerNormalSearchPanel);
-			searchTab.on('edititem', _onCustomerNormalEditItem);
-			searchTab.on('newitem', _onCustomerNewItem);
-		}
-
-		function _onEmployeeNormalEditItem(sender, item) {
-			var editTab, description;
-			description = ExtMvc.Employee.toString(item);
-			editTab = _openTab('Employee ' + description, ExtMvc.EmployeeEditPanel);
-			editTab.loadItem(item.StringId);
-		}
-		function _onEmployeeNewItem(sender) {
-			_openTab('New Employee', ExtMvc.EmployeeEditPanel);
-		}
-		function _onEmployeeNormalClick(sender, item) {
-			var searchTab = _openTab('Search Employee Normal', ExtMvc.EmployeeNormalSearchPanel);
-			searchTab.on('edititem', _onEmployeeNormalEditItem);
-			searchTab.on('newitem', _onEmployeeNewItem);
-		}
-
-		function _onOrderDetailEditItem(sender, item) {
-			var editTab, description;
-			description = ExtMvc.OrderDetail.toString(item);
-			editTab = _openTab('OrderDetail ' + description, ExtMvc.OrderDetailEditPanel);
-			editTab.loadItem(item.StringId);
-		}
-		function _onOrderDetailNewItem(sender) {
-			_openTab('New OrderDetail', ExtMvc.OrderDetailEditPanel);
-		}
-		function _onOrderDetailClick(sender, item) {
-			var searchTab = _openTab('Search OrderDetail', ExtMvc.OrderDetailSearchPanel);
-			searchTab.on('edititem', _onOrderDetailEditItem);
-			searchTab.on('newitem', _onOrderDetailNewItem);
-		}
-
-		function _onOrderNormalEditItem(sender, item) {
-			var editTab, description;
-			description = ExtMvc.Order.toString(item);
-			editTab = _openTab('Order ' + description, ExtMvc.OrderEditPanel);
-			editTab.loadItem(item.StringId);
-		}
-		function _onOrderNewItem(sender) {
-			_openTab('New Order', ExtMvc.OrderEditPanel);
-		}
-		function _onOrderNormalClick(sender, item) {
-			var searchTab = _openTab('Search Order Normal', ExtMvc.OrderNormalSearchPanel);
-			searchTab.on('edititem', _onOrderNormalEditItem);
-			searchTab.on('newitem', _onOrderNewItem);
-		}
-
-		function _onProductNormalEditItem(sender, item) {
-			var editTab, description;
-			description = ExtMvc.Product.toString(item);
-			editTab = _openTab('Product ' + description, ExtMvc.ProductEditPanel);
-			editTab.loadItem(item.StringId);
-		}
-		function _onProductNewItem(sender) {
-			_openTab('New Product', ExtMvc.ProductEditPanel);
-		}
-		function _onProductNormalClick(sender, item) {
-			var searchTab = _openTab('Search Product Normal', ExtMvc.ProductNormalSearchPanel);
-			searchTab.on('edititem', _onProductNormalEditItem);
-			searchTab.on('newitem', _onProductNewItem);
-		}
-
-		function _onRegionNormalEditItem(sender, item) {
-			var editTab, description;
-			description = ExtMvc.Region.toString(item);
-			editTab = _openTab('Region ' + description, ExtMvc.RegionEditPanel);
-			editTab.loadItem(item.StringId);
-		}
-		function _onRegionNewItem(sender) {
-			_openTab('New Region', ExtMvc.RegionEditPanel);
-		}
-		function _onRegionNormalClick(sender, item) {
-			var searchTab = _openTab('Search Region Normal', ExtMvc.RegionNormalSearchPanel);
-			searchTab.on('edititem', _onRegionNormalEditItem);
-			searchTab.on('newitem', _onRegionNewItem);
-		}
-
-		function _onShipperNormalEditItem(sender, item) {
-			var editTab, description;
-			description = ExtMvc.Shipper.toString(item);
-			editTab = _openTab('Shipper ' + description, ExtMvc.ShipperEditPanel);
-			editTab.loadItem(item.StringId);
-		}
-		function _onShipperNewItem(sender) {
-			_openTab('New Shipper', ExtMvc.ShipperEditPanel);
-		}
-		function _onShipperNormalClick(sender, item) {
-			var searchTab = _openTab('Search Shipper Normal', ExtMvc.ShipperNormalSearchPanel);
-			searchTab.on('edititem', _onShipperNormalEditItem);
-			searchTab.on('newitem', _onShipperNewItem);
-		}
-
-		function _onSupplierNormalEditItem(sender, item) {
-			var editTab, description;
-			description = ExtMvc.Supplier.toString(item);
-			editTab = _openTab('Supplier ' + description, ExtMvc.SupplierEditPanel);
-			editTab.loadItem(item.StringId);
-		}
-		function _onSupplierNewItem(sender) {
-			_openTab('New Supplier', ExtMvc.SupplierEditPanel);
-		}
-		function _onSupplierNormalClick(sender, item) {
-			var searchTab = _openTab('Search Supplier Normal', ExtMvc.SupplierNormalSearchPanel);
-			searchTab.on('edititem', _onSupplierNormalEditItem);
-			searchTab.on('newitem', _onSupplierNewItem);
-		}
-
-		function _onTerritoryNormalEditItem(sender, item) {
-			var editTab, description;
-			description = ExtMvc.Territory.toString(item);
-			editTab = _openTab('Territory ' + description, ExtMvc.TerritoryEditPanel);
-			editTab.loadItem(item.StringId);
-		}
-		function _onTerritoryNewItem(sender) {
-			_openTab('New Territory', ExtMvc.TerritoryEditPanel);
-		}
-		function _onTerritoryNormalClick(sender, item) {
-			var searchTab = _openTab('Search Territory Normal', ExtMvc.TerritoryNormalSearchPanel);
-			searchTab.on('edititem', _onTerritoryNormalEditItem);
-			searchTab.on('newitem', _onTerritoryNewItem);
-		}
-
-
+						function _onCategoryNormalEditItem (sender, item) {
+							var editTab, description;
+							description = ExtMvc.Category.toString(item);
+							editTab = _openTab('Category ' + description, ExtMvc.CategoryEditPanel);
+							editTab.loadItem(item.StringId);
+						}
+						function _onCategoryNewItem (sender) {
+							_openTab('New Category', ExtMvc.CategoryEditPanel);
+						}
+						function _onCategoryNormalClick (sender, item) {
+							var searchTab = _openTab('Search Category Normal', ExtMvc.CategoryNormalSearchPanel);
+							searchTab.on('edititem', _onCategoryNormalEditItem);
+							searchTab.on('newitem', _onCategoryNewItem);
+						}
+						
+						function _onCustomerNormalEditItem (sender, item) {
+							var editTab, description;
+							description = ExtMvc.Customer.toString(item);
+							editTab = _openTab('Customer ' + description, ExtMvc.CustomerEditPanel);
+							editTab.loadItem(item.StringId);
+						}
+						function _onCustomerNewItem (sender) {
+							_openTab('New Customer', ExtMvc.CustomerEditPanel);
+						}
+						function _onCustomerNormalClick (sender, item) {
+							var searchTab = _openTab('Search Customer Normal', ExtMvc.CustomerNormalSearchPanel);
+							searchTab.on('edititem', _onCustomerNormalEditItem);
+							searchTab.on('newitem', _onCustomerNewItem);
+						}
+						
+						function _onEmployeeNormalEditItem (sender, item) {
+							var editTab, description;
+							description = ExtMvc.Employee.toString(item);
+							editTab = _openTab('Employee ' + description, ExtMvc.EmployeeEditPanel);
+							editTab.loadItem(item.StringId);
+						}
+						function _onEmployeeNewItem (sender) {
+							_openTab('New Employee', ExtMvc.EmployeeEditPanel);
+						}
+						function _onEmployeeNormalClick (sender, item) {
+							var searchTab = _openTab('Search Employee Normal', ExtMvc.EmployeeNormalSearchPanel);
+							searchTab.on('edititem', _onEmployeeNormalEditItem);
+							searchTab.on('newitem', _onEmployeeNewItem);
+						}
+						
+						function _onOrderDetailEditItem (sender, item) {
+							var editTab, description;
+							description = ExtMvc.OrderDetail.toString(item);
+							editTab = _openTab('OrderDetail ' + description, ExtMvc.OrderDetailEditPanel);
+							editTab.loadItem(item.StringId);
+						}
+						function _onOrderDetailNewItem (sender) {
+							_openTab('New OrderDetail', ExtMvc.OrderDetailEditPanel);
+						}
+						function _onOrderDetailClick (sender, item) {
+							var searchTab = _openTab('Search OrderDetail', ExtMvc.OrderDetailSearchPanel);
+							searchTab.on('edititem', _onOrderDetailEditItem);
+							searchTab.on('newitem', _onOrderDetailNewItem);
+						}
+						
+						function _onOrderNormalEditItem (sender, item) {
+							var editTab, description;
+							description = ExtMvc.Order.toString(item);
+							editTab = _openTab('Order ' + description, ExtMvc.OrderEditPanel);
+							editTab.loadItem(item.StringId);
+						}
+						function _onOrderNewItem (sender) {
+							_openTab('New Order', ExtMvc.OrderEditPanel);
+						}
+						function _onOrderNormalClick (sender, item) {
+							var searchTab = _openTab('Search Order Normal', ExtMvc.OrderNormalSearchPanel);
+							searchTab.on('edititem', _onOrderNormalEditItem);
+							searchTab.on('newitem', _onOrderNewItem);
+						}
+						
+						function _onProductNormalEditItem (sender, item) {
+							var editTab, description;
+							description = ExtMvc.Product.toString(item);
+							editTab = _openTab('Product ' + description, ExtMvc.ProductEditPanel);
+							editTab.loadItem(item.StringId);
+						}
+						function _onProductNewItem (sender) {
+							_openTab('New Product', ExtMvc.ProductEditPanel);
+						}
+						function _onProductNormalClick (sender, item) {
+							var searchTab = _openTab('Search Product Normal', ExtMvc.ProductNormalSearchPanel);
+							searchTab.on('edititem', _onProductNormalEditItem);
+							searchTab.on('newitem', _onProductNewItem);
+						}
+						
+						function _onRegionNormalEditItem (sender, item) {
+							var editTab, description;
+							description = ExtMvc.Region.toString(item);
+							editTab = _openTab('Region ' + description, ExtMvc.RegionEditPanel);
+							editTab.loadItem(item.StringId);
+						}
+						function _onRegionNewItem (sender) {
+							_openTab('New Region', ExtMvc.RegionEditPanel);
+						}
+						function _onRegionNormalClick (sender, item) {
+							var searchTab = _openTab('Search Region Normal', ExtMvc.RegionNormalSearchPanel);
+							searchTab.on('edititem', _onRegionNormalEditItem);
+							searchTab.on('newitem', _onRegionNewItem);
+						}
+						
+						function _onShipperNormalEditItem (sender, item) {
+							var editTab, description;
+							description = ExtMvc.Shipper.toString(item);
+							editTab = _openTab('Shipper ' + description, ExtMvc.ShipperEditPanel);
+							editTab.loadItem(item.StringId);
+						}
+						function _onShipperNewItem (sender) {
+							_openTab('New Shipper', ExtMvc.ShipperEditPanel);
+						}
+						function _onShipperNormalClick (sender, item) {
+							var searchTab = _openTab('Search Shipper Normal', ExtMvc.ShipperNormalSearchPanel);
+							searchTab.on('edititem', _onShipperNormalEditItem);
+							searchTab.on('newitem', _onShipperNewItem);
+						}
+						
+						function _onSupplierNormalEditItem (sender, item) {
+							var editTab, description;
+							description = ExtMvc.Supplier.toString(item);
+							editTab = _openTab('Supplier ' + description, ExtMvc.SupplierEditPanel);
+							editTab.loadItem(item.StringId);
+						}
+						function _onSupplierNewItem (sender) {
+							_openTab('New Supplier', ExtMvc.SupplierEditPanel);
+						}
+						function _onSupplierNormalClick (sender, item) {
+							var searchTab = _openTab('Search Supplier Normal', ExtMvc.SupplierNormalSearchPanel);
+							searchTab.on('edititem', _onSupplierNormalEditItem);
+							searchTab.on('newitem', _onSupplierNewItem);
+						}
+						
+						function _onTerritoryNormalEditItem (sender, item) {
+							var editTab, description;
+							description = ExtMvc.Territory.toString(item);
+							editTab = _openTab('Territory ' + description, ExtMvc.TerritoryEditPanel);
+							editTab.loadItem(item.StringId);
+						}
+						function _onTerritoryNewItem (sender) {
+							_openTab('New Territory', ExtMvc.TerritoryEditPanel);
+						}
+						function _onTerritoryNormalClick (sender, item) {
+							var searchTab = _openTab('Search Territory Normal', ExtMvc.TerritoryNormalSearchPanel);
+							searchTab.on('edititem', _onTerritoryNormalEditItem);
+							searchTab.on('newitem', _onTerritoryNewItem);
+						}
+						
+				
 		_treePanel = new Ext.tree.TreePanel({
 			title: 'Main Menu',
 			region: 'west',
