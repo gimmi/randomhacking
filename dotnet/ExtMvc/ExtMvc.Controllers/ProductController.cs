@@ -1,18 +1,26 @@
-using System.Web.Mvc;
 using System.Collections.Generic;
+using System.Web.Mvc;
+using AutoMapper;
+using Conversation;
+using ExtMvc.Data;
+using ExtMvc.Domain;
+using ExtMvc.Dtos;
+using log4net;
+using Nexida.Infrastructure;
+using Nexida.Infrastructure.Mvc;
 
 namespace ExtMvc.Controllers
 {
 	public class ProductController : Controller
 	{
-		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ExtMvc.Controllers.ProductController));
-		private readonly ExtMvc.Data.ProductRepository _repository;
-		private readonly AutoMapper.IMappingEngine _mapper;
-		private readonly Nexida.Infrastructure.IValidator _validator;
-		private readonly Conversation.IConversation _conversation;
-		private readonly Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.Product> _stringConverter;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(ProductController));
+		private readonly ProductRepository _repository;
+		private readonly IMappingEngine _mapper;
+		private readonly IValidator _validator;
+		private readonly IConversation _conversation;
+		private readonly IStringConverter<Product> _stringConverter;
 
-		public ProductController(Conversation.IConversation conversation, AutoMapper.IMappingEngine mapper, ExtMvc.Data.ProductRepository repository, Nexida.Infrastructure.IValidator validator, Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.Product> stringConverter)
+		public ProductController(IConversation conversation, IMappingEngine mapper, ProductRepository repository, IValidator validator, IStringConverter<Product> stringConverter)
 		{
 			_conversation = conversation;
 			_mapper = mapper;
@@ -21,15 +29,15 @@ namespace ExtMvc.Controllers
 			_stringConverter = stringConverter;
 		}
 
-		public ActionResult Save(ExtMvc.Dtos.ProductDto item)
+		public ActionResult Save(ProductDto item)
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				var itemMapped = _mapper.Map<ExtMvc.Dtos.ProductDto, ExtMvc.Domain.Product>(item);
-				Nexida.Infrastructure.Mvc.ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
-				if (ModelState.IsValid)
+				Product itemMapped = _mapper.Map<ProductDto, Product>(item);
+				ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
+				if(ModelState.IsValid)
 				{
-					var isNew = string.IsNullOrEmpty(item.StringId);
+					bool isNew = string.IsNullOrEmpty(item.StringId);
 					if(isNew)
 					{
 						_repository.Create(itemMapped);
@@ -42,7 +50,7 @@ namespace ExtMvc.Controllers
 				}
 				return Json(new{
 					success = ModelState.IsValid,
-					errors = Nexida.Infrastructure.Mvc.ValidationHelpers.BuildErrorDictionary(ModelState),
+					errors = ValidationHelpers.BuildErrorDictionary(ModelState),
 				});
 			}
 		}
@@ -51,8 +59,8 @@ namespace ExtMvc.Controllers
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				var item = _stringConverter.FromString(stringId);
-				var itemDto = _mapper.Map<ExtMvc.Domain.Product, ExtMvc.Dtos.ProductDto>(item);
+				Product item = _stringConverter.FromString(stringId);
+				ProductDto itemDto = _mapper.Map<Product, ProductDto>(item);
 				return Json(itemDto);
 			}
 		}
@@ -61,28 +69,25 @@ namespace ExtMvc.Controllers
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				var item = _stringConverter.FromString(stringId);
+				Product item = _stringConverter.FromString(stringId);
 				_repository.Delete(item);
 				_conversation.Flush();
 			}
 		}
 
-				public ActionResult SearchNormal(int? productId, string productName, bool? discontinued, ExtMvc.Dtos.CategoryReferenceDto category, ExtMvc.Dtos.SupplierReferenceDto supplier, int start, int limit, string sort, string dir)
-				{
-					Log.DebugFormat("SearchNormal called");
-					using(_conversation.SetAsCurrent())
-					{
-																						var categoryMapped = _mapper.Map<ExtMvc.Dtos.CategoryReferenceDto, ExtMvc.Domain.Category>(category);
-														var supplierMapped = _mapper.Map<ExtMvc.Dtos.SupplierReferenceDto, ExtMvc.Domain.Supplier>(supplier);
-										
-						var set = _repository.SearchNormal(productId, productName, discontinued, categoryMapped, supplierMapped);
-						var items = set.Skip(start).Take(limit).Sort(sort, dir == "ASC").AsEnumerable();
-						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Product>, ExtMvc.Dtos.ProductDto[]>(items);
-						return Json(new{ items = dtos, count = set.Count() });
-					}
-				}
-				
+		public ActionResult SearchNormal(int? productId, string productName, bool? discontinued, CategoryReferenceDto category, SupplierReferenceDto supplier, int start, int limit, string sort, string dir)
+		{
+			Log.DebugFormat("SearchNormal called");
+			using(_conversation.SetAsCurrent())
+			{
+				Category categoryMapped = _mapper.Map<CategoryReferenceDto, Category>(category);
+				Supplier supplierMapped = _mapper.Map<SupplierReferenceDto, Supplier>(supplier);
 
-
+				IPresentableSet<Product> set = _repository.SearchNormal(productId, productName, discontinued, categoryMapped, supplierMapped);
+				IEnumerable<Product> items = set.Skip(start).Take(limit).Sort(sort, dir == "ASC").AsEnumerable();
+				ProductDto[] dtos = _mapper.Map<IEnumerable<Product>, ProductDto[]>(items);
+				return Json(new{ items = dtos, count = set.Count() });
+			}
+		}
 	}
 }

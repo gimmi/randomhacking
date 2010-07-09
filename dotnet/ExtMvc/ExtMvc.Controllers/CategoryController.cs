@@ -1,18 +1,26 @@
-using System.Web.Mvc;
 using System.Collections.Generic;
+using System.Web.Mvc;
+using AutoMapper;
+using Conversation;
+using ExtMvc.Data;
+using ExtMvc.Domain;
+using ExtMvc.Dtos;
+using log4net;
+using Nexida.Infrastructure;
+using Nexida.Infrastructure.Mvc;
 
 namespace ExtMvc.Controllers
 {
 	public class CategoryController : Controller
 	{
-		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ExtMvc.Controllers.CategoryController));
-		private readonly ExtMvc.Data.CategoryRepository _repository;
-		private readonly AutoMapper.IMappingEngine _mapper;
-		private readonly Nexida.Infrastructure.IValidator _validator;
-		private readonly Conversation.IConversation _conversation;
-		private readonly Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.Category> _stringConverter;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(CategoryController));
+		private readonly CategoryRepository _repository;
+		private readonly IMappingEngine _mapper;
+		private readonly IValidator _validator;
+		private readonly IConversation _conversation;
+		private readonly IStringConverter<Category> _stringConverter;
 
-		public CategoryController(Conversation.IConversation conversation, AutoMapper.IMappingEngine mapper, ExtMvc.Data.CategoryRepository repository, Nexida.Infrastructure.IValidator validator, Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.Category> stringConverter)
+		public CategoryController(IConversation conversation, IMappingEngine mapper, CategoryRepository repository, IValidator validator, IStringConverter<Category> stringConverter)
 		{
 			_conversation = conversation;
 			_mapper = mapper;
@@ -21,15 +29,15 @@ namespace ExtMvc.Controllers
 			_stringConverter = stringConverter;
 		}
 
-		public ActionResult Save(ExtMvc.Dtos.CategoryDto item)
+		public ActionResult Save(CategoryDto item)
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				var itemMapped = _mapper.Map<ExtMvc.Dtos.CategoryDto, ExtMvc.Domain.Category>(item);
-				Nexida.Infrastructure.Mvc.ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
-				if (ModelState.IsValid)
+				Category itemMapped = _mapper.Map<CategoryDto, Category>(item);
+				ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
+				if(ModelState.IsValid)
 				{
-					var isNew = string.IsNullOrEmpty(item.StringId);
+					bool isNew = string.IsNullOrEmpty(item.StringId);
 					if(isNew)
 					{
 						_repository.Create(itemMapped);
@@ -42,7 +50,7 @@ namespace ExtMvc.Controllers
 				}
 				return Json(new{
 					success = ModelState.IsValid,
-					errors = Nexida.Infrastructure.Mvc.ValidationHelpers.BuildErrorDictionary(ModelState),
+					errors = ValidationHelpers.BuildErrorDictionary(ModelState),
 				});
 			}
 		}
@@ -51,8 +59,8 @@ namespace ExtMvc.Controllers
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				var item = _stringConverter.FromString(stringId);
-				var itemDto = _mapper.Map<ExtMvc.Domain.Category, ExtMvc.Dtos.CategoryDto>(item);
+				Category item = _stringConverter.FromString(stringId);
+				CategoryDto itemDto = _mapper.Map<Category, CategoryDto>(item);
 				return Json(itemDto);
 			}
 		}
@@ -61,37 +69,34 @@ namespace ExtMvc.Controllers
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				var item = _stringConverter.FromString(stringId);
+				Category item = _stringConverter.FromString(stringId);
 				_repository.Delete(item);
 				_conversation.Flush();
 			}
 		}
 
-				public ActionResult SearchNormal(int start, int limit, string sort, string dir)
-				{
-					Log.DebugFormat("SearchNormal called");
-					using(_conversation.SetAsCurrent())
-					{
-						var set = _repository.SearchNormal();
-						var items = set.Skip(start).Take(limit).Sort(sort, dir == "ASC").AsEnumerable();
-						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Category>, ExtMvc.Dtos.CategoryDto[]>(items);
-						return Json(new{ items = dtos, count = set.Count() });
-					}
-				}
-				
+		public ActionResult SearchNormal(int start, int limit, string sort, string dir)
+		{
+			Log.DebugFormat("SearchNormal called");
+			using(_conversation.SetAsCurrent())
+			{
+				IPresentableSet<Category> set = _repository.SearchNormal();
+				IEnumerable<Category> items = set.Skip(start).Take(limit).Sort(sort, dir == "ASC").AsEnumerable();
+				CategoryDto[] dtos = _mapper.Map<IEnumerable<Category>, CategoryDto[]>(items);
+				return Json(new{ items = dtos, count = set.Count() });
+			}
+		}
 
 
-
-				public ActionResult ComboSearch()
-				{
-					Log.DebugFormat("ComboSearch called");
-					using(_conversation.SetAsCurrent())
-					{
-						var items = _repository.SearchNormal().AsEnumerable();
-						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Category>, ExtMvc.Dtos.CategoryReferenceDto[]>(items);
-						return Json(new{ items = dtos });
-					}
-				}
-				
+		public ActionResult ComboSearch()
+		{
+			Log.DebugFormat("ComboSearch called");
+			using(_conversation.SetAsCurrent())
+			{
+				IEnumerable<Category> items = _repository.SearchNormal().AsEnumerable();
+				CategoryReferenceDto[] dtos = _mapper.Map<IEnumerable<Category>, CategoryReferenceDto[]>(items);
+				return Json(new{ items = dtos });
+			}
+		}
 	}
 }

@@ -42,7 +42,6 @@ ExtMvc.EmployeeField = Ext.extend(Ext.ux.ProxyField, {
 				valueField: '$ref',
 				mode: 'local',
 				disabled: true,
-				triggerAction: 'all',
 				store: _store
 			}),
 			setValue: _valueProxy.setValue,

@@ -1,18 +1,26 @@
-using System.Web.Mvc;
 using System.Collections.Generic;
+using System.Web.Mvc;
+using AutoMapper;
+using Conversation;
+using ExtMvc.Data;
+using ExtMvc.Domain;
+using ExtMvc.Dtos;
+using log4net;
+using Nexida.Infrastructure;
+using Nexida.Infrastructure.Mvc;
 
 namespace ExtMvc.Controllers
 {
 	public class TerritoryController : Controller
 	{
-		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ExtMvc.Controllers.TerritoryController));
-		private readonly ExtMvc.Data.TerritoryRepository _repository;
-		private readonly AutoMapper.IMappingEngine _mapper;
-		private readonly Nexida.Infrastructure.IValidator _validator;
-		private readonly Conversation.IConversation _conversation;
-		private readonly Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.Territory> _stringConverter;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(TerritoryController));
+		private readonly TerritoryRepository _repository;
+		private readonly IMappingEngine _mapper;
+		private readonly IValidator _validator;
+		private readonly IConversation _conversation;
+		private readonly IStringConverter<Territory> _stringConverter;
 
-		public TerritoryController(Conversation.IConversation conversation, AutoMapper.IMappingEngine mapper, ExtMvc.Data.TerritoryRepository repository, Nexida.Infrastructure.IValidator validator, Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.Territory> stringConverter)
+		public TerritoryController(IConversation conversation, IMappingEngine mapper, TerritoryRepository repository, IValidator validator, IStringConverter<Territory> stringConverter)
 		{
 			_conversation = conversation;
 			_mapper = mapper;
@@ -21,15 +29,15 @@ namespace ExtMvc.Controllers
 			_stringConverter = stringConverter;
 		}
 
-		public ActionResult Save(ExtMvc.Dtos.TerritoryDto item)
+		public ActionResult Save(TerritoryDto item)
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				var itemMapped = _mapper.Map<ExtMvc.Dtos.TerritoryDto, ExtMvc.Domain.Territory>(item);
-				Nexida.Infrastructure.Mvc.ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
-				if (ModelState.IsValid)
+				Territory itemMapped = _mapper.Map<TerritoryDto, Territory>(item);
+				ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
+				if(ModelState.IsValid)
 				{
-					var isNew = string.IsNullOrEmpty(item.StringId);
+					bool isNew = string.IsNullOrEmpty(item.StringId);
 					if(isNew)
 					{
 						_repository.Create(itemMapped);
@@ -42,7 +50,7 @@ namespace ExtMvc.Controllers
 				}
 				return Json(new{
 					success = ModelState.IsValid,
-					errors = Nexida.Infrastructure.Mvc.ValidationHelpers.BuildErrorDictionary(ModelState),
+					errors = ValidationHelpers.BuildErrorDictionary(ModelState),
 				});
 			}
 		}
@@ -51,8 +59,8 @@ namespace ExtMvc.Controllers
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				var item = _stringConverter.FromString(stringId);
-				var itemDto = _mapper.Map<ExtMvc.Domain.Territory, ExtMvc.Dtos.TerritoryDto>(item);
+				Territory item = _stringConverter.FromString(stringId);
+				TerritoryDto itemDto = _mapper.Map<Territory, TerritoryDto>(item);
 				return Json(itemDto);
 			}
 		}
@@ -61,38 +69,34 @@ namespace ExtMvc.Controllers
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				var item = _stringConverter.FromString(stringId);
+				Territory item = _stringConverter.FromString(stringId);
 				_repository.Delete(item);
 				_conversation.Flush();
 			}
 		}
 
-				public ActionResult SearchNormal(string territoryDescription, int start, int limit, string sort, string dir)
-				{
-					Log.DebugFormat("SearchNormal called");
-					using(_conversation.SetAsCurrent())
-					{
-										
-						var set = _repository.SearchNormal(territoryDescription);
-						var items = set.Skip(start).Take(limit).Sort(sort, dir == "ASC").AsEnumerable();
-						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Territory>, ExtMvc.Dtos.TerritoryDto[]>(items);
-						return Json(new{ items = dtos, count = set.Count() });
-					}
-				}
-				
+		public ActionResult SearchNormal(string territoryDescription, int start, int limit, string sort, string dir)
+		{
+			Log.DebugFormat("SearchNormal called");
+			using(_conversation.SetAsCurrent())
+			{
+				IPresentableSet<Territory> set = _repository.SearchNormal(territoryDescription);
+				IEnumerable<Territory> items = set.Skip(start).Take(limit).Sort(sort, dir == "ASC").AsEnumerable();
+				TerritoryDto[] dtos = _mapper.Map<IEnumerable<Territory>, TerritoryDto[]>(items);
+				return Json(new{ items = dtos, count = set.Count() });
+			}
+		}
 
 
-				public ActionResult ComboSearch(string query)
-				{
-					Log.DebugFormat("ComboSearch called");
-					using(_conversation.SetAsCurrent())
-					{
-						var items = _repository.SearchNormal(query).AsEnumerable();
-						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Territory>, ExtMvc.Dtos.TerritoryReferenceDto[]>(items);
-						return Json(new{ items = dtos });
-					}
-				}
-				
-
+		public ActionResult ComboSearch(string query)
+		{
+			Log.DebugFormat("ComboSearch called");
+			using(_conversation.SetAsCurrent())
+			{
+				IEnumerable<Territory> items = _repository.SearchNormal(query).AsEnumerable();
+				TerritoryReferenceDto[] dtos = _mapper.Map<IEnumerable<Territory>, TerritoryReferenceDto[]>(items);
+				return Json(new{ items = dtos });
+			}
+		}
 	}
 }
