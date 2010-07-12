@@ -3,7 +3,7 @@
   <types>
     <type id="Northwind.dbo.Categories">
       <name>Category</name>
-      <namespace />
+      <namespace>Ns</namespace>
       <isDetail>false</isDetail>
       <fields>
         <field id="CategoryID">
@@ -134,7 +134,7 @@
     </type>
     <type id="Northwind.dbo.CustomerDemographics">
       <name>CustomerDemographic</name>
-      <namespace />
+      <namespace>Ns</namespace>
       <isDetail>true</isDetail>
       <fields>
         <field id="CustomerTypeID">
@@ -231,7 +231,7 @@
     </type>
     <type id="Northwind.dbo.Customers">
       <name>Customer</name>
-      <namespace />
+      <namespace>Ns</namespace>
       <isDetail>false</isDetail>
       <fields>
         <field id="CustomerID">
@@ -494,7 +494,7 @@
     </type>
     <type id="Northwind.dbo.Employees">
       <name>Employee</name>
-      <namespace />
+      <namespace>Ns</namespace>
       <isDetail>false</isDetail>
       <fields>
         <field id="EmployeeID">

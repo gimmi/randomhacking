@@ -49,14 +49,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressStringConverter.cs" />
-    <Compile Include="CategoryRepository.cs" />
-    <Compile Include="CategoryStringConverter.cs" />
-    <Compile Include="CustomerDemographicRepository.cs" />
-    <Compile Include="CustomerDemographicStringConverter.cs" />
-    <Compile Include="CustomerRepository.cs" />
-    <Compile Include="CustomerStringConverter.cs" />
-    <Compile Include="EmployeeRepository.cs" />
-    <Compile Include="EmployeeStringConverter.cs" />
+    <Compile Include="Ns\CategoryRepository.cs" />
+    <Compile Include="Ns\CategoryStringConverter.cs" />
+    <Compile Include="Ns\CustomerDemographicRepository.cs" />
+    <Compile Include="Ns\CustomerDemographicStringConverter.cs" />
+    <Compile Include="Ns\CustomerRepository.cs" />
+    <Compile Include="Ns\CustomerStringConverter.cs" />
+    <Compile Include="Ns\EmployeeRepository.cs" />
+    <Compile Include="Ns\EmployeeStringConverter.cs" />
     <Compile Include="OrderDetailRepository.cs" />
     <Compile Include="OrderDetailStringConverter.cs" />
     <Compile Include="OrderRepository.cs" />

@@ -44,10 +44,10 @@
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CategoryController.cs" />
-    <Compile Include="CustomerController.cs" />
-    <Compile Include="EmployeeController.cs" />
     <Compile Include="HomeController.cs" />
+    <Compile Include="Ns\NsCategoryController.cs" />
+    <Compile Include="Ns\NsCustomerController.cs" />
+    <Compile Include="Ns\NsEmployeeController.cs" />
     <Compile Include="OrderController.cs" />
     <Compile Include="OrderDetailController.cs" />
     <Compile Include="ProductController.cs" />

@@ -4,17 +4,16 @@
 
 Ext.namespace('ExtMvc');
 
-ExtMvc.AddressListField = Ext.extend(Ext.form.Field, {
+ExtMvc.AddressListField = Ext.extend(Ext.ux.ProxyField, {
 	initComponent: function () {
 		var _this = this,
-		_gridPanel,
 		_onEditEnded = function (window, item) {
 			var value = _this.getValue();
 			if (value.indexOf(item) === -1) {
 				value[value.length] = item;
 			}
 			window.close();
-			_gridPanel.getStore().load();
+			_this.item.getStore().load();
 		},
 		_buildWindow = function () {
 			return new ExtMvc.AddressEditWindow({
@@ -29,7 +28,7 @@ ExtMvc.AddressListField = Ext.extend(Ext.form.Field, {
 		},
 		_onEditButtonClick = function (button) {
 			var sm, window;
-			sm = _gridPanel.getSelectionModel();
+			sm = _this.item.getSelectionModel();
 			if (sm.getCount() > 0) {
 				window = _buildWindow();
 				window.setItem(sm.getSelected().data.$ref);
@@ -37,64 +36,34 @@ ExtMvc.AddressListField = Ext.extend(Ext.form.Field, {
 			}
 		},
 		_onDeleteButtonClick = function () {
-			var sm = _gridPanel.getSelectionModel();
+			var sm = _this.item.getSelectionModel();
 			if (sm.getCount() > 0) {
 				_this.getValue().remove(sm.getSelected().data.$ref);
-				_gridPanel.getStore().load();
+				_this.item.getStore().load();
 			}
 		};
 
-		_gridPanel = new ExtMvc.AddressGridPanel(Ext.copyTo({
-			id: _this.id + '-gridpanel',
-			store: new Ext.data.Store({
-				autoDestroy: true,
-				proxy: new Ext.data.MemoryProxy({ items: [] }),
-				reader: new ExtMvc.AddressJsonReader()
-			}),
-			tbar: [
-				{ text: 'New', handler: _onNewButtonClick, icon: 'images/add.png', cls: 'x-btn-text-icon' },
-				{ text: 'Edit', handler: _onEditButtonClick, icon: 'images/pencil.png', cls: 'x-btn-text-icon' },
-				{ text: 'Delete', handler: _onDeleteButtonClick, icon: 'images/delete.png', cls: 'x-btn-text-icon' }
-			]
-		}, _this.initialConfig, []));
-
 		Ext.apply(_this, {
-			onRender: function (ct, position) {
-				// TODO This creates a hidden field above the grid. Check if this is good or not
-				this.autoCreate = {
-					id: _this.id,
-					name: _this.name,
-					type: 'hidden',
-					tag: 'input'
-				};
-				ExtMvc.AddressListField.superclass.onRender.call(_this, ct, position);
-				_this.wrap = _this.el.wrap({ cls: 'x-form-field-wrap' });
-				_this.resizeEl = _this.positionEl = _this.wrap;
-				_gridPanel.render(_this.wrap);
-			},
-			onResize: function (w, h, aw, ah) {
-				ExtMvc.AddressListField.superclass.onResize.apply(_this, arguments);
-				_gridPanel.setSize(w, h);
-			},
-			onEnable: function () {
-				ExtMvc.AddressListField.superclass.onEnable.apply(_this, arguments);
-				_gridPanel.enable();
-			},
-			onDisable: function () {
-				ExtMvc.AddressListField.superclass.onDisable.apply(_this, arguments);
-				_gridPanel.disable();
-			},
-			beforeDestroy: function () {
-				Ext.destroy(_gridPanel);
-				ExtMvc.AddressListField.superclass.beforeDestroy.apply(_this, arguments);
-			},
+			item: new ExtMvc.AddressGridPanel({
+				id: _this.id + '-gridpanel',
+				store: new Ext.data.Store({
+					autoDestroy: true,
+					proxy: new Ext.data.MemoryProxy({ items: [] }),
+					reader: new ExtMvc.AddressJsonReader()
+				}),
+				tbar: [
+					{ text: 'New', handler: _onNewButtonClick, icon: 'images/add.png', cls: 'x-btn-text-icon' },
+					{ text: 'Edit', handler: _onEditButtonClick, icon: 'images/pencil.png', cls: 'x-btn-text-icon' },
+					{ text: 'Delete', handler: _onDeleteButtonClick, icon: 'images/delete.png', cls: 'x-btn-text-icon' }
+				]
+			}),
 			setValue: function (v) {
-				_gridPanel.getStore().proxy.data.items = v;
-				_gridPanel.getStore().load();
+				_this.item.getStore().proxy.data.items = v;
+				_this.item.getStore().load();
 				return ExtMvc.AddressListField.superclass.setValue.apply(_this, arguments);
 			},
 			getValue: function () {
-				return _gridPanel.getStore().proxy.data.items;
+				return _this.item.getStore().proxy.data.items;
 			}
 		});
 

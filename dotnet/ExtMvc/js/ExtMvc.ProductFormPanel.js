@@ -21,7 +21,7 @@ ExtMvc.ProductFormPanel = Ext.extend(Ext.form.FormPanel, {
 				{ name: 'UnitsOnOrder', fieldLabel: 'UnitsOnOrder', xtype: 'numberfield' },
 				{ name: 'ReorderLevel', fieldLabel: 'ReorderLevel', xtype: 'numberfield' },
 				{ name: 'Discontinued', fieldLabel: 'Discontinued', xtype: 'checkbox' },
-				{ name: 'Category', fieldLabel: 'Category', xtype: 'ExtMvc.CategoryField' }
+				{ name: 'Category', fieldLabel: 'Category', xtype: 'ExtMvc.Ns.CategoryField' }
 			]
 		});
 

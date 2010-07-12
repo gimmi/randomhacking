@@ -41,15 +41,7 @@
   <ItemGroup>
     <Compile Include="Address.cs" />
     <Compile Include="AddressFactory.cs" />
-    <Compile Include="Category.cs" />
-    <Compile Include="CategoryFactory.cs" />
-    <Compile Include="Customer.cs" />
     <Compile Include="CustomerCustomerDemoAssociationSynchronizer.cs" />
-    <Compile Include="CustomerDemographic.cs" />
-    <Compile Include="CustomerDemographicFactory.cs" />
-    <Compile Include="CustomerFactory.cs" />
-    <Compile Include="Employee.cs" />
-    <Compile Include="EmployeeFactory.cs" />
     <Compile Include="EmployeeTerritoriesAssociationSynchronizer.cs" />
     <Compile Include="FkEmployeesEmployeesAssociationSynchronizer.cs" />
     <Compile Include="FkOrdersCustomersAssociationSynchronizer.cs" />
@@ -58,6 +50,14 @@
     <Compile Include="FkProductsCategoriesAssociationSynchronizer.cs" />
     <Compile Include="FkProductsSuppliersAssociationSynchronizer.cs" />
     <Compile Include="FkTerritoriesRegionAssociationSynchronizer.cs" />
+    <Compile Include="Ns\Category.cs" />
+    <Compile Include="Ns\CategoryFactory.cs" />
+    <Compile Include="Ns\Customer.cs" />
+    <Compile Include="Ns\CustomerDemographic.cs" />
+    <Compile Include="Ns\CustomerDemographicFactory.cs" />
+    <Compile Include="Ns\CustomerFactory.cs" />
+    <Compile Include="Ns\Employee.cs" />
+    <Compile Include="Ns\EmployeeFactory.cs" />
     <Compile Include="Order.cs" />
     <Compile Include="OrderDetail.cs" />
     <Compile Include="OrderDetailFactory.cs" />
@@ -75,10 +75,16 @@
     <Compile Include="TerritoryFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Category.hbm.xml" />
-    <EmbeddedResource Include="Customer.hbm.xml" />
-    <EmbeddedResource Include="CustomerDemographic.hbm.xml" />
-    <EmbeddedResource Include="Employee.hbm.xml" />
+    <ProjectReference Include="..\ExtMvc.Infrastructure\ExtMvc.Infrastructure.csproj">
+      <Project>{CB4AC17F-3718-4B44-B23E-7E065845BE66}</Project>
+      <Name>ExtMvc.Infrastructure</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Ns\Category.hbm.xml" />
+    <EmbeddedResource Include="Ns\Customer.hbm.xml" />
+    <EmbeddedResource Include="Ns\CustomerDemographic.hbm.xml" />
+    <EmbeddedResource Include="Ns\Employee.hbm.xml" />
     <EmbeddedResource Include="Order.hbm.xml" />
     <EmbeddedResource Include="OrderDetail.hbm.xml" />
     <EmbeddedResource Include="Product.hbm.xml" />
@@ -86,12 +92,6 @@
     <EmbeddedResource Include="Shipper.hbm.xml" />
     <EmbeddedResource Include="Supplier.hbm.xml" />
     <EmbeddedResource Include="Territory.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ExtMvc.Infrastructure\ExtMvc.Infrastructure.csproj">
-      <Project>{CB4AC17F-3718-4B44-B23E-7E065845BE66}</Project>
-      <Name>ExtMvc.Infrastructure</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

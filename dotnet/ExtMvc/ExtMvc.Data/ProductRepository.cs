@@ -37,7 +37,7 @@ namespace ExtMvc.Data
 			_northwind.GetCurrentSession().Delete(v);
 		}
 
-				public IPresentableSet<ExtMvc.Domain.Product> SearchNormal(int? productId, string productName, bool? discontinued, ExtMvc.Domain.Category category, ExtMvc.Domain.Supplier supplier)
+				public IPresentableSet<ExtMvc.Domain.Product> SearchNormal(int? productId, string productName, bool? discontinued, ExtMvc.Domain.Ns.Category category, ExtMvc.Domain.Supplier supplier)
 				{
 					IQueryable<ExtMvc.Domain.Product> queryable = _northwind.GetCurrentSession().Linq<ExtMvc.Domain.Product>();
 								if(productId != default(int?))
@@ -52,7 +52,7 @@ namespace ExtMvc.Data
 								{
 									queryable = queryable.Where(x => x.Discontinued == discontinued);
 								}
-											if(category != default(ExtMvc.Domain.Category))
+											if(category != default(ExtMvc.Domain.Ns.Category))
 								{
 									queryable = queryable.Where(x => x.Category == category);
 								}

@@ -13,7 +13,7 @@ ExtMvc.ProductNormalSearchFormPanel = Ext.extend(Ext.form.FormPanel, {
 			{ name: 'productId', xtype: 'numberfield', fieldLabel: 'productId' },
 			{ name: 'productName', xtype: 'textfield', fieldLabel: 'productName' },
 			{ name: 'discontinued', xtype: 'checkbox', fieldLabel: 'discontinued' },
-			{ name: 'category', xtype: 'ExtMvc.CategoryField', fieldLabel: 'category' },
+			{ name: 'category', xtype: 'ExtMvc.Ns.CategoryField', fieldLabel: 'category' },
 			{ name: 'supplier', xtype: 'ExtMvc.SupplierField', fieldLabel: 'supplier' }
 		];
 		ExtMvc.ProductNormalSearchFormPanel.superclass.initComponent.apply(this, arguments);

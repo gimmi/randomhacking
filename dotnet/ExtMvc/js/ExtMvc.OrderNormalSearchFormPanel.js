@@ -16,8 +16,8 @@ ExtMvc.OrderNormalSearchFormPanel = Ext.extend(Ext.form.FormPanel, {
 			{ name: 'shippedDate', xtype: 'datefield', fieldLabel: 'shippedDate' },
 			{ name: 'freight', xtype: 'numberfield', fieldLabel: 'freight' },
 			{ name: 'address', xtype: 'ExtMvc.AddressField', fieldLabel: 'address' },
-			{ name: 'customer', xtype: 'ExtMvc.CustomerField', fieldLabel: 'customer' },
-			{ name: 'employee', xtype: 'ExtMvc.EmployeeField', fieldLabel: 'employee' },
+			{ name: 'customer', xtype: 'ExtMvc.Ns.CustomerField', fieldLabel: 'customer' },
+			{ name: 'employee', xtype: 'ExtMvc.Ns.EmployeeField', fieldLabel: 'employee' },
 			{ name: 'shipper', xtype: 'ExtMvc.ShipperField', fieldLabel: 'shipper' }
 		];
 		ExtMvc.OrderNormalSearchFormPanel.superclass.initComponent.apply(this, arguments);

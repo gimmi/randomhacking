@@ -1,8 +1,6 @@
-using Nexida.Infrastructure;
-
 namespace ExtMvc.Domain
 {
-	public class OrderFactory : IFactory<Order>
+	public class OrderFactory : Nexida.Infrastructure.IFactory<Order>
 	{
 		public Order Create()
 		{

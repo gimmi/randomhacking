@@ -11,8 +11,11 @@ using CommonServiceLocator.WindsorAdapter;
 using Conversation;
 using Conversation.NHibernate;
 using ExtMvc.Controllers;
+using ExtMvc.Controllers.Ns;
 using ExtMvc.Data;
+using ExtMvc.Data.Ns;
 using ExtMvc.Domain;
+using ExtMvc.Domain.Ns;
 using ExtMvc.Dtos;
 using ExtMvc.Infrastructure;
 using log4net.Config;
@@ -63,7 +66,7 @@ namespace ExtMvc
 			ioc.Register(AllTypes.FromAssemblyContaining<CustomerFactory>().BasedOn(typeof(IFactory<>)).WithService.Base());
 			ioc.Register(AllTypes.FromAssemblyContaining<CustomerRepository>().BasedOn<IRepository>());
 
-			ioc.RegisterControllers(typeof(CustomerController).Assembly);
+			ioc.RegisterControllers(typeof(NsCustomerController).Assembly);
 			ControllerBuilder.Current.SetControllerFactory(new WindsorControllerFactory(ioc));
 
 			AreaRegistration.RegisterAllAreas();

@@ -1,27 +1,18 @@
-using System;
-using System.Collections.Generic;
 using System.Web.Mvc;
-using AutoMapper;
-using Conversation;
-using ExtMvc.Data;
-using ExtMvc.Domain;
-using ExtMvc.Dtos;
-using log4net;
-using Nexida.Infrastructure;
-using Nexida.Infrastructure.Mvc;
+using System.Collections.Generic;
 
 namespace ExtMvc.Controllers
 {
 	public class OrderController : Controller
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(OrderController));
-		private readonly OrderRepository _repository;
-		private readonly IMappingEngine _mapper;
-		private readonly IValidator _validator;
-		private readonly IConversation _conversation;
-		private readonly IStringConverter<Order> _stringConverter;
+		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ExtMvc.Controllers.OrderController));
+		private readonly ExtMvc.Data.OrderRepository _repository;
+		private readonly AutoMapper.IMappingEngine _mapper;
+		private readonly Nexida.Infrastructure.IValidator _validator;
+		private readonly Conversation.IConversation _conversation;
+		private readonly Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.Order> _stringConverter;
 
-		public OrderController(IConversation conversation, IMappingEngine mapper, OrderRepository repository, IValidator validator, IStringConverter<Order> stringConverter)
+		public OrderController(Conversation.IConversation conversation, AutoMapper.IMappingEngine mapper, ExtMvc.Data.OrderRepository repository, Nexida.Infrastructure.IValidator validator, Nexida.Infrastructure.IStringConverter<ExtMvc.Domain.Order> stringConverter)
 		{
 			_conversation = conversation;
 			_mapper = mapper;
@@ -30,15 +21,15 @@ namespace ExtMvc.Controllers
 			_stringConverter = stringConverter;
 		}
 
-		public ActionResult Save(OrderDto item)
+		public ActionResult Save(ExtMvc.Dtos.OrderDto item)
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				Order itemMapped = _mapper.Map<OrderDto, Order>(item);
-				ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
-				if(ModelState.IsValid)
+				var itemMapped = _mapper.Map<ExtMvc.Dtos.OrderDto, ExtMvc.Domain.Order>(item);
+				Nexida.Infrastructure.Mvc.ValidationHelpers.AddErrorsToModelState(ModelState, _validator.Validate(itemMapped), "item");
+				if (ModelState.IsValid)
 				{
-					bool isNew = string.IsNullOrEmpty(item.StringId);
+					var isNew = string.IsNullOrEmpty(item.StringId);
 					if(isNew)
 					{
 						_repository.Create(itemMapped);
@@ -51,7 +42,7 @@ namespace ExtMvc.Controllers
 				}
 				return Json(new{
 					success = ModelState.IsValid,
-					errors = ValidationHelpers.BuildErrorDictionary(ModelState),
+					errors = Nexida.Infrastructure.Mvc.ValidationHelpers.BuildErrorDictionary(ModelState),
 				});
 			}
 		}
@@ -60,8 +51,8 @@ namespace ExtMvc.Controllers
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				Order item = _stringConverter.FromString(stringId);
-				OrderDto itemDto = _mapper.Map<Order, OrderDto>(item);
+				var item = _stringConverter.FromString(stringId);
+				var itemDto = _mapper.Map<ExtMvc.Domain.Order, ExtMvc.Dtos.OrderDto>(item);
 				return Json(itemDto);
 			}
 		}
@@ -70,27 +61,30 @@ namespace ExtMvc.Controllers
 		{
 			using(_conversation.SetAsCurrent())
 			{
-				Order item = _stringConverter.FromString(stringId);
+				var item = _stringConverter.FromString(stringId);
 				_repository.Delete(item);
 				_conversation.Flush();
 			}
 		}
 
-		public ActionResult SearchNormal(int? orderId, DateTime? orderDate, DateTime? requiredDate, DateTime? shippedDate, decimal? freight, AddressDto address, CustomerReferenceDto customer, EmployeeReferenceDto employee, ShipperReferenceDto shipper, int start, int limit, string sort, string dir)
-		{
-			Log.DebugFormat("SearchNormal called");
-			using(_conversation.SetAsCurrent())
-			{
-				Address addressMapped = _mapper.Map<AddressDto, Address>(address);
-				Customer customerMapped = _mapper.Map<CustomerReferenceDto, Customer>(customer);
-				Employee employeeMapped = _mapper.Map<EmployeeReferenceDto, Employee>(employee);
-				Shipper shipperMapped = _mapper.Map<ShipperReferenceDto, Shipper>(shipper);
+				public ActionResult SearchNormal(int? orderId, System.DateTime? orderDate, System.DateTime? requiredDate, System.DateTime? shippedDate, decimal? freight, ExtMvc.Dtos.AddressDto address, ExtMvc.Dtos.Ns.CustomerReferenceDto customer, ExtMvc.Dtos.Ns.EmployeeReferenceDto employee, ExtMvc.Dtos.ShipperReferenceDto shipper, int start, int limit, string sort, string dir)
+				{
+					Log.DebugFormat("SearchNormal called");
+					using(_conversation.SetAsCurrent())
+					{
+																														var addressMapped = _mapper.Map<ExtMvc.Dtos.AddressDto, ExtMvc.Domain.Address>(address);
+														var customerMapped = _mapper.Map<ExtMvc.Dtos.Ns.CustomerReferenceDto, ExtMvc.Domain.Ns.Customer>(customer);
+														var employeeMapped = _mapper.Map<ExtMvc.Dtos.Ns.EmployeeReferenceDto, ExtMvc.Domain.Ns.Employee>(employee);
+														var shipperMapped = _mapper.Map<ExtMvc.Dtos.ShipperReferenceDto, ExtMvc.Domain.Shipper>(shipper);
+										
+						var set = _repository.SearchNormal(orderId, orderDate, requiredDate, shippedDate, freight, addressMapped, customerMapped, employeeMapped, shipperMapped);
+						var items = set.Skip(start).Take(limit).Sort(sort, dir == "ASC").AsEnumerable();
+						var dtos = _mapper.Map<IEnumerable<ExtMvc.Domain.Order>, ExtMvc.Dtos.OrderDto[]>(items);
+						return Json(new{ items = dtos, count = set.Count() });
+					}
+				}
+				
 
-				IPresentableSet<Order> set = _repository.SearchNormal(orderId, orderDate, requiredDate, shippedDate, freight, addressMapped, customerMapped, employeeMapped, shipperMapped);
-				IEnumerable<Order> items = set.Skip(start).Take(limit).Sort(sort, dir == "ASC").AsEnumerable();
-				OrderDto[] dtos = _mapper.Map<IEnumerable<Order>, OrderDto[]>(items);
-				return Json(new{ items = dtos, count = set.Count() });
-			}
-		}
+
 	}
 }

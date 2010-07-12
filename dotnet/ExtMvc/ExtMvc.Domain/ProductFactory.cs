@@ -1,8 +1,6 @@
-using Nexida.Infrastructure;
-
 namespace ExtMvc.Domain
 {
-	public class ProductFactory : IFactory<Product>
+	public class ProductFactory : Nexida.Infrastructure.IFactory<Product>
 	{
 		public Product Create()
 		{

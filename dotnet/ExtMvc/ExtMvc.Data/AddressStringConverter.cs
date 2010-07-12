@@ -13,6 +13,7 @@ namespace ExtMvc.Data
 			{
 				new System.Xml.Serialization.XmlSerializer(typeof(ExtMvc.Domain.Address)).Serialize(stringWriter, obj);
 			}
+			// UrlEncoding the string is a workaround for ASP.NET security exceprion that appen if this string is used as querystring
 			return sb.ToString();
 		}
 
@@ -24,6 +25,7 @@ namespace ExtMvc.Data
 			}
 			#warning Nexida.CodeGen.Warning: Here is an example implementation that relies on object serialization.
 			var xmlSerializer = new System.Xml.Serialization.XmlSerializer(typeof(ExtMvc.Domain.Address));
+			// UrlDecoding the string is a workaround for ASP.NET security exceprion that appen if this string is used as querystring
 			using (var stringReader = new System.IO.StringReader(str))
 			{
 				return (ExtMvc.Domain.Address)xmlSerializer.Deserialize(stringReader);

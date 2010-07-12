@@ -1,18 +1,30 @@
 <?xml version="1.0"?>
-
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
 	<class name="ExtMvc.Domain.Product, ExtMvc.Domain" table="`Products`" schema="`dbo`">
+
 		<id name="ProductId" column="`ProductID`" type="Int32" unsaved-value="0">
 			<generator class="native" />
 		</id>
+
+
 		<property name="ProductName" column="`ProductName`" type="String" not-null="true" />
+
 		<property name="QuantityPerUnit" column="`QuantityPerUnit`" type="String" not-null="false" />
+
 		<property name="UnitPrice" column="`UnitPrice`" type="Decimal" not-null="false" />
+
 		<property name="UnitsInStock" column="`UnitsInStock`" type="Int16" not-null="false" />
+
 		<property name="UnitsOnOrder" column="`UnitsOnOrder`" type="Int16" not-null="false" />
+
 		<property name="ReorderLevel" column="`ReorderLevel`" type="Int16" not-null="false" />
+
 		<property name="Discontinued" column="`Discontinued`" type="Boolean" not-null="true" />
-		<many-to-one name="Category" column="`CategoryID`" class="ExtMvc.Domain.Category, ExtMvc.Domain" />
+
+
+		<many-to-one name="Category" column="`CategoryID`" class="ExtMvc.Domain.Ns.Category, ExtMvc.Domain" />
+
 		<many-to-one name="Supplier" column="`SupplierID`" class="ExtMvc.Domain.Supplier, ExtMvc.Domain" />
+
 	</class>
 </hibernate-mapping>

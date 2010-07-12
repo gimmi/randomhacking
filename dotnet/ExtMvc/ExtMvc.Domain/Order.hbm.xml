@@ -1,22 +1,38 @@
 <?xml version="1.0"?>
-
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
 	<class name="ExtMvc.Domain.Order, ExtMvc.Domain" table="`Orders`" schema="`dbo`">
+
 		<id name="OrderId" column="`OrderID`" type="Int32" unsaved-value="0">
 			<generator class="native" />
 		</id>
+
+
 		<property name="OrderDate" column="`OrderDate`" type="DateTime" not-null="false" />
+
 		<property name="RequiredDate" column="`RequiredDate`" type="DateTime" not-null="false" />
+
 		<property name="ShippedDate" column="`ShippedDate`" type="DateTime" not-null="false" />
+
 		<property name="Freight" column="`Freight`" type="Decimal" not-null="false" />
+
 		<property name="ShipName" column="`ShipName`" type="String" not-null="false" />
+
 		<property name="ShipAddress" column="`ShipAddress`" type="String" not-null="false" />
+
 		<property name="ShipCity" column="`ShipCity`" type="String" not-null="false" />
+
 		<property name="ShipRegion" column="`ShipRegion`" type="String" not-null="false" />
+
 		<property name="ShipPostalCode" column="`ShipPostalCode`" type="String" not-null="false" />
+
 		<property name="ShipCountry" column="`ShipCountry`" type="String" not-null="false" />
-		<many-to-one name="Customer" column="`CustomerID`" class="ExtMvc.Domain.Customer, ExtMvc.Domain" />
-		<many-to-one name="Employee" column="`EmployeeID`" class="ExtMvc.Domain.Employee, ExtMvc.Domain" />
+
+
+		<many-to-one name="Customer" column="`CustomerID`" class="ExtMvc.Domain.Ns.Customer, ExtMvc.Domain" />
+
+		<many-to-one name="Employee" column="`EmployeeID`" class="ExtMvc.Domain.Ns.Employee, ExtMvc.Domain" />
+
 		<many-to-one name="Shipper" column="`ShipVia`" class="ExtMvc.Domain.Shipper, ExtMvc.Domain" />
+
 	</class>
 </hibernate-mapping>

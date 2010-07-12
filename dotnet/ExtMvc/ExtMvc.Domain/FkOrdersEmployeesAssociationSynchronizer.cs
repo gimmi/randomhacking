@@ -2,7 +2,7 @@ namespace ExtMvc.Domain
 {
 	public static class FkOrdersEmployeesAssociationSynchronizer
 	{
-		public static void Associate(Order item1, Employee item2)
+		public static void Associate(ExtMvc.Domain.Order item1, ExtMvc.Domain.Ns.Employee item2)
 		{
 			if(item1.Employee != null)
 			{
@@ -15,10 +15,9 @@ namespace ExtMvc.Domain
 			}
 		}
 
-		public static void Disassociate(Order item1, Employee item2)
+		public static void Disassociate(ExtMvc.Domain.Order item1, ExtMvc.Domain.Ns.Employee item2)
 		{
 			item1.Employee = null;
 			item2.Orders.Remove(item1);
-		}
-	}
+		}	}
 }

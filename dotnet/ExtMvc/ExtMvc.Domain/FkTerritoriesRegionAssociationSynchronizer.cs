@@ -2,7 +2,7 @@ namespace ExtMvc.Domain
 {
 	public static class FkTerritoriesRegionAssociationSynchronizer
 	{
-		public static void Associate(Territory item1, Region item2)
+		public static void Associate(ExtMvc.Domain.Territory item1, ExtMvc.Domain.Region item2)
 		{
 			if(item1.Region != null)
 			{
@@ -15,10 +15,9 @@ namespace ExtMvc.Domain
 			}
 		}
 
-		public static void Disassociate(Territory item1, Region item2)
+		public static void Disassociate(ExtMvc.Domain.Territory item1, ExtMvc.Domain.Region item2)
 		{
 			item1.Region = null;
 			item2.Territories.Remove(item1);
-		}
-	}
+		}	}
 }

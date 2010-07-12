@@ -37,7 +37,7 @@ namespace ExtMvc.Data
 			_northwind.GetCurrentSession().Delete(v);
 		}
 
-				public IPresentableSet<ExtMvc.Domain.Order> SearchNormal(int? orderId, System.DateTime? orderDate, System.DateTime? requiredDate, System.DateTime? shippedDate, decimal? freight, ExtMvc.Domain.Address address, ExtMvc.Domain.Customer customer, ExtMvc.Domain.Employee employee, ExtMvc.Domain.Shipper shipper)
+				public IPresentableSet<ExtMvc.Domain.Order> SearchNormal(int? orderId, System.DateTime? orderDate, System.DateTime? requiredDate, System.DateTime? shippedDate, decimal? freight, ExtMvc.Domain.Address address, ExtMvc.Domain.Ns.Customer customer, ExtMvc.Domain.Ns.Employee employee, ExtMvc.Domain.Shipper shipper)
 				{
 					IQueryable<ExtMvc.Domain.Order> queryable = _northwind.GetCurrentSession().Linq<ExtMvc.Domain.Order>();
 								if(orderId != default(int?))
@@ -64,11 +64,11 @@ namespace ExtMvc.Data
 								{
 									#warning Nexida.CodeGen.Warning: FieldName not specified in model, you have to manually implement filter
 								}
-											if(customer != default(ExtMvc.Domain.Customer))
+											if(customer != default(ExtMvc.Domain.Ns.Customer))
 								{
 									queryable = queryable.Where(x => x.Customer == customer);
 								}
-											if(employee != default(ExtMvc.Domain.Employee))
+											if(employee != default(ExtMvc.Domain.Ns.Employee))
 								{
 									queryable = queryable.Where(x => x.Employee == employee);
 								}
