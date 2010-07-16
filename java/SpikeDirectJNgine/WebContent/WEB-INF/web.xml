@@ -8,6 +8,15 @@
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 	<servlet>
+		<servlet-name>startup</servlet-name>
+		<servlet-class>spikeDirectJNgine.WebAppSetup</servlet-class>
+		<init-param>
+			<param-name>log4j-init-file</param-name>
+			<param-value>WEB-INF/log4j.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet>
 		<servlet-name>DjnServlet</servlet-name>
 		<servlet-class>com.softwarementors.extjs.djn.servlet.DirectJNgineServlet</servlet-class>
 		<init-param>
@@ -26,7 +35,6 @@
 			<param-name>batchRequestsMultithreadingEnabled</param-name>
 			<param-value>true</param-value>
 		</init-param>
-
 		<init-param>
 			<param-name>apis</param-name>
 			<param-value>test</param-value>
@@ -47,10 +55,8 @@
 			<param-name>test.classes</param-name>
 			<param-value>spikeDirectJNgine.TestAction</param-value>
 		</init-param>
-
-		<load-on-startup>1</load-on-startup>
+		<load-on-startup>2</load-on-startup>
 	</servlet>
-
 	<servlet-mapping>
 		<servlet-name>DjnServlet</servlet-name>
 		<url-pattern>/djn/directprovider/*</url-pattern>
