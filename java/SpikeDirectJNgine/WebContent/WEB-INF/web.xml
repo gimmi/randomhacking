@@ -8,15 +8,6 @@
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 	<servlet>
-		<servlet-name>startup</servlet-name>
-		<servlet-class>spikeDirectJNgine.WebAppSetup</servlet-class>
-		<init-param>
-			<param-name>log4j-init-file</param-name>
-			<param-value>WEB-INF/log4j.xml</param-value>
-		</init-param>
-		<load-on-startup>1</load-on-startup>
-	</servlet>
-	<servlet>
 		<servlet-name>DjnServlet</servlet-name>
 		<servlet-class>com.softwarementors.extjs.djn.servlet.DirectJNgineServlet</servlet-class>
 		<init-param>
@@ -57,6 +48,12 @@
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
+	<listener>
+		<listener-class>spikeDirectJNgine.AppSessionListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>spikeDirectJNgine.AppContextListener</listener-class>
+	</listener>
 	<servlet-mapping>
 		<servlet-name>DjnServlet</servlet-name>
 		<url-pattern>/djn/directprovider/*</url-pattern>
