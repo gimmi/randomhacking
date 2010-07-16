@@ -11,29 +11,17 @@
 		<servlet-name>DjnServlet</servlet-name>
 		<servlet-class>com.softwarementors.extjs.djn.servlet.DirectJNgineServlet</servlet-class>
 		<init-param>
-			<param-name>debug</param-name>
-			<param-value>true</param-value>
+			<param-name>providersUrl</param-name>
+			<param-value>djn/directprovider</param-value>
 		</init-param>
 		<init-param>
-			<param-name>minify</param-name>
+			<param-name>debug</param-name>
 			<param-value>true</param-value>
 		</init-param>
 		<init-param>
 			<param-name>createSourceFiles</param-name>
 			<param-value>true</param-value>
 		</init-param>
-		<init-param>
-			<param-name>providersUrl</param-name>
-			<param-value>djn/directprovider</param-value>
-		</init-param>
-		<!-- <init-param> -->
-		<!-- <param-name>registryConfiguratorClass</param-name> -->
-		<!-- <param-value>com.softwarementors.extjs.djn.test.servlet.config.RegistryConfiguratorForTesting</param-value> -->
-		<!-- </init-param> -->
-		<!-- <init-param> -->
-		<!-- <param-name>gsonBuilderConfiguratorClass</param-name> -->
-		<!-- <param-value>com.softwarementors.extjs.djn.test.config.GsonBuilderConfiguratorForTesting</param-value> -->
-		<!-- </init-param> -->
 		<init-param>
 			<param-name>batchRequestsMultithreadingEnabled</param-name>
 			<param-value>true</param-value>
@@ -44,14 +32,17 @@
 			<param-value>test</param-value>
 		</init-param>
 		<init-param>
-			<param-name>test.apiNamespace</param-name>
-			<param-value>Ext.app</param-value>
+			<param-name>test.apiFile</param-name>
+			<param-value>js/test-api.js</param-value>
 		</init-param>
 		<init-param>
-			<param-name>test.apiFile</param-name>
-			<param-value>test/Api.js</param-value>
+			<param-name>test.apiNamespace</param-name>
+			<param-value>Ext.app.test</param-value>
 		</init-param>
-
+		<init-param>
+			<param-name>test.actionsNamespace</param-name>
+			<param-value>Ext.app.test</param-value>
+		</init-param>
 		<init-param>
 			<param-name>test.classes</param-name>
 			<param-value>spikeDirectJNgine.TestAction</param-value>
