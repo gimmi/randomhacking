@@ -7,17 +7,23 @@ import java.sql.SQLException;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-public class AppSessionListener implements HttpSessionListener {
+import org.apache.log4j.Logger;
 
+public class AppSessionListener implements HttpSessionListener {
+	static Logger logger = Logger.getLogger(AppSessionListener.class);
+	
 	@Override
 	public void sessionCreated(HttpSessionEvent se) {
+		String connectionString = se.getSession().getServletContext().getInitParameter("connectionString");
+
 		Connection connection;
 		try {
-			connection = DriverManager.getConnection("jdbc:sqlserver://127.0.0.1\\SQLEXPRESS;database=Northwind;","sa", "");
+			connection = DriverManager.getConnection(connectionString, "sa", "");
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
 		se.getSession().setAttribute("conn", connection);
+		logger.warn("AppSessionListener.sessionCreated");
 	}
 
 	@Override
@@ -28,5 +34,6 @@ public class AppSessionListener implements HttpSessionListener {
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+		logger.warn("AppSessionListener.sessionDestroyed");
 	}
 }
