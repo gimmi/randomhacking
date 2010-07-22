@@ -15,7 +15,10 @@ public class TestAction {
 	@DirectMethod
 	public String doEcho(String data) {
 		HttpSession session = WebContextManager.get().getSession();
+
+		@SuppressWarnings("unused")
 		Connection conn = (Connection) session.getAttribute("conn");
+
 		logger.warn("TestAction.doEcho");
 		return data;
 	}
