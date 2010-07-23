@@ -4,6 +4,47 @@
 		<servlet-name>SpikeAppEngine</servlet-name>
 		<servlet-class>spikeAppEngine.SpikeAppEngineServlet</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>DjnServlet</servlet-name>
+		<servlet-class>com.softwarementors.extjs.djn.servlet.DirectJNgineServlet</servlet-class>
+		<init-param>
+			<param-name>providersUrl</param-name>
+			<param-value>djn/directprovider</param-value>
+		</init-param>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>createSourceFiles</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>batchRequestsMultithreadingEnabled</param-name>
+			<param-value>false</param-value>
+		</init-param>
+		<init-param>
+			<param-name>apis</param-name>
+			<param-value>test</param-value>
+		</init-param>
+		<init-param>
+			<param-name>test.apiFile</param-name>
+			<param-value>test-api.js</param-value>
+		</init-param>
+		<init-param>
+			<param-name>test.apiNamespace</param-name>
+			<param-value>Ext.app.test</param-value>
+		</init-param>
+		<init-param>
+			<param-name>test.actionsNamespace</param-name>
+			<param-value>Ext.app.test</param-value>
+		</init-param>
+		<init-param>
+			<param-name>test.classes</param-name>
+			<param-value>spikeAppEngine.TestAction</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>SpikeAppEngine</servlet-name>
 		<url-pattern>/spikeappengine</url-pattern>
@@ -11,4 +52,8 @@
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
+	<servlet-mapping>
+		<servlet-name>DjnServlet</servlet-name>
+		<url-pattern>/djn/directprovider/*</url-pattern>
+	</servlet-mapping>
 </web-app>
