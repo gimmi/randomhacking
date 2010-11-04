@@ -12,9 +12,13 @@ import org.springframework.web.HttpRequestHandler;
 
 public class TestServlet implements HttpRequestHandler {
 	private static final Logger logger = LoggerFactory.getLogger(TestServlet.class);
+	
+	public TestServlet() {
+		logger.warn("ctor");
+	}
 
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.warn("X");
+		logger.warn("handleRequest");
 	}
 }
