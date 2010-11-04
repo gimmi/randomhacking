@@ -41,11 +41,27 @@
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
+	<servlet>
+		<servlet-name>Index</servlet-name>
+		<servlet-class>spikeAppEngine.IndexServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>Login</servlet-name>
+		<servlet-class>spikeAppEngine.LoginServlet</servlet-class>
+	</servlet>
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>
 	<servlet-mapping>
 		<servlet-name>DjnServlet</servlet-name>
 		<url-pattern>/djn/directprovider/*</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Index</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Login</servlet-name>
+		<url-pattern>/Login</url-pattern>
 	</servlet-mapping>
 </web-app>
