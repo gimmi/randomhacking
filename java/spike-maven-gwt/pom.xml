@@ -8,6 +8,24 @@
 		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
 		<gwt.version>2.1.0</gwt.version>
 	</properties>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>central</id>
+			<name>Maven Plugin Repository</name>
+			<url>http://repo1.maven.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+		<pluginRepository>
+			<!-- gwt-maven-plugin 2.1.0 is still not available in maven central repository -->
+			<id>codehaus</id>
+			<url>https://nexus.codehaus.org/content/groups/public/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
 	<build>
 		<finalName>spike-maven-gwt</finalName>
 		<plugins>
@@ -36,6 +54,22 @@
 						<id>attach-sources</id>
 						<goals>
 							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>gwt-maven-plugin</artifactId>
+				<version>${gwt.version}</version>
+				<configuration>
+					<gwtVersion>${gwt.version}</gwtVersion>
+				</configuration>
+				<executions>
+					<execution>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>compile</goal>
 						</goals>
 					</execution>
 				</executions>
