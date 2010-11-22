@@ -7,6 +7,7 @@
 	<properties>
 		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
 		<gwt.version>2.1.0</gwt.version>
+		<gxt.version>2.2.0</gxt.version>
 	</properties>
 	<pluginRepositories>
 		<pluginRepository>
@@ -82,6 +83,11 @@
 			<artifactId>gwt-servlet</artifactId>
 			<version>${gwt.version}</version>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.extjs</groupId>
+			<artifactId>gxt</artifactId>
+			<version>${gxt.version}</version>
 		</dependency>
 		<!-- TEST DEPENDENCIES -->
 		<dependency>
