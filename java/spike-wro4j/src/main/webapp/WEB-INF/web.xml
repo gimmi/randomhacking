@@ -15,4 +15,12 @@
 		<filter-name>WebResourceOptimizer</filter-name>
 		<url-pattern>/wro/*</url-pattern>
 	</filter-mapping>
+	<servlet>
+		<servlet-name>classpath-resource</servlet-name>
+		<servlet-class>com.github.gimmi.spikewro4j.ClasspathResourceServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>classpath-resource</servlet-name>
+		<url-pattern>/classpath/*</url-pattern>
+	</servlet-mapping>
 </web-app>
