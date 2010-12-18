@@ -7,6 +7,10 @@
 		<servlet-name>dwr-invoker</servlet-name>
 		<servlet-class>org.directwebremoting.servlet.DwrServlet</servlet-class>
 		<init-param>
+		<param-name>customConfigurator</param-name>
+		<param-value>com.github.gimmi.spikedwr.DwrConfigurator</param-value>
+		</init-param>
+		<init-param>
 			<param-name>debug</param-name>
 			<param-value>true</param-value>
 		</init-param>
