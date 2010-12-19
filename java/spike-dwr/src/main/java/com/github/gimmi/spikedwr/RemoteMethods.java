@@ -1,5 +1,6 @@
 package com.github.gimmi.spikedwr;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -26,9 +27,23 @@ public class RemoteMethods {
 		return map;
 	}
 
-	public List<Map<Integer, Date>> listOfMap(List<Map<Integer, Date>> list) {
+	public List<Map<Integer, Date>> stronglyTypedListOfMap(List<Map<Integer, Date>> list) {
 		Map<Integer, Date> map = new HashMap<Integer, Date>();
 		map.put(123, newDate(2010, 12, 23));
+		list.add(map);
+		return list;
+	}
+
+	public List<DbRow> databaseRows(List<DbRow> rows) {
+		List<DbRow> list = new ArrayList<DbRow>();
+		list.add(rows.get(0));
+		DbRow map = new DbRow(1);
+		map.put("intValue", 123);
+		map.put("stringValue", "aString");
+		map.put("boolValue", true);
+		map.put("dateValue", newDate(2010, 12, 25));
+		map.put("doubleValue", 3.14);
+		map.put("lookupValue", new LookupValue(456, "456 descr"));
 		list.add(map);
 		return list;
 	}

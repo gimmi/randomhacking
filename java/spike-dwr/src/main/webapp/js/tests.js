@@ -65,10 +65,10 @@ describe('RemoteMethods', function () {
 
 	});
 
-	it('listOfMap', function () {
+	it('stronglyTypedListOfMap', function () {
 		var callCompleted = false;
 		var retVal;
-		RemoteMethods.listOfMap([ {
+		RemoteMethods.stronglyTypedListOfMap([ {
 			1: new Date('2010-12-01'),
 			2: new Date('2010-12-02')
 		}, {
@@ -94,6 +94,43 @@ describe('RemoteMethods', function () {
 				123: new Date('2010-12-23')
 			} ]);
 		});
+	});
 
+	it('databaseRows', function () {
+		var callCompleted = false;
+		var retVal;
+
+		var parameter = [ {
+			intValue: 123,
+			stringValue: 'aString',
+			boolValue: true,
+			dateValue: new Date('2010-12-02'),
+			doubleValue: 3.14,
+			lookupValue: {
+				value: 456,
+				descr: '456 descr'
+			}
+		} ];
+
+		RemoteMethods.databaseRows(parameter, function (ret) {
+			retVal = ret;
+			callCompleted = true;
+		});
+
+		waitsFor(function () {
+			return callCompleted;
+		}, 'Server call', 1000);
+
+		runs(function () {
+			expect(retVal).toEqual([ {
+				1: new Date('2010-12-01'),
+				2: new Date('2010-12-02')
+			}, {
+				3: new Date('2010-12-03'),
+				4: new Date('2010-12-04')
+			}, {
+				123: new Date('2010-12-23')
+			} ]);
+		});
 	});
 });
