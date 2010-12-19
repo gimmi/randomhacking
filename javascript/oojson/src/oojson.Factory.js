@@ -1,3 +1,5 @@
+oojson = oojson || {};
+
 oojson.Factory = function (selectorFn, factoryFn) {
 	this._selectorFn = selectorFn;
 	this._factoryFn = factoryFn;

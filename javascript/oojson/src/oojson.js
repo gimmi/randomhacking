@@ -5,6 +5,14 @@ oojson.OoJson = function (nativeJson, factories) {
 	this.factories = factories;
 };
 
+oojson.OoJson.prototype.addFactory = function (selectorFn, factoryFn) {
+	this.factories.push(new oojson.Factory(selectorFn, factoryFn));
+};
+
+oojson.OoJson.prototype.stringify = function () {
+	return this.nativeJson.stringify.apply(this, arguments);
+};
+
 oojson.OoJson.prototype.parse = function (text, reviver) {
 	var sf = this.factories;
 	return this.nativeJson.parse(text, function (key, value) {
@@ -15,4 +23,15 @@ oojson.OoJson.prototype.parse = function (text, reviver) {
 		}
 		return (typeof reviver === 'function' ? reviver(key, value) : value);
 	});
+};
+
+oojson.OoJson.replaceNativeJson = function (instance) {
+	var nativeJson = JSON;
+	if (!nativeJson) {
+		throw 'Global JSON object not found';
+	}
+	if (nativeJson instanceof oojson.OoJson) {
+		throw 'Global JSON object is already an OoJson object';
+	}
+	JSON = instance;
 };

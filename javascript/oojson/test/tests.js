@@ -66,4 +66,11 @@ describe('oojson', function () {
 
 		expect(actual.wrapped).toBe(newInstance);
 	});
+
+	it('Should execute native stringify', function () {
+		var actual = target.stringify({
+			a: 1
+		});
+		expect(actual).toEqual('{"a":1}');
+	});
 });
