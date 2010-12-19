@@ -1,4 +1,4 @@
-oojson = oojson || {};
+var oojson = oojson || {};
 
 oojson.Factory = function (selectorFn, factoryFn) {
 	this._selectorFn = selectorFn;
