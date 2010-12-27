@@ -1,4 +1,4 @@
-qooxdoo-*-sdk
-.classpath
-.project
-.settings/
+/src/main/webapp/qooxdoo-*-sdk/
+/.classpath
+/.project
+/.settings/
