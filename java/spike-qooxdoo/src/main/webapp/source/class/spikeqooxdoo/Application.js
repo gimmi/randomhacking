@@ -48,7 +48,7 @@ qx.Class.define("spikeqooxdoo.Application",
         // support native logging capabilities, e.g. Firebug for Firefox
         qx.log.appender.Native;
         // support additional cross-browser console. Press F7 to toggle visibility
-        qx.log.appender.Console;
+        //qx.log.appender.Console;
       }
 
       /*
