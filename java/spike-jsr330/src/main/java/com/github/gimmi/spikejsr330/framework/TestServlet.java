@@ -10,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.inject.Singleton;
+
+@Singleton
 public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 2201562246783765952L;
 	public Logger logger = LoggerFactory.getLogger(TestServlet.class);
