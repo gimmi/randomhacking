@@ -12,16 +12,16 @@ import org.springframework.web.HttpRequestHandler;
 
 public class TestServlet implements HttpRequestHandler {
 	private static final Logger logger = LoggerFactory.getLogger(TestServlet.class);
-	private final SessionScopedBean sessionScopedBean;
+	private final Repository repository;
 
-	public TestServlet(SessionScopedBean sessionScopedBean) {
-		this.sessionScopedBean = sessionScopedBean;
+	public TestServlet(Repository repository) {
 		logger.warn("ctor");
+		this.repository = repository;
 	}
 
 	@Override
 	public void handleRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		logger.warn("handleRequest");
-		sessionScopedBean.doSomethig();
+		repository.query();
 	}
 }

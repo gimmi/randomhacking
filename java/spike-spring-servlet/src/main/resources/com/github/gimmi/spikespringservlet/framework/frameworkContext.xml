@@ -7,10 +7,10 @@
 			</props>
 		</property>
 	</bean>
-	<bean id="testServlet" class="com.github.gimmi.spikespringservlet.framework.TestServlet">
-		<constructor-arg ref="sessionScopedBean" />
+	<bean id="repository" class="com.github.gimmi.spikespringservlet.framework.Repository" scope="singleton">
+		<constructor-arg ref="conn" />
 	</bean>
-	<bean id="sessionScopedBean" class="com.github.gimmi.spikespringservlet.framework.SessionScopedBeanImpl" scope="request">
-		<aop:scoped-proxy proxy-target-class="false" />
+	<bean id="testServlet" class="com.github.gimmi.spikespringservlet.framework.TestServlet" scope="request">
+		<constructor-arg ref="repository" />
 	</bean>
 </beans>
