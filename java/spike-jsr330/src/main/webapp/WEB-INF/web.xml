@@ -4,7 +4,7 @@
 		<welcome-file>/TestServlet</welcome-file>
 	</welcome-file-list>
 	<listener>
-		<listener-class>com.github.gimmi.spikejsr330.AppServletContextListener</listener-class>
+		<listener-class>com.github.gimmi.spikejsr330.application.AppServletContextListener</listener-class>
 	</listener>
 	<filter>
 		<filter-name>guiceFilter</filter-name>

@@ -1,4 +1,4 @@
-package com.github.gimmi.spikejsr330;
+package com.github.gimmi.spikejsr330.framework;
 
 import java.io.IOException;
 
