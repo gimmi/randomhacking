@@ -1,4 +1,4 @@
-package com.github.gimmi.spikespringservlet;
+package com.github.gimmi.spikespringservlet.framework;
 
 import java.io.IOException;
 

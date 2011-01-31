@@ -1,4 +1,4 @@
-package com.github.gimmi.spikespringservlet;
+package com.github.gimmi.spikespringservlet.framework;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
