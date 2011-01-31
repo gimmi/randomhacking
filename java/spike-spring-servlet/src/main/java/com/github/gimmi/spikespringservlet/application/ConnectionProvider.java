@@ -5,8 +5,8 @@ import java.sql.Connection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ConnectionBuilder {
-	private static final Logger logger = LoggerFactory.getLogger(ConnectionBuilder.class);
+public class ConnectionProvider {
+	private static final Logger logger = LoggerFactory.getLogger(ConnectionProvider.class);
 
 	public Connection build() {
 		logger.info("Building Connection");

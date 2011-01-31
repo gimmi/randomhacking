@@ -5,6 +5,7 @@
   <classpathentry kind="output" path="target/classes"/>
   <classpathentry kind="var" path="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5.jar" sourcepath="M2_REPO/javax/servlet/servlet-api/2.5/servlet-api-2.5-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/aopalliance/aopalliance/1.0/aopalliance-1.0.jar" sourcepath="M2_REPO/aopalliance/aopalliance/1.0/aopalliance-1.0-sources.jar"/>
+  <classpathentry kind="var" path="M2_REPO/cglib/cglib-nodep/2.2/cglib-nodep-2.2.jar" sourcepath="M2_REPO/cglib/cglib-nodep/2.2/cglib-nodep-2.2-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1.jar" sourcepath="M2_REPO/org/hamcrest/hamcrest-core/1.1/hamcrest-core-1.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/hamcrest/hamcrest-library/1.1/hamcrest-library-1.1.jar" sourcepath="M2_REPO/org/hamcrest/hamcrest-library/1.1/hamcrest-library-1.1-sources.jar"/>
   <classpathentry kind="var" path="M2_REPO/org/slf4j/jcl-over-slf4j/1.6.1/jcl-over-slf4j-1.6.1.jar" sourcepath="M2_REPO/org/slf4j/jcl-over-slf4j/1.6.1/jcl-over-slf4j-1.6.1-sources.jar"/>

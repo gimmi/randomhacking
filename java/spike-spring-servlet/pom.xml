@@ -42,13 +42,12 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>${spring.version}</version>
 		</dependency>
-		<!-- Needed for <aop:scoped-proxy /> for concrete classes
+		<!-- Needed for <aop:scoped-proxy /> for concrete classes and java-based configuration -->
 		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib-nodep</artifactId>
 			<version>2.2</version>
 		</dependency>
-		-->
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>jcl-over-slf4j</artifactId>

@@ -1,10 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project-modules id="moduleCoreId" project-version="1.5.0">
   <wb-module deploy-name="spike-spring-servlet">
     <property name="context-root" value="spike-spring-servlet"/>
     <wb-resource deploy-path="/" source-path="src/main/webapp"/>
     <property name="java-output-path" value="/target/classes"/>
     <dependent-module archiveName="aopalliance-1.0.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/aopalliance/aopalliance/1.0/aopalliance-1.0.jar">
+      <dependency-type>uses</dependency-type>
+    </dependent-module>
+    <dependent-module archiveName="cglib-nodep-2.2.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/cglib/cglib-nodep/2.2/cglib-nodep-2.2.jar">
       <dependency-type>uses</dependency-type>
     </dependent-module>
     <dependent-module archiveName="jcl-over-slf4j-1.6.1.jar" deploy-path="/WEB-INF/lib" handle="module:/classpath/var/M2_REPO/org/slf4j/jcl-over-slf4j/1.6.1/jcl-over-slf4j-1.6.1.jar">
@@ -45,6 +47,5 @@
     </dependent-module>
     <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/java"/>
     <wb-resource deploy-path="/WEB-INF/classes" source-path="src/main/resources"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
   </wb-module>
 </project-modules>
