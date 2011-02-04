@@ -16,8 +16,8 @@ public class StringTemplateTest {
 
 	@Test
 	public void should_process_template_loaded_from_classpath() {
-		StringTemplateGroup group = new StringTemplateGroup("templates");
-		StringTemplate st = group.getInstanceOf("com/github/gimmi/spikestringtemplate/template");
+		StringTemplateGroup group = new StringTemplateGroupBuilder().build();
+		StringTemplate st = group.getInstanceOf("com/github/gimmi/spikestringtemplate/testTemplate");
 		st.setAttribute("name", "World");
 		assertEquals("Hello, World", st.toString());
 	}
