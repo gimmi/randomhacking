@@ -4,11 +4,11 @@
 
 describe('BooleanConverter', function () {
 	var target;
-	
+
 	beforeEach(function () {
-		target = new BooleanConverter();
+		target = new com.github.gimmi.spikemavenjs.BooleanConverter();
 	});
-	
+
 	it('Should fail', function () {
 		expect(target.toBoolean(false)).toBeTruthy();
 	});
