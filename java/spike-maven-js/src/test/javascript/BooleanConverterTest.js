@@ -2,11 +2,11 @@
 
 "use strict";
 
-describe('Spike spec', function () {
+describe('BooleanConverter', function () {
 	var target;
 	
 	beforeEach(function () {
-		target = new com.github.gimmi.spikemavenjs.ClassUnderTest();
+		target = new BooleanConverter();
 	});
 	
 	it('Should fail', function () {
