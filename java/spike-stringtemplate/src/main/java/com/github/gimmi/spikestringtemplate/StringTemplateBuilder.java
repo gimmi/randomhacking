@@ -1,13 +1,15 @@
 package com.github.gimmi.spikestringtemplate;
 
+import org.antlr.stringtemplate.StringTemplate;
 import org.antlr.stringtemplate.StringTemplateErrorListener;
 import org.antlr.stringtemplate.StringTemplateGroup;
 
-public class StringTemplateGroupBuilder {
-	public StringTemplateGroup build() {
+public class StringTemplateBuilder {
+	public StringTemplate build(String templateName) {
 		StringTemplateGroup group = new StringTemplateGroup("templates");
 		group.setErrorListener(new ExceptionStringTemplateErrorListener());
-		return group;
+		String templatePrefix = getClass().getPackage().getName().replace('.', '/') + "/";
+		return group.getInstanceOf(templatePrefix + templateName);
 	}
 
 	public static class ExceptionStringTemplateErrorListener implements StringTemplateErrorListener {
