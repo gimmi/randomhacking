@@ -1,0 +1,1 @@
+Parent template (name = $name$), $com/github/gimmi/spikestringtemplate/childTemplate(param={$name$})$

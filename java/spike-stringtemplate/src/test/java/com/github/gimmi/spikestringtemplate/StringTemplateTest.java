@@ -21,4 +21,12 @@ public class StringTemplateTest {
 		st.setAttribute("name", "World");
 		assertEquals("Hello, World", st.toString());
 	}
+
+	@Test
+	public void should_process_subtemplates() {
+		StringTemplateGroup group = new StringTemplateGroupBuilder().build();
+		StringTemplate st = group.getInstanceOf("com/github/gimmi/spikestringtemplate/parentTemplate");
+		st.setAttribute("name", "World");
+		assertEquals("Parent template (name = World), Child template (param = World, name = World)", st.toString());
+	}
 }
