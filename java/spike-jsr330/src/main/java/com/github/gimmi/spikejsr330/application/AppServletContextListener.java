@@ -1,14 +1,18 @@
 package com.github.gimmi.spikejsr330.application;
 
+import javax.servlet.ServletContextEvent;
+import javax.servlet.ServletContextListener;
+
 import com.github.gimmi.spikejsr330.framework.FrameworkModule;
 import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.servlet.GuiceServletContextListener;
 
-public class AppServletContextListener extends GuiceServletContextListener {
+public class AppServletContextListener implements ServletContextListener {
+	@Override
+	public void contextInitialized(ServletContextEvent evt) {
+		Guice.createInjector(new ApplicationModule(), new FrameworkModule());
+	}
 
 	@Override
-	protected Injector getInjector() {
-		return Guice.createInjector(new ApplicationModule(), new FrameworkModule());
+	public void contextDestroyed(ServletContextEvent sce) {
 	}
 }
