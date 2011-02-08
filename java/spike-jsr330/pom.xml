@@ -22,6 +22,12 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
+			<!-- Guice uses jul for logging, redirecting to slf4j -->
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>javax.inject</groupId>
 			<artifactId>javax.inject</artifactId>
 			<version>1</version>

@@ -8,7 +8,7 @@
 		<param-value>jdbc:oracle:thin:blahblah</param-value>
 	</context-param>
 	<listener>
-		<listener-class>com.github.gimmi.spikejsr330.application.AppServletContextListener</listener-class>
+		<listener-class>com.github.gimmi.spikejsr330.application.AppGuiceServletContextListener</listener-class>
 	</listener>
 	<filter>
 		<filter-name>guiceFilter</filter-name>
