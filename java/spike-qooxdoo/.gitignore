@@ -1,6 +1,7 @@
-/src/main/webapp/qooxdoo-*-sdk/
 /.classpath
 /.project
 /.settings/
+/target/
+/src/main/webapp/qooxdoo-*-sdk/
 /src/main/webapp/source/script/
 /src/main/webapp/test/
