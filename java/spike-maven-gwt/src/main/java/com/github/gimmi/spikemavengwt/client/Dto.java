@@ -1,10 +1,15 @@
 package com.github.gimmi.spikemavengwt.client;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Dto {
-	public static final List<Dto> DATA = Arrays.asList(new Dto("John", "123 Fourth Road"), new Dto("Mary", "222 Lancer Lane"));
+	public static final List<Dto> DATA = new ArrayList<Dto>();
+	static {
+		for (int i = 0; i < 1; i++) {
+			DATA.add(new Dto("Name " + i, "Address " + i));
+		}
+	}
 
 	final String address;
 	final String name;

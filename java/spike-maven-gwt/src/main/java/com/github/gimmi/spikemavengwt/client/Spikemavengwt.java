@@ -105,9 +105,24 @@ public class Spikemavengwt implements EntryPoint {
 				return contact.address;
 			}
 		}, "Address");
+		table.setVisibleRange(0, 3);
 
-		table.setRowCount(Dto.DATA.size(), true);
-		table.setRowData(0, Dto.DATA);
+		new AsyncDataProvider<Dto>() {
+			@Override
+			protected void onRangeChanged(final HasData<Dto> display) {
+				new Timer() {
+					@Override
+					public void run() {
+						// On the server...
+						Range range = display.getVisibleRange();
+						List<Dto> values = Dto.DATA.subList(range.getStart(), range.getStart() + range.getLength());
+						// On the callback...
+						display.setRowCount(Dto.DATA.size());
+						display.setRowData(range.getStart(), values);
+					}
+				}.schedule(2000);
+			}
+		}.addDataDisplay(table);
 
 		LayoutPanel layoutPanel = new LayoutPanel();
 		layoutPanel.add(table);
