@@ -62,11 +62,11 @@ public class Spikemavengwt implements EntryPoint {
 		TextCell textCell = new TextCell();
 		final CellList<String> cellList = new CellList<String>(textCell);
 
-		final List<String> data = Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
 		cellList.setVisibleRange(1, 3);
-		cellList.setRowCount(data.size()); // Should be asyncronously asked to the server
 
 		AsyncDataProvider<String> dataProvider = new AsyncDataProvider<String>() {
+			final List<String> data = Arrays.asList("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
+
 			@Override
 			protected void onRangeChanged(final HasData<String> display) {
 				new Timer() {
@@ -76,6 +76,7 @@ public class Spikemavengwt implements EntryPoint {
 						Range range = display.getVisibleRange();
 						List<String> values = data.subList(range.getStart(), range.getStart() + range.getLength());
 						// On the callback...
+						display.setRowCount(data.size());
 						display.setRowData(range.getStart(), values);
 					}
 				}.schedule(2000);
@@ -91,38 +92,27 @@ public class Spikemavengwt implements EntryPoint {
 	}
 
 	private LayoutPanel buildTableTab() {
-		CellTable<Contact> table = new CellTable<Contact>();
-		table.addColumn(new TextColumn<Contact>() {
+		CellTable<Dto> table = new CellTable<Dto>();
+		table.addColumn(new TextColumn<Dto>() {
 			@Override
-			public String getValue(Contact contact) {
+			public String getValue(Dto contact) {
 				return contact.name;
 			}
 		}, "Name");
-		table.addColumn(new TextColumn<Contact>() {
+		table.addColumn(new TextColumn<Dto>() {
 			@Override
-			public String getValue(Contact contact) {
+			public String getValue(Dto contact) {
 				return contact.address;
 			}
 		}, "Address");
 
-		List<Contact> contacts = Arrays.asList(new Contact("John", "123 Fourth Road"), new Contact("Mary", "222 Lancer Lane"));
-		table.setRowCount(contacts.size(), true);
-		table.setRowData(0, contacts);
+		table.setRowCount(Dto.DATA.size(), true);
+		table.setRowData(0, Dto.DATA);
 
 		LayoutPanel layoutPanel = new LayoutPanel();
 		layoutPanel.add(table);
 		layoutPanel.setWidgetLeftWidth(table, 10.0, Unit.EM, 20.0, Unit.EM);
 		layoutPanel.setWidgetTopHeight(table, 10.0, Unit.EM, 20.0, Unit.EM);
 		return layoutPanel;
-	}
-
-	private static class Contact {
-		private final String address;
-		private final String name;
-
-		public Contact(String name, String address) {
-			this.name = name;
-			this.address = address;
-		}
 	}
 }
