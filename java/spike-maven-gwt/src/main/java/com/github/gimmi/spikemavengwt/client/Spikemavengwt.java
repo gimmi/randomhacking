@@ -5,9 +5,11 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.MenuBar;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
 
 public class Spikemavengwt implements EntryPoint {
 	private final GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
@@ -22,31 +24,21 @@ public class Spikemavengwt implements EntryPoint {
 		};
 		RootLayoutPanel rootLayoutPanel = RootLayoutPanel.get();
 
-		MenuBar fooMenu = new MenuBar(true);
-		fooMenu.addItem("the", cmd);
-		fooMenu.addItem("foo", cmd);
-		fooMenu.addItem("menu", cmd);
+		TabLayoutPanel tabLayoutPanel = new TabLayoutPanel(1.5, Unit.EM);
 
-		MenuBar barMenu = new MenuBar(true);
-		barMenu.addItem("the", cmd);
-		barMenu.addItem("bar", cmd);
-		barMenu.addItem("menu", cmd);
+		LayoutPanel layoutPanel = new LayoutPanel();
+		tabLayoutPanel.add(layoutPanel, "New Widget", false);
 
-		MenuBar bazMenu = new MenuBar(true);
-		bazMenu.addItem("the", cmd);
-		bazMenu.addItem("baz", cmd);
-		bazMenu.addItem("menu", cmd);
+		Button btnNewButton = new Button("New button");
+		layoutPanel.add(btnNewButton);
+		layoutPanel.setWidgetLeftRight(btnNewButton, 10.0, Unit.EM, 10.0, Unit.EM);
+		layoutPanel.setWidgetTopBottom(btnNewButton, 10.0, Unit.EM, 10.0, Unit.EM);
+		rootLayoutPanel.add(tabLayoutPanel);
 
-		MenuBar menu = new MenuBar();
-		menu.addItem("foo", fooMenu);
-		menu.addItem("bar", barMenu);
-		menu.addItem("baz", bazMenu);
+		HTML htmlCiao = new HTML("Ciao", true);
+		tabLayoutPanel.add(htmlCiao, "New Widget", false);
 
-		FlowPanel flowPanel = new FlowPanel();
-		rootLayoutPanel.add(flowPanel);
-		rootLayoutPanel.setWidgetLeftWidth(flowPanel, 0.0, Unit.EM, 100.0, Unit.PCT);
-		rootLayoutPanel.setWidgetTopHeight(flowPanel, 0.0, Unit.EM, 100.0, Unit.PCT);
-
-		flowPanel.add(menu);
+		HTML htmlCiao_1 = new HTML("Ciao 2", true);
+		tabLayoutPanel.add(htmlCiao_1, "New Widget", false);
 	}
 }
