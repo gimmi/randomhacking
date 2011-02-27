@@ -7,14 +7,20 @@ import com.google.gwt.cell.client.TextCell;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.cellview.client.CellTable;
+import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.view.client.AsyncDataProvider;
 import com.google.gwt.view.client.HasData;
@@ -37,6 +43,7 @@ public class Spikemavengwt implements EntryPoint {
 		tabLayoutPanel.add(buildListTab(), "List", false);
 		tabLayoutPanel.add(buildTableTab(), "Table", false);
 		tabLayoutPanel.add(buildAsyncListTab(), "Async List", false);
+		tabLayoutPanel.add(buildDialogsTab(), "Dialogs", false);
 
 		RootLayoutPanel rootLayoutPanel = RootLayoutPanel.get();
 		rootLayoutPanel.add(tabLayoutPanel);
@@ -55,6 +62,30 @@ public class Spikemavengwt implements EntryPoint {
 		layoutPanel.add(cellList);
 		layoutPanel.setWidgetLeftWidth(cellList, 10.0, Unit.EM, 20.0, Unit.EM);
 		layoutPanel.setWidgetTopHeight(cellList, 10.0, Unit.EM, 20.0, Unit.EM);
+		return layoutPanel;
+	}
+
+	private LayoutPanel buildDialogsTab() {
+
+		Button button = new Button("Show dialog");
+		LayoutPanel layoutPanel = new LayoutPanel();
+		layoutPanel.add(button);
+		layoutPanel.setWidgetLeftWidth(button, 10.0, Unit.EM, 20.0, Unit.EM);
+		layoutPanel.setWidgetTopHeight(button, 10.0, Unit.EM, 20.0, Unit.EM);
+
+		button.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent sender) {
+				DialogBox dialogBox = new DialogBox();
+				dialogBox.setText("Dialog window");
+				Button btnNewButton = new Button("New button");
+				btnNewButton.setSize("100px", "100px");
+				dialogBox.setWidget(btnNewButton);
+				dialogBox.center();
+				dialogBox.show();
+			}
+		});
+
 		return layoutPanel;
 	}
 
@@ -105,7 +136,7 @@ public class Spikemavengwt implements EntryPoint {
 				return contact.address;
 			}
 		}, "Address");
-		table.setVisibleRange(0, 3);
+		table.setVisibleRange(0, 10);
 
 		new AsyncDataProvider<Dto>() {
 			@Override
@@ -124,10 +155,19 @@ public class Spikemavengwt implements EntryPoint {
 			}
 		}.addDataDisplay(table);
 
+		ScrollPanel scrollPanel = new ScrollPanel();
+		scrollPanel.add(table);
+
 		LayoutPanel layoutPanel = new LayoutPanel();
-		layoutPanel.add(table);
-		layoutPanel.setWidgetLeftWidth(table, 10.0, Unit.EM, 20.0, Unit.EM);
-		layoutPanel.setWidgetTopHeight(table, 10.0, Unit.EM, 20.0, Unit.EM);
+		layoutPanel.add(scrollPanel);
+		layoutPanel.setWidgetLeftRight(scrollPanel, 10.0, Unit.EM, 10.0, Unit.EM);
+		layoutPanel.setWidgetTopHeight(scrollPanel, 10.0, Unit.EM, 10.0, Unit.EM);
+
+		SimplePager pager = new SimplePager();
+		pager.setDisplay(table);
+		layoutPanel.add(pager);
+		layoutPanel.setWidgetLeftRight(pager, 10.0, Unit.EM, 10.0, Unit.EM);
+		layoutPanel.setWidgetTopHeight(pager, 20.0, Unit.EM, 10.0, Unit.EM);
 		return layoutPanel;
 	}
 }
