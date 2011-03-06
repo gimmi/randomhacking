@@ -1,7 +1,5 @@
 package com.github.gimmi.spikemavengae.data;
 
-import java.util.Collection;
-
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Key;
 
@@ -10,5 +8,5 @@ public interface EntityConverter<T> {
 
 	Entity toEntity(T obj, Key parent);
 
-	Collection<Object> getChildren();
+	Iterable<Object> getChildren();
 }
