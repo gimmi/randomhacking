@@ -38,6 +38,16 @@
 				<groupId>net.kindleit</groupId>
 				<artifactId>maven-gae-plugin</artifactId>
 				<version>0.8.2</version>
+				<configuration>
+					<jvmFlags>
+						<!-- 
+						For Java debugging with 'mvn gae:run'
+						http://stackoverflow.com/questions/2170597/maven-gae-plugin-unable-to-run-gaedebug
+						http://stackoverflow.com/questions/138511/what-are-java-command-line-options-to-set-to-allow-jvm-to-be-remotely-debugged
+						-->
+						<jvmFlag>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000</jvmFlag>
+					</jvmFlags>
+				</configuration>
 				<dependencies>
 					<dependency>
 						<groupId>net.kindleit</groupId>
