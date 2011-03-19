@@ -7,7 +7,7 @@
 	<packaging>war</packaging>
 	<properties>
 		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
-		<gwt.version>2.1.0</gwt.version>
+		<gwt.version>2.2.0</gwt.version>
 	</properties>
 	<build>
 		<finalName>spike-maven-gwt</finalName>
@@ -50,7 +50,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.1.0-1</version>
+				<version>${gwt.version}</version>
 				<configuration>
 					<gwtVersion>${gwt.version}</gwtVersion>
 				</configuration>
