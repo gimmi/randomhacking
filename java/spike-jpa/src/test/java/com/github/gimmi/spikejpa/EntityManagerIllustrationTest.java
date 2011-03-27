@@ -1,23 +1,24 @@
 package com.github.gimmi.spikejpa;
 
-import java.util.Date;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-
-import com.github.gimmi.spikejpa.Event;
-import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EntityManagerIllustrationTest {
 	private EntityManagerFactory entityManagerFactory;
 
 	@Before
 	public void before() {
-		entityManagerFactory = Persistence.createEntityManagerFactory("spikejpa");
+		Map<String, String> props = new HashMap<String, String>();
+		entityManagerFactory = Persistence.createEntityManagerFactory("spikejpa", props);
 	}
 
 	@After
@@ -38,11 +39,11 @@ public class EntityManagerIllustrationTest {
 		// now lets pull events from the database and list them
 		entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-        List<Event> result = entityManager.createQuery( "from Event", Event.class ).getResultList();
-		for ( Event event : result ) {
-			System.out.println( "Event (" + event.getDate() + ") : " + event.getTitle() );
+		List<Event> result = entityManager.createQuery("from Event", Event.class).getResultList();
+		for (Event event : result) {
+			System.out.println("Event (" + event.getDate() + ") : " + event.getTitle());
 		}
-        entityManager.getTransaction().commit();
-        entityManager.close();
+		entityManager.getTransaction().commit();
+		entityManager.close();
 	}
 }
