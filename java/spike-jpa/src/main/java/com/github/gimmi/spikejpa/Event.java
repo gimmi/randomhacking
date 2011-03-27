@@ -1,47 +1,29 @@
 package com.github.gimmi.spikejpa;
 
-import org.hibernate.annotations.GenericGenerator;
-
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.Version;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
-@Table(name = "EVENTS")
 public class Event {
-	private Long id;
-
+	@Id
+	private String id = UUID.randomUUID().toString();
 	private String title;
 	private Date date;
 
-	public Event() {
-		// this form used by Hibernate
+	@Version
+	private Integer version;
+
+	public Integer getVersion() {
+		return version;
 	}
 
-	public Event(String title, Date date) {
-		// for application use, to create new events
-		this.title = title;
-		this.date = date;
-	}
-
-	@Id
-	@GeneratedValue(generator = "increment")
-	@GenericGenerator(name = "increment", strategy = "increment")
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	private void setId(Long id) {
-		this.id = id;
-	}
-
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "EVENT_DATE")
 	public Date getDate() {
 		return date;
 	}
