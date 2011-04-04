@@ -146,6 +146,7 @@ public class Spikemavengwt implements EntryPoint {
 				greetingService.getDtos(range.getStart(), range.getLength(), new AsyncCallback<PaginatedResults<Dto>>() {
 					@Override
 					public void onFailure(Throwable caught) {
+						throw new RuntimeException(caught);
 					}
 
 					@Override
