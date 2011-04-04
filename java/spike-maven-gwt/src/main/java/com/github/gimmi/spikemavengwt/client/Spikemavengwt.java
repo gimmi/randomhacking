@@ -16,6 +16,7 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.LayoutPanel;
@@ -141,17 +142,18 @@ public class Spikemavengwt implements EntryPoint {
 		new AsyncDataProvider<Dto>() {
 			@Override
 			protected void onRangeChanged(final HasData<Dto> display) {
-				new Timer() {
+				final Range range = display.getVisibleRange();
+				greetingService.getDtos(range.getStart(), range.getLength(), new AsyncCallback<PaginatedResults<Dto>>() {
 					@Override
-					public void run() {
-						// On the server...
-						Range range = display.getVisibleRange();
-						List<Dto> values = Dto.DATA.subList(range.getStart(), range.getStart() + range.getLength());
-						// On the callback...
-						display.setRowCount(Dto.DATA.size());
-						display.setRowData(range.getStart(), values);
+					public void onFailure(Throwable caught) {
 					}
-				}.schedule(2000);
+
+					@Override
+					public void onSuccess(PaginatedResults<Dto> result) {
+						display.setRowCount(result.totalRows);
+						display.setRowData(range.getStart(), result.results);
+					}
+				});
 			}
 		}.addDataDisplay(table);
 
