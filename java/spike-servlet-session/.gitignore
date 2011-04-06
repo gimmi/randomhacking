@@ -1,0 +1,8 @@
+/target/
+/.classpath
+/.project
+/.settings/
+# Intellij Idea
+/*.iml
+/*.ipr
+/*.iws
