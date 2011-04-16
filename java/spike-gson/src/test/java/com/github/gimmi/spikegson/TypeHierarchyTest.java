@@ -30,7 +30,6 @@ public class TypeHierarchyTest {
 	public void before() {
 		class1Instance = new Class1();
 		class1Instance.collection.add(new Class2());
-//		baseInstance.collection.add(new BaseClass());
 	}
 
 	@Test
@@ -56,15 +55,15 @@ public class TypeHierarchyTest {
 //				return context.serialize(src);
 //			}
 //		});
-		builder.registerTypeAdapter(BaseClass.class, new JsonSerializer<BaseClass>() {
-			@Override
-			public JsonElement serialize(BaseClass src, Type typeOfSrc, JsonSerializationContext context) {
-				// See http://groups.google.com/group/google-gson/browse_thread/thread/f7e827b1d2bf63e8/f1402131daa152f4
-				return context.serialize(src);
-			}
-		});
+//		builder.registerTypeAdapter(BaseClass.class, new JsonSerializer<BaseClass>() {
+//			@Override
+//			public JsonElement serialize(BaseClass src, Type typeOfSrc, JsonSerializationContext context) {
+//				// See http://groups.google.com/group/google-gson/browse_thread/thread/f7e827b1d2bf63e8/f1402131daa152f4
+//				return context.serialize(src);
+//			}
+//		});
 
-		String json = builder.create().toJson(class1Instance, BaseClass.class).replace('"', '\'');
+		String json = builder.create().toJson(class1Instance).replace('"', '\'');
 
 		assertEquals("{'class1Field':'class 1 field value','baseField':'base field value','collection':[{'class2Field':'class 2 field value','baseField':'base field value','collection':[]}]}", json);
 	}
