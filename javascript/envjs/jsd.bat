@@ -1,0 +1,1 @@
+java -cp js.jar org.mozilla.javascript.tools.debugger.Main %*
