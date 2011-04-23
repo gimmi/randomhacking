@@ -22,5 +22,4 @@ Envjs({
 		}
     }
 });
-
-window.location = 'file:///C:/Users/gianmarco.gherardi/Tools/envjs/testpage.html';
+window.location = 'file:///C:/Users/gianmarco.gherardi/Sources/randomhacking/javascript/envjs/testpage.html';
