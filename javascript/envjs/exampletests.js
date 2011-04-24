@@ -1,24 +1,9 @@
-test("a basic test example", function() {
-	ok( true, "this test is fine" );
-	var value = "hello";
-	equals( "hello", value, "We expect value to be hello" );
-});
-/*
-module("Module A");
+module("Example module");
 
-test("first test within module", function() {
-	ok( true, "all pass" );
+test("succesful test", function() {
+	ok( true, "succesful assertion" );
 });
 
-test("second test within module", function() {
-	ok( true, "all pass" );
+test("failing test", function() {
+	ok( false, "failing assertion" );
 });
-
-module("Module B");
-
-test("some other test", function() {
-	expect(2);
-	equals( true, false, "failing test" );
-	equals( true, true, "passing test" );
-});
-*/
