@@ -12,6 +12,9 @@
 			Ns.Service.echo('par1', function(result) {
 				console.log(result);
 			});
+			Ns.Service.primitiveParameters('str', 123, true, 3.14, function() {
+				console.log('done');
+			});
 		});
 	</script>
 </head>

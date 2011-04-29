@@ -6,6 +6,7 @@
 	<packaging>war</packaging>
 	<properties>
 		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding> <!-- The most platform independent encodings is UTF-8, but currently eclipse doesn't use this encoding by default -->
+		<slf4j.version>1.6.1</slf4j.version>
 	</properties>
 	<build>
 		<plugins>
@@ -34,6 +35,16 @@
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>1.7.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
 		</dependency>
 		<!-- PROVIDED DEPENDENCIES -->
 		<dependency>
