@@ -1,0 +1,10 @@
+/.classpath
+/.project
+/.settings/
+/target/
+# Intellij Idea
+/*.iml
+/*.ipr
+/*.iws
+# extjs
+/src/main/webapp/ext
