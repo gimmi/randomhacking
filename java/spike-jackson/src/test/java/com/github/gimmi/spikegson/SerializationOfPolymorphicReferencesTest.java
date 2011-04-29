@@ -9,8 +9,7 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
-public class PolymorphicReferencesTest {
-
+public class SerializationOfPolymorphicReferencesTest {
 	public static class AnotherClass {
 		public String anotherClassField = "base field value";
 		public Class1 class1Field;
