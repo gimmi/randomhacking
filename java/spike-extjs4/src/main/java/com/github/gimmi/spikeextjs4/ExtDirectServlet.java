@@ -18,12 +18,10 @@ public abstract class ExtDirectServlet extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		PrintWriter writer = buildResponseWriter(resp, "text/javascript", "UTF-8");
-		writer.write(String.format("%s = ", getApiName()));
-		getGson().toJson(buildApi(req.getRequestURI()), writer);
-		writer.write(";");
+		writeApi(req.getRequestURI(), writer);
 	}
 
-	private JsonObject buildApi(String url) {
+	private void writeApi(String url, Writer writer) throws IOException {
 		JsonObject api = new JsonObject();
 		api.addProperty("url", url);
 		api.addProperty("type", "remoting");
@@ -38,10 +36,13 @@ public abstract class ExtDirectServlet extends HttpServlet {
 			methods.add(obj);
 		}
 		actions.add(getActionName(), methods);
-		return api;
+		writer.write(getApiName());
+		writer.write(" = ");
+		getGson().toJson(api, writer);
+		writer.write(";");
 	}
 
-	private String getNamespace() {
+	String getNamespace() {
 		return "Ns";
 	}
 
@@ -49,15 +50,15 @@ public abstract class ExtDirectServlet extends HttpServlet {
 		return new GsonBuilder().setPrettyPrinting().create();
 	}
 
-	private String getActionName() {
+	String getActionName() {
 		return getClass().getSimpleName();
 	}
 
-	private String getApiName() {
+	String getApiName() {
 		return "REMOTING_API";
 	}
 
-	private Map<String, Method> getMethods() {
+	Map<String, Method> getMethods() {
 		Map<String, Method> ret = new HashMap<String, Method>();
 		for (Method method : getClass().getMethods()) {
 			if (method.getAnnotation(ExtDirect.class) != null) {
