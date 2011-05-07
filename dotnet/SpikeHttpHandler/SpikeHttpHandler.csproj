@@ -66,11 +66,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Configuration\DirectMethodMetadata.cs" />
+    <Compile Include="Configuration\DirectMethodAttribute.cs" />
+    <Compile Include="Configuration\DirectActionAttribute.cs" />
     <Compile Include="DirectActionFactory.cs" />
+    <Compile Include="Configuration\AttributeConfigurator.cs" />
+    <Compile Include="Configuration\DirectActionMetadata.cs" />
     <Compile Include="DirectHandler.cs" />
     <Compile Include="DirectRequest.cs" />
     <Compile Include="DirectResponse.cs" />
-    <Compile Include="ExampleHandler.cs" />
+    <Compile Include="DirectHttpHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
