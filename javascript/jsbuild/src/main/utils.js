@@ -66,15 +66,20 @@ Make.Task.prototype.run = function () {
 	this._body();
 };
 
-function project(name, defaultTaskName, body) {
-	var project = new Make.Project(name);
-	Make.project = project;
-	body();
-	Make.project = null;
-	project.run(defaultTaskName);
-}
+function setupGlobalMethods (global) {
+	var project = null;
+	
+	global.project = function (name, defaultTaskName, body) {
+		project = new Make.Project(name);
+		body();
+		project = null;
+		project.run(defaultTaskName);
+	}
 
-function task(name, tasks, body) {
-	var task = new Make.Task(Make.project, name, tasks, body);
-	Make.project.addTask(task);
-}
+	global.task = function (name, tasks, body) {
+		var task = new Make.Task(project, name, tasks, body);
+		project.addTask(task);
+	}
+};
+
+setupGlobalMethods(this);
