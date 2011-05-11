@@ -1,3 +1,4 @@
+load('tools/underscore-1.1.6.js');
 load('tools/utils.js');
 
 project('my project', 'build', function () {

@@ -47,13 +47,20 @@ Make.Project.prototype.run = function (taskName) {
 	this._tasks[taskName].run();
 };
 
-Make.Task = function (name, taskNames, body) {
+Make.Task = function (project, name, taskNames, body) {
+	this._project = project;
 	this._name = name;
 	this._taskNames = taskNames;
 	this._body = body;
 };
 Make.Task.prototype.getName = function () {
 	return this._name;
+};
+Make.Task.prototype.getTasks = function () {
+	return _(this._taskNames).map(function (taskName) {
+		var task = this._project.getTask(taskName);
+		return _([task, task.getTasks()]).flatten();
+	}, this);
 };
 Make.Task.prototype.run = function () {
 	this._body();
@@ -68,7 +75,6 @@ function project(name, defaultTaskName, body) {
 }
 
 function task(name, tasks, body) {
-	var task = new Make.Task(name, tasks, body);
+	var task = new Make.Task(Make.project, name, tasks, body);
 	Make.project.addTask(task);
 }
-
