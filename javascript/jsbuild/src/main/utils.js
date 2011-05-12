@@ -33,38 +33,7 @@ Helpers = {
 	}
 };
 
-Make = {
-	project: null
-};
-Make.Project = function (name) {
-	this._name = name;
-	this._tasks = {};
-};
-Make.Project.prototype.addTask = function (task) {
-	this._tasks[task.getName()] = task;
-};
-Make.Project.prototype.run = function (taskName) {
-	this._tasks[taskName].run();
-};
-
-Make.Task = function (project, name, taskNames, body) {
-	this._project = project;
-	this._name = name;
-	this._taskNames = taskNames;
-	this._body = body;
-};
-Make.Task.prototype.getName = function () {
-	return this._name;
-};
-Make.Task.prototype.getTasks = function () {
-	return _(this._taskNames).map(function (taskName) {
-		var task = this._project.getTask(taskName);
-		return _([task, task.getTasks()]).flatten();
-	}, this);
-};
-Make.Task.prototype.run = function () {
-	this._body();
-};
+Make = {};
 
 function setupGlobalMethods (global) {
 	var project = null;
