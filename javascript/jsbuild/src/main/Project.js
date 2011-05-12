@@ -1,6 +1,7 @@
-Make.Project = function (name) {
+Make.Project = function (name, logger) {
 	this._name = name;
 	this._tasks = {};
+	this._logger = logger;
 };
 Make.Project.prototype = {
 	addTask: function (task) {
@@ -12,9 +13,10 @@ Make.Project.prototype = {
 	getTasks: function (name) {
 		var tasks = [];
 		this.getTask(name).visit(tasks, new Make.RecursionChecker('Task recursion found'));
-		return tasks;
+		return _(tasks).unique();
 	},
-	run: function (taskName) {
-		this._tasks[taskName].run();
+	run: function (name) {
+		var tasks = this.getTasks(name);
+		this._tasks[name].run();
 	}
 };

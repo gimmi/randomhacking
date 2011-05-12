@@ -33,22 +33,4 @@ Helpers = {
 	}
 };
 
-Make = {};
 
-function setupGlobalMethods (global) {
-	var project = null;
-	
-	global.project = function (name, defaultTaskName, body) {
-		project = new Make.Project(name);
-		body();
-		project = null;
-		project.run(defaultTaskName);
-	}
-
-	global.task = function (name, tasks, body) {
-		var task = new Make.Task(project, name, tasks, body);
-		project.addTask(task);
-	}
-};
-
-setupGlobalMethods(this);
