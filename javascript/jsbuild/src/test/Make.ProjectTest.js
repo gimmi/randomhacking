@@ -9,7 +9,7 @@ describe("Make.Project", function() {
 	}
 	
 	function getTaskNames (tasks) {
-		return _(target.getTasks('t1')).map(function (task) {
+		return Make.map(target.getTasks('t1'), function (task) {
 			return task.getName();
 		});
 	}
@@ -46,6 +46,6 @@ describe("Make.Project", function() {
 		
 		expect(function () {
 			target.getTasks('t1');
-		}).toThrow('Task recursion found. t1 => t2 => t3 => t1');
+		}).toThrow('Task recursion found: t1 => t2 => t3 => t1');
 	});
 });

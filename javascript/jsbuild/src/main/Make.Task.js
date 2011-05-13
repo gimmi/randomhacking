@@ -10,7 +10,7 @@ Make.Task.prototype = {
 	},
 	visit: function (tasks, recursionChecker) {
 		recursionChecker.wrap(this._name, function () {
-			_(this._taskNames).each(function (taskName) {
+			Make.each(this._taskNames, function (taskName) {
 				var task = this._project.getTask(taskName);
 				task.visit(tasks, recursionChecker);
 			}, this);

@@ -13,7 +13,7 @@ Make.Project.prototype = {
 	getTasks: function (name) {
 		var tasks = [];
 		this.getTask(name).visit(tasks, new Make.RecursionChecker('Task recursion found'));
-		return _(tasks).unique();
+		return Make.distinct(tasks);
 	},
 	run: function (name) {
 		var tasks = this.getTasks(name);

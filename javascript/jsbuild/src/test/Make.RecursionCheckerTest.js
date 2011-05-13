@@ -9,6 +9,6 @@ describe("Make.RecursionChecker", function() {
 		target.enter('b');
 		expect(function () {
 			target.enter('a');
-		}).toThrow('Recursion detected. a => b => a');
+		}).toThrow('Recursion detected: a => b => a');
 	});
 });
