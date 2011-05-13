@@ -5,13 +5,15 @@
 	
 	global.project = function (name, defaultTaskName, body) {
 		project = new Make.Project(name);
-		body();
-		project = null;
+		try {
+			body();
+		} finally {
+			project = null;
+		}
 		project.run(defaultTaskName);
-	}
+	};
 
 	global.task = function (name, tasks, body) {
-		var task = new Make.Task(project, name, tasks, body);
-		project.addTask(task);
-	}
+		project.addTask(new Make.Task(project, name, tasks, body));
+	};
 }(this));

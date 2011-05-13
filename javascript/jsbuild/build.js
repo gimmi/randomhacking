@@ -1,13 +1,15 @@
-load('tools/underscore-1.1.6.js');
 load('tools/utils.js');
+load('tools/JSLint-2011.05.10/jslint.js');
 
-project('my project', 'build', function () {
-	task('build', ['get latest'], function () {
+project('my project', 'default', function () {
+	task('default', ['get latest'], function () {
 		print('running');
 	});
 	
-	task('get latest', [], function () {
-		print('running');
+	task('jslint', [], function () {
+		if(!JSLINT('', {})) {
+			throw 'JSLint fail';
+		}
 	});
 });
 
