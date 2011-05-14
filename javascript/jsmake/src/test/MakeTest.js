@@ -25,6 +25,11 @@ describe("Make", function() {
 		expect(target.isObject(null)).toBe(false);
 	});
 	
+	it("trim", function() {
+		expect(target.trim(' a ')).toBe('a');
+		expect(target.trim('')).toBe('');
+	});
+	
 	describe('each', function () {
 		it('should call function whit expected params when iterating object', function () {
 			var items = { a: 1, b: 2 };
@@ -94,14 +99,14 @@ describe("Make", function() {
 		});
 	});
 	
-	it('select', function () {
+	it('filter', function () {
 		var fn = jasmine.createSpy();
 		fn.andCallFake(function (item) {
 			return item % 2;
 		});
 		var scope = {};
 		
-		var actual = target.select([ 1, 2, 3, 4 ], fn, scope);
+		var actual = target.filter([ 1, 2, 3, 4 ], fn, scope);
 
 		expect(actual).toEqual([ 1, 3 ]);
 		expect(fn.callCount).toEqual(4);
@@ -145,5 +150,19 @@ describe("Make", function() {
 	it('distinct', function () {
 		expect(target.distinct([ 1, 1, 2, 3, 2, 3 ])).toEqual([ 1, 2, 3 ]);
 		expect(target.distinct(1)).toEqual([ 1 ]);
+	});
+
+	it('reduce', function () {
+		var fn = jasmine.createSpy();
+		fn.andCallFake(function (memo, item) {
+			return memo + item;
+		});
+		var scope = {};
+		
+		var actual = target.reduce([ '2', '3', '4' ], fn, '1', scope);
+
+		expect(actual).toEqual('1234');
+		expect(fn.callCount).toEqual(3);
+		expect(fn.mostRecentCall.object).toBe(scope);
 	});
 });

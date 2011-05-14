@@ -4,8 +4,8 @@ describe("Make.Project", function() {
 		target = new Make.Project('test project');
 	});
 	
-	function createTask (name, tasks) {
-		return target.addTask(new Make.Task(target, name, tasks, jasmine.createSpy()));
+	function createTask (name, tasks, fn) {
+		return target.addTask(new Make.Task(target, name, tasks, fn));
 	}
 	
 	function getTaskNames (tasks) {
@@ -47,5 +47,16 @@ describe("Make.Project", function() {
 		expect(function () {
 			target.getTasks('t1');
 		}).toThrow('Task recursion found: t1 => t2 => t3 => t1');
+	});
+	
+	it('should run tasks in dependency order', function () {
+		var execution = [];
+		createTask('t1', [ 't2', 't3' ], function () { execution.push(1); });
+		createTask('t2', [], function () { execution.push(2); });
+		createTask('t3', [], function () { execution.push(3); });
+
+		target.run('t1');
+		
+		expect(execution).toEqual([ 2, 3, 1 ]);
 	});
 });

@@ -8,6 +8,9 @@ Make = {
 	isEmpty : function(v) {
 		return v === null || v === undefined || ((this.isArray(v) && !v.length));
 	},
+	trim: function (str) {
+		return str.replace(/(?:^\s+)|(?:\s+$)/g, '');
+	},
 	each: function (items, fn, scope) {
 		var key;
 		if (items === null || items === undefined) {
@@ -31,7 +34,7 @@ Make = {
 			fn.call(scope, items, undefined, items);
 		}
 	},
-	select: function (items, fn, scope) {
+	filter: function (items, fn, scope) {
 		var ret = [];
 		this.each(items, function (item) {
 			if (fn.call(scope, item)) {
@@ -46,6 +49,12 @@ Make = {
 			ret.push(fn.call(scope, item, key, items));
 		}, this);
 		return ret;
+	},
+	reduce: function (items, fn, memo, scope) {
+		this.each(items, function (item) {
+			memo = fn.call(scope, memo, item);
+		}, this);
+		return memo;
 	},
 	join: function (items, separator) {
 		var ret = '';
@@ -71,38 +80,6 @@ Make = {
 			}
 		}, this);
 		return ret;
-	},
-	iterateArray: function (items, fn, scope) {
-		var i;
-		for (i = 0; i < items.length; i += 1) {
-			fn.call(scope, items[i]);
-		}
-	},
-	forEachFile: function (path, regex, fn, scope) {
-		this.iterateArray(new java.io.File(path).listFiles(), function (file) {
-			var filePath = file.getPath();
-			if (file.isDirectory()) {
-				this.forEachFile(filePath, regex, fn, scope);
-			} else if (file.isFile() && regex.test(filePath)) {
-				fn.call(scope, filePath);
-			}
-		}, this);
-	},
-	runCmd: function (cmd) {
-		var process = java.lang.Runtime.getRuntime().exec(cmd);
-
-		this.printInputStream(process.getInputStream());
-		this.printInputStream(process.getErrorStream());
-
-		return process.exitValue();
-	},
-	printInputStream: function (inputStream) {
-		var reader = new java.io.BufferedReader(new java.io.InputStreamReader(inputStream));
-		var line;
-		while (line = reader.readLine()) {
-			print(line);
-		}
-		reader.close();
 	}
 };
 

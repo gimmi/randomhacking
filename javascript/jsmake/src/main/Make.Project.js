@@ -16,7 +16,8 @@ Make.Project.prototype = {
 		return Make.distinct(tasks);
 	},
 	run: function (name) {
-		var tasks = this.getTasks(name);
-		this._tasks[name].run();
+		Make.each(this.getTasks(name), function (task) {
+			task.run();
+		}, this);
 	}
 };

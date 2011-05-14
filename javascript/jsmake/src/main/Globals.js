@@ -7,10 +7,10 @@
 		project = new Make.Project(name);
 		try {
 			body();
+			project.run(defaultTaskName);
 		} finally {
 			project = null;
 		}
-		project.run(defaultTaskName);
 	};
 
 	global.task = function (name, tasks, body) {
