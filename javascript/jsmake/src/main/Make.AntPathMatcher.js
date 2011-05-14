@@ -2,25 +2,30 @@ Make.AntPathMatcher = function () {
 };
 Make.AntPathMatcher.prototype = {
 	CASE_SENSITIVE: false,
-	match: function (pattern, basePath) {
-		var parts = this._parsePattern(pattern);
-		var file = new java.io.File(basePath);
+	match: function (pattern, path) {
+		var patternParts = this._normalize(pattern);
+		var pathParts = this._normalize(path);
+		// Make.each(patternParts, 
 	},
-	_parsePattern: function (pattern) {
-		pattern = pattern.replace(/(?:\s*\\+\s*)|(?:\s*\/+\s*)/g, '/');
-		if(pattern.indexOf('/') === 0) {
-			throw 'Absolute path patterns not supported';
-		}
-		return Make.map(pattern.split('/'), function (part) {
+	_normalize: function (pattern) {
+		var parts = pattern.split(/\\+|//+/);
+		parts = Make.map(parts, function (part) {
 			return Make.trim(part);
 		}, this);
+		parts = Make.filter(parts, function (part) {
+			return (part.length > 0) && (part !== '.') && (part !== '..');
+		}, this);
+		return parts;
 	},
-	_makeRelative: function (basePath, path) {
-		basePath = Make.Sys.getCanonicalPath(basePath) + '/';
-		path = Make.Sys.getCanonicalPath(path);
-		if (path.indexOf(basePath) !== 0) {
-			throw "'" + path + "' is not a subpath of '" + basePath + "'";
-		}
-		return path.slice(basePath.length - 1);
+	_split: function (parts) {
+		var head = current = [], tail = [];
+		Make.each(parts, function (part) {
+			if (part === '**') {
+				current = tail;
+			} else {
+				current.push(part);
+			}
+		}, this);
+		return { head: head, tail: tail };
 	}
 };
