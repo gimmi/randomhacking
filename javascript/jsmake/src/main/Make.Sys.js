@@ -32,10 +32,10 @@ Make.Sys = {
 	_visitPath: function (basePath, path, fileNames) {
 		var file = new java.io.File(basePath, path);
 		if (file.isFile()) {
-			fileNames.push(this.combinePath(path, file.getPath()));
+			fileNames.push(path);
 		} else if(file.isDirectory()) {
 			Make.each(this._translateJavaArray(new java.io.File(basePath, path).listFiles()), function (file) {
-				this._visitPath(basePath, this.combinePath(path, file.getPath()), fileNames);
+				this._visitPath(basePath, this.combinePath(path, file.getName()), fileNames);
 			}, this);
 		}
 	},
