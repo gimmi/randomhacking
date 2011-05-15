@@ -17,24 +17,16 @@ describe("Make.AntPathMatcher", function() {
 		expect(target.fileMatch('a/b', 'a/b/c')).toBeFalsy();
 	});
 	
-	it('should match pattern with ** wildcard', function () {
-		expect(target.fileMatch('**', 'a')).toBeTruthy();
-		expect(target.fileMatch('**', 'a/b')).toBeTruthy();
-		expect(target.fileMatch('a/**', 'a/b')).toBeTruthy();
-		expect(target.fileMatch('a/**', 'a/b/c')).toBeTruthy();
-		expect(target.fileMatch('a/**/c', 'a/b')).toBeFalsy();
+	it('valid match with ** wildcard', function () {
+		expect(target.fileMatch('**/a', 'a')).toBeTruthy();
+		expect(target.fileMatch('**/b', 'a/b')).toBeTruthy();
+		expect(target.fileMatch('a/**/b', 'a/b')).toBeTruthy();
 		expect(target.fileMatch('a/**/c', 'a/b/c')).toBeTruthy();
 		expect(target.fileMatch('a/**/d', 'a/b/c/d')).toBeTruthy();
 	});
 	
-	it('should detect if path can contain pattern matching elements', function () {
-		expect(target.directoryMatch('**', 'a')).toBeTruthy();
-		expect(target.directoryMatch('**', 'a/b')).toBeTruthy();
-		expect(target.directoryMatch('a/**', 'a/b')).toBeTruthy();
-		expect(target.directoryMatch('a/**', 'a/b/c')).toBeTruthy();
-		expect(target.directoryMatch('a/**/c', 'a/b')).toBeFalsy();
-		expect(target.directoryMatch('a/**/c', 'a/b/c')).toBeTruthy();
-		expect(target.directoryMatch('a/**/d', 'a/b/c/d')).toBeTruthy();
+	it('invalid match with ** wildcard', function () {
+		expect(target.fileMatch('a/**/c', 'a/b')).toBeFalsy();
 	});
 	
 	it('should tokenize path/pattern', function () {
@@ -46,5 +38,29 @@ describe("Make.AntPathMatcher", function() {
 		expect(target._tokenize('a/')).toEqual([ 'a' ]);
 		expect(target._tokenize('a / ')).toEqual([ 'a' ]);
 		expect(target._tokenize('a/./b')).toEqual([ 'a', 'b' ]);
+	});
+	
+	it('should throw exception when tokenizing invalid pattern', function () {
+		
+	});
+	
+	it('should match token considering wildcards', function () {
+		expect(target._matchToken('file', 'file')).toBeTruthy();
+		expect(target._matchToken('file', '')).toBeFalsy();
+		expect(target._matchToken('file', 'other')).toBeFalsy();
+		expect(target._matchToken('?', '')).toBeFalsy();
+		expect(target._matchToken('?', 'f')).toBeTruthy();
+		expect(target._matchToken('a?c', 'ac')).toBeFalsy();
+		expect(target._matchToken('a?c', 'abc')).toBeTruthy();
+		expect(target._matchToken('*', '')).toBeTruthy();
+		expect(target._matchToken('*', 'file')).toBeTruthy();
+		expect(target._matchToken('*', 'file')).toBeTruthy();
+		expect(target._matchToken('f*e', 'file')).toBeTruthy();
+		expect(target._matchToken('fil*e', 'file')).toBeTruthy();
+		expect(target._matchToken('a*c', 'def')).toBeFalsy();
+	});
+	
+	it('should match token with special characters', function () {
+		expect(target._matchToken('-[]{}()+.,\\^$|# ', '-[]{}()+.,\\^$|# ')).toBeTruthy();
 	});
 });

@@ -16,8 +16,31 @@ Make.AntPathMatcher.prototype = {
 	_matchTokens: function (patternTokens, pathTokens, exact) {
 		var patternToken;
 		var pathToken;
-		while((pathToken = pathTokens.shift()) !== undefined) {
-			if((patternToken = patternTokens.shift()) === undefined) {
+		while(true) {
+			pathToken = pathTokens.shift();
+			patternToken = patternTokens.shift();
+			if (patternToken && pathToken) {
+				if (patternToken === '**') {
+					patternToken = patternTokens.shift();
+					while (!this._matchToken(patternToken, pathToken)) {
+						pathToken = pathTokens.shift();
+						if (!pathToken) {
+							return false;
+						}
+					}
+				} else if (!this._matchToken(patternToken, pathToken)) {
+					return false;
+				}
+			} else if (patternToken && !pathToken) {
+				return false;
+			} else if (!patternToken && pathToken) {
+				return false;
+			} else {
+				return true;
+			}
+		}
+/*
+			if(patternToken === undefined) {
 				return false;
 			} else if (patternToken === '**') {
 				if((patternToken = patternTokens.shift()) === undefined) {
@@ -35,6 +58,7 @@ Make.AntPathMatcher.prototype = {
 			}
 		}
 		return true;
+*/
 /*
 		while((patternToken = patternTokens.shift()) !== undefined) {
 			if (patternToken === '**') {
@@ -57,7 +81,18 @@ Make.AntPathMatcher.prototype = {
 */
 	},
 	_matchToken: function (patternToken, pathToken) {
-		return patternToken === pathToken;
+		var regex = '';
+		for (var i = 0; i < patternToken.length; i += 1) {
+			var ch = patternToken.charAt(i);
+			if (ch === '*') {
+				regex += '.*';
+			} else if (ch === '?') {
+				regex += '.{1}';
+			} else {
+				regex += Make.escapeForRegex(ch);
+			}
+		}
+		return new RegExp(regex).test(pathToken);
 	},
 	_tokenize: function (pattern) {
 		var tokens = pattern.split(/\\+|\/+/);
@@ -67,6 +102,10 @@ Make.AntPathMatcher.prototype = {
 		tokens = Make.filter(tokens, function (token) {
 			return !/^[\s\.]*$/.test(token);
 		}, this);
+		if (tokens[tokens.length - 1] === '**') {
+			throw 'Invalid ** wildcard at end pattern';
+		}
+		// TODO invalid more then one **
 		return tokens;
 	}
 };
