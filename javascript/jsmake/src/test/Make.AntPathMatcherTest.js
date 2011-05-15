@@ -6,36 +6,27 @@ describe("Make.AntPathMatcher", function() {
 	});
 	
 	it('should match patterns without ** wildcard', function () {
-		expect(target.fileMatch('a', 'a')).toBeTruthy();
-		expect(target.fileMatch('a/b', 'a/b')).toBeTruthy();
+		expect(target.match('a', 'a')).toBeTruthy();
+		expect(target.match('a/b', 'a/b')).toBeTruthy();
 
-		expect(target.fileMatch('a', 'b')).toBeFalsy();
-		expect(target.fileMatch('a', 'a/b')).toBeFalsy();
-		expect(target.fileMatch('a/b', 'a')).toBeFalsy();
-		expect(target.fileMatch('a/b', 'a/b/c')).toBeFalsy();
+		expect(target.match('a', 'b')).toBeFalsy();
+		expect(target.match('a', 'a/b')).toBeFalsy();
+		expect(target.match('a/b', 'a')).toBeFalsy();
+		expect(target.match('a/b', 'a/b/c')).toBeFalsy();
 	});
 	
 	it('should match pattern with ** wildcard', function () {
-		expect(target.fileMatch('**/a', 'a')).toBeTruthy();
-		expect(target.fileMatch('**/b', 'a/b')).toBeTruthy();
-		expect(target.fileMatch('**/c', 'a/b/c')).toBeTruthy();
-		expect(target.fileMatch('a/**/b', 'a/b')).toBeTruthy();
-		expect(target.fileMatch('a/**/c', 'a/b/c')).toBeTruthy();
-		expect(target.fileMatch('a/**/d', 'a/b/c/d')).toBeTruthy();
-		expect(target.fileMatch('a/**/d', 'a/b/c/d/d')).toBeTruthy();
+		expect(target.match('**/a', 'a')).toBeTruthy();
+		expect(target.match('**/b', 'a/b')).toBeTruthy();
+		expect(target.match('**/c', 'a/b/c')).toBeTruthy();
+		expect(target.match('a/**/b', 'a/b')).toBeTruthy();
+		expect(target.match('a/**/c', 'a/b/c')).toBeTruthy();
+		expect(target.match('a/**/d', 'a/b/c/d')).toBeTruthy();
+		expect(target.match('a/**/d', 'a/b/c/d/d')).toBeTruthy();
 
-		expect(target.fileMatch('a/**/c', 'a/b')).toBeFalsy();
+		expect(target.match('a/**/c', 'a/b')).toBeFalsy();
 	});
-	
-	it('should match partially', function () {
-		expect(target.directoryMatch('a/b/c', 'a/b')).toBeTruthy();
-		expect(target.directoryMatch('a/**/*', 'a')).toBeTruthy();
-		//expect(target.directoryMatch('a/**/*', 'a/b/c')).toBeTruthy();
-		
-		//expect(target.directoryMatch('a/**/*', 'a')).toBeTruthy();
-		expect(target.directoryMatch('a/c', 'a/b')).toBeFalsy();
-	});
-	
+
 	it('should tokenize path/pattern', function () {
 		expect(target._tokenize('a/b/c')).toEqual([ 'a', 'b', 'c' ]);
 		expect(target._tokenize('a\\b\\c')).toEqual([ 'a', 'b', 'c' ]);
