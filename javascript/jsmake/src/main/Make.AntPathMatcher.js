@@ -3,32 +3,23 @@ Make.AntPathMatcher = function () {
 Make.AntPathMatcher.prototype = {
 	CASE_SENSITIVE: false,
 	match: function (pattern, path) {
-		pattern = this._split(this._normalize(pattern));
-		path = this._normalize(path);
-		for (var i = 0, match = true; i < path.length && match === true; i += 1) {
-			path[i] === pattern[i]
+		var patternTokens = this._tokenize(pattern);
+		var pathTokens = this._tokenize(path);
+		return this._matchTokens(patternTokens, pathTokens);
+	},
+	_matchTokens: function (patternTokens, pathTokens) {
+		var patternToken;
+		var pathToken;
+		while((patternToken = patternTokens.shift()) !== undefined) {
+			if(patternToken === '**') {
+				return this._matchTokens(patternTokens.reverse(), pathTokens.reverse());
+			}
+			pathToken = pathTokens.shift()
+			if(patternToken !== pathToken) {
+				return false;
+			}
 		}
-		Make.each(path, function (part) {
-			
-		}, this);
-		var ret = true;
-		Make.each(path.headParts, function (part, index) {
-			return !(ret = ret && part === path[index]);
-		}, this);
-		Make.each(path.tailParts, function (part, index) {
-			return !(ret = ret && part === path[index]);
-		}, this);
-		// Make.each(patternParts, 
-	},
-	_toRegexes: function (tokens) {
-		var regexes = [];
-		Make.each(tokens, function(token, index, tokens) {
-			regexes.push(this._toRegex(tokens.slice(0, index + 1)));
-		}, this);
-		return regexes;
-	},
-	_toRegex: function (tokens) {
-		'^' + Make.join(tokens, '\/')
+		return true;
 	},
 	_tokenize: function (pattern) {
 		var tokens = pattern.split(/\\+|\/+/);
