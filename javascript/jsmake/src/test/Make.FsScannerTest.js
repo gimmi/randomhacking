@@ -59,7 +59,7 @@ describe("Make.FsScanner", function() {
 		expect(actual).toEqual([ 
 			'./src/main/Main.js',
 			'./src/main/Core.js',
-			'./src/main/Helpers.js'
+			'./src/main/Helpers.js',
 			'./src/test/MainTests.js',
 			'./src/test/CoreTests.js',
 			'./src/test/HelpersTests.js'
