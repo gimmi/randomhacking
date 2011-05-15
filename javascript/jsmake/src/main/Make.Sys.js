@@ -1,9 +1,9 @@
 Make.Sys = {
 	getCanonicalPath: function (path) {
-		return new java.io.File(basePath).getCanonicalPath();
+		return this._translateJavaString(new java.io.File(basePath).getCanonicalPath());
 	},
 	combinePath: function (path1, path2) {
-		return new java.io.File(path1, path2).getPath();
+		return this._translateJavaString(new java.io.File(path1, path2).getPath());
 	},
 	getFiles: function (basePath) {
 		return this._getFiles(basePath, function (fileName) {
@@ -38,7 +38,7 @@ Make.Sys = {
 		var fileFilter = new java.io.FileFilter({ accept: filter });
 		var files = this._translateJavaArray(new java.io.File(basePath).listFiles(fileFilter));
 		return Make.map(files, function (file) {
-			return file.getName();
+			return this._translateJavaString(file.getName());
 		}, this);
 	},
 	_translateJavaArray: function (javaArray) {
@@ -47,5 +47,8 @@ Make.Sys = {
 			ary.push(javaArray[i]);
 		}
 		return ary;
+	},
+	_translateJavaString: function (javaString) {
+		return String(javaString);
 	}
 };

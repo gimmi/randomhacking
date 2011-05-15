@@ -22,7 +22,8 @@ project('my project', 'default', function () {
 	
 	task('files', [], function () {
 		sys.log('running files task');
-		Make.each(new Make.FsScanner('.').scan(), function (file) {
+		var scanner = new Make.FsScanner('.').include('**/*');
+		Make.each(scanner.scan(), function (file) {
 			sys.log(file);
 		});
 	});

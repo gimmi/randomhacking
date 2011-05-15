@@ -2,29 +2,29 @@ describe("Make.AntPathMatcher", function() {
 	var target;
 
 	beforeEach(function() {
-		target = new Make.AntPathMatcher();
+		target = new Make.AntPathMatcher('');
 	});
 	
 	it('should match patterns without ** wildcard', function () {
-		expect(target.match('a', 'a')).toBeTruthy();
-		expect(target.match('a/b', 'a/b')).toBeTruthy();
+		expect(new Make.AntPathMatcher('a', 'a')).toBeTruthy();
+		expect(new Make.AntPathMatcher('a/b').match('a/b')).toBeTruthy();
 
-		expect(target.match('a', 'b')).toBeFalsy();
-		expect(target.match('a', 'a/b')).toBeFalsy();
-		expect(target.match('a/b', 'a')).toBeFalsy();
-		expect(target.match('a/b', 'a/b/c')).toBeFalsy();
+		expect(new Make.AntPathMatcher('a').match('b')).toBeFalsy();
+		expect(new Make.AntPathMatcher('a').match('a/b')).toBeFalsy();
+		expect(new Make.AntPathMatcher('a/b').match('a')).toBeFalsy();
+		expect(new Make.AntPathMatcher('a/b').match('a/b/c')).toBeFalsy();
 	});
 	
 	it('should match pattern with ** wildcard', function () {
-		expect(target.match('**/a', 'a')).toBeTruthy();
-		expect(target.match('**/b', 'a/b')).toBeTruthy();
-		expect(target.match('**/c', 'a/b/c')).toBeTruthy();
-		expect(target.match('a/**/b', 'a/b')).toBeTruthy();
-		expect(target.match('a/**/c', 'a/b/c')).toBeTruthy();
-		expect(target.match('a/**/d', 'a/b/c/d')).toBeTruthy();
-		expect(target.match('a/**/d', 'a/b/c/d/d')).toBeTruthy();
+		expect(new Make.AntPathMatcher('**/a').match('a')).toBeTruthy();
+		expect(new Make.AntPathMatcher('**/b').match('a/b')).toBeTruthy();
+		expect(new Make.AntPathMatcher('**/c').match('a/b/c')).toBeTruthy();
+		expect(new Make.AntPathMatcher('a/**/b').match('a/b')).toBeTruthy();
+		expect(new Make.AntPathMatcher('a/**/c').match('a/b/c')).toBeTruthy();
+		expect(new Make.AntPathMatcher('a/**/d').match('a/b/c/d')).toBeTruthy();
+		expect(new Make.AntPathMatcher('a/**/d').match('a/b/c/d/d')).toBeTruthy();
 
-		expect(target.match('a/**/c', 'a/b')).toBeFalsy();
+		expect(new Make.AntPathMatcher('a/**/c').match('a/b')).toBeFalsy();
 	});
 
 	it('should tokenize path/pattern', function () {

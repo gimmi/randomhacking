@@ -1,8 +1,9 @@
-Make.AntPathMatcher = function () {
+Make.AntPathMatcher = function (pattern) {
+	this._pattern = pattern;
 };
 Make.AntPathMatcher.prototype = {
-	match: function (pattern, path) {
-		var patternTokens = this._tokenize(pattern);
+	match: function (path) {
+		var patternTokens = this._tokenize(this._pattern);
 		var pathTokens = this._tokenize(path);
 		return this._matchTokens(patternTokens, pathTokens);
 	},
