@@ -16,18 +16,48 @@ Make.AntPathMatcher.prototype = {
 	_matchTokens: function (patternTokens, pathTokens, exact) {
 		var patternToken;
 		var pathToken;
-		while((patternToken = patternTokens.shift()) !== undefined && (exact || (pathToken = pathTokens.shift()) !== undefined)) {
-			if (exact) {
-				pathToken = pathTokens.shift();
-			}
-			if (patternToken === '**') {
-				return this._matchTokens(patternTokens.reverse(), pathTokens.reverse(), exact);
-			}
-			if (patternToken !== pathToken) {
+		while((pathToken = pathTokens.shift()) !== undefined) {
+			if((patternToken = patternTokens.shift()) === undefined) {
 				return false;
+			} else if (patternToken === '**') {
+				if((patternToken = patternTokens.shift()) === undefined) {
+					return true;
+				}
+				while(!this._matchToken(patternToken, pathToken)) {
+					if((pathToken = pathTokens.shift()) === undefined) {
+						return false;
+					}
+				}
+			} else {
+				if (!this._matchToken(patternToken, pathToken)) {
+					return false;
+				}
 			}
 		}
 		return true;
+/*
+		while((patternToken = patternTokens.shift()) !== undefined) {
+			if (patternToken === '**') {
+				if((patternToken = patternTokens.shift()) === undefined) {
+					return true;
+				}
+				do {
+					if((pathToken = pathTokens.shift()) === undefined) {
+						return false;
+					}
+				} while(this._matchToken(patternToken, pathToken))
+			} else {
+				pathToken = pathTokens.shift();
+				if (!this._matchToken(patternToken, pathToken)) {
+					return false;
+				}
+			}
+		}
+		return true;
+*/
+	},
+	_matchToken: function (patternToken, pathToken) {
+		return patternToken === pathToken;
 	},
 	_tokenize: function (pattern) {
 		var tokens = pattern.split(/\\+|\/+/);

@@ -5,10 +5,16 @@ describe("Make.AntPathMatcher", function() {
 		target = new Make.AntPathMatcher();
 	});
 	
-	it('should match non wildcard patterns', function () {
+	it('valid match without wildcards', function () {
 		expect(target.fileMatch('a', 'a')).toBeTruthy();
 		expect(target.fileMatch('a/b', 'a/b')).toBeTruthy();
-		expect(target.fileMatch('a/b', 'a/b/c')).toBeTruthy();
+	});
+	
+	it('invalid match without wildcards', function () {
+		expect(target.fileMatch('a', 'b')).toBeFalsy();
+		expect(target.fileMatch('a', 'a/b')).toBeFalsy();
+		expect(target.fileMatch('a/b', 'a')).toBeFalsy();
+		expect(target.fileMatch('a/b', 'a/b/c')).toBeFalsy();
 	});
 	
 	it('should match pattern with ** wildcard', function () {
