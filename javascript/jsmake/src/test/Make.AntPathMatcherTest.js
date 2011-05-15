@@ -22,8 +22,18 @@ describe("Make.AntPathMatcher", function() {
 		expect(target.fileMatch('a/**/b', 'a/b')).toBeTruthy();
 		expect(target.fileMatch('a/**/c', 'a/b/c')).toBeTruthy();
 		expect(target.fileMatch('a/**/d', 'a/b/c/d')).toBeTruthy();
+		expect(target.fileMatch('a/**/d', 'a/b/c/d/d')).toBeTruthy();
 
 		expect(target.fileMatch('a/**/c', 'a/b')).toBeFalsy();
+	});
+	
+	it('should match partially', function () {
+		expect(target.directoryMatch('a/b/c', 'a/b')).toBeTruthy();
+		expect(target.directoryMatch('a/**/*', 'a')).toBeTruthy();
+		//expect(target.directoryMatch('a/**/*', 'a/b/c')).toBeTruthy();
+		
+		//expect(target.directoryMatch('a/**/*', 'a')).toBeTruthy();
+		expect(target.directoryMatch('a/c', 'a/b')).toBeFalsy();
 	});
 	
 	it('should tokenize path/pattern', function () {

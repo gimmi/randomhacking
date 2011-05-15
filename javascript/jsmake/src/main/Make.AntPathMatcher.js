@@ -3,17 +3,17 @@ Make.AntPathMatcher = function () {
 Make.AntPathMatcher.prototype = {
 	CASE_SENSITIVE: false,
 	fileMatch: function (pattern, path) {
-		return this._match(pattern, path, true);
+		return this.match(pattern, path, false);
 	},
 	directoryMatch: function (pattern, path) {
-		return this._match(pattern, path, false);
+		return this.match(pattern, path, true);
 	},
-	_match: function (pattern, path, exact) {
+	match: function (pattern, path, partialMatch) {
 		var patternTokens = this._tokenize(pattern);
 		var pathTokens = this._tokenize(path);
-		return this._matchTokens(patternTokens, pathTokens, exact);
+		return this._matchTokens(patternTokens, pathTokens, partialMatch);
 	},
-	_matchTokens: function (patternTokens, pathTokens, exact) {
+	_matchTokens: function (patternTokens, pathTokens, partialMatch) {
 		var patternToken;
 		var pathToken;
 		while(true) {
@@ -32,7 +32,7 @@ Make.AntPathMatcher.prototype = {
 					return false;
 				}
 			} else if (patternToken && !pathToken) {
-				return false;
+				return partialMatch;
 			} else if (!patternToken && pathToken) {
 				return false;
 			} else {
