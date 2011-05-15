@@ -1,4 +1,7 @@
 Make = {
+	escapeForRegex: function (str) {
+        return str.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+	},
 	isArray: function(v) {
 		return toString.apply(v) === '[object Array]';
 	},
