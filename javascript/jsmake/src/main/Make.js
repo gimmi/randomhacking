@@ -59,7 +59,7 @@ Make = {
 		}, this);
 		return memo;
 	},
-	join: function (items, separator) {
+	join: function (items, separator) { // TODO use Array.join
 		var ret = '';
 		this.each(items, function (item) {
 			ret += (ret === '' ? '' : separator);
