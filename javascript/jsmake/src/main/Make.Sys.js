@@ -6,9 +6,14 @@ Make.Sys = {
 		return new java.io.File(path1, path2).getPath();
 	},
 	getFiles: function (basePath) {
-		var fileNames = [];
-		this._visitPath(basePath, '.', fileNames);
-		return fileNames;
+		return this._getFiles(basePath, function (fileName) {
+			return new java.io.File(fileName).isFile();
+		});
+	},
+	getDirectories: function (basePath) {
+		return this._getFiles(basePath, function (fileName) {
+			return new java.io.File(fileName).isDirectory();
+		});
 	},
 	runCmd: function (cmd) {
 		var process = java.lang.Runtime.getRuntime().exec(cmd);
@@ -29,15 +34,12 @@ Make.Sys = {
 	log: function (msg) {
 		print(msg);
 	},
-	_visitPath: function (basePath, path, fileNames) {
-		var file = new java.io.File(basePath, path);
-		if (file.isFile()) {
-			fileNames.push(path);
-		} else if(file.isDirectory()) {
-			Make.each(this._translateJavaArray(new java.io.File(basePath, path).listFiles()), function (file) {
-				this._visitPath(basePath, this.combinePath(path, file.getName()), fileNames);
-			}, this);
-		}
+	_getFiles: function (basePath, filter) {
+		var fileFilter = new java.io.FileFilter({ accept: filter });
+		var files = this._translateJavaArray(new java.io.File(basePath).listFiles(fileFilter));
+		return Make.map(files, function (file) {
+			return file.getName();
+		}, this);
 	},
 	_translateJavaArray: function (javaArray) {
 		var ary = [];
