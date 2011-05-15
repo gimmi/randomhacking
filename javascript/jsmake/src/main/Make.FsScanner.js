@@ -21,18 +21,18 @@ Make.FsScanner.prototype = {
 		var fullPath = Make.Sys.combinePath(this._basePath, relativePath);
 		Make.each(Make.Sys.getFiles(fullPath), function (fileName) {
 			fileName = Make.Sys.combinePath(relativePath, fileName);
-			if (this._include(fileName)) {
+			if (this._evaluateInclusion(fileName)) {
 				fileNames.push(fileName);
 			}
 		}, this);
 		Make.each(Make.Sys.getDirectories(fullPath), function (path) {
 			path = Make.Sys.combinePath(relativePath, path);
-			if (this._include(path)) {
+			if (this._evaluateInclusion(path)) {
 				this._scan(path, fileNames);
 			}
 		}, this);
 	},
-	_include: function (path) {
+	_evaluateInclusion: function (path) {
 		var exclude = false;
 		Make.each(this._excludePatterns, function (matcher) {
 			if(matcher.match(path)) {

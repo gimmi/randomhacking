@@ -1,11 +1,5 @@
 describe("Make.FsScanner", function() {
-	var target;
-
-	beforeEach(function() {
-		
-	});
-
-	it("should scan", function() {
+	it("should traverse directory tree from base path", function() {
 		spyOn(Make.Sys, 'getFiles').andCallFake(function (path) {
 			return {
 				'base/.': [ 'file1', 'file2' ],
@@ -22,7 +16,7 @@ describe("Make.FsScanner", function() {
 			return [path1, path2].join('/');
 		});
 		
-		var actual = new Make.FsScanner('base').scan();
+		var actual = new Make.FsScanner('base').include('**/*').scan();
 
 		expect(actual).toEqual([ './file1', './file2', './fld1/file3' ]);
 	});
