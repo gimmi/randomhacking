@@ -20,7 +20,8 @@ Make.RecursionChecker.prototype = {
 	},
 	_check: function (id) {
 		if(Make.contains(this._stack, id)) {
-			throw this._message + ': ' + Make.join(this._stack, ' => ') + ' => ' + id;
+			this._stack.push(id);
+			throw this._message + ': ' + this._stack.join(' => ');
 		}
 	}
 };

@@ -126,18 +126,6 @@ describe("Make", function() {
 		expect(fn.mostRecentCall.object).toBe(scope);
 	});
 	
-	it('join', function () {
-		var fn = jasmine.createSpy();
-		fn.andCallFake(function (item) {
-			return item.toUpperCase();
-		});
-		var scope = {};
-		
-		var actual = target.join([ 1, 2 ], ', ');
-
-		expect(actual).toEqual('1, 2');
-	});
-	
 	it('contains', function () {
 		expect(target.contains([ 1, 2, 3 ], 2)).toBeTruthy();
 		expect(target.contains([ 1, 2, 3 ], 4)).toBeFalsy();

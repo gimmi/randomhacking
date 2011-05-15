@@ -59,14 +59,6 @@ Make = {
 		}, this);
 		return memo;
 	},
-	join: function (items, separator) { // TODO use Array.join
-		var ret = '';
-		this.each(items, function (item) {
-			ret += (ret === '' ? '' : separator);
-			ret += item;
-		}, this);
-		return ret;
-	},
 	contains: function (items, item) {
 		var ret = false;
 		this.each(items, function (it) {
