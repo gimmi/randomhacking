@@ -18,6 +18,7 @@ describe("Make.AntPathMatcher", function() {
 	it('should match pattern with ** wildcard', function () {
 		expect(target.fileMatch('**/a', 'a')).toBeTruthy();
 		expect(target.fileMatch('**/b', 'a/b')).toBeTruthy();
+		expect(target.fileMatch('**/c', 'a/b/c')).toBeTruthy();
 		expect(target.fileMatch('a/**/b', 'a/b')).toBeTruthy();
 		expect(target.fileMatch('a/**/c', 'a/b/c')).toBeTruthy();
 		expect(target.fileMatch('a/**/d', 'a/b/c/d')).toBeTruthy();
@@ -37,7 +38,9 @@ describe("Make.AntPathMatcher", function() {
 	});
 	
 	it('should throw exception when tokenizing invalid pattern', function () {
-		// TODO
+		expect(function () {
+			target._tokenize('a/**');
+		}).toThrow('Invalid ** wildcard at end pattern, use **/* instead');
 	});
 	
 	it('should match token considering wildcards', function () {

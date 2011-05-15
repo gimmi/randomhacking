@@ -103,7 +103,7 @@ Make.AntPathMatcher.prototype = {
 			return !/^[\s\.]*$/.test(token);
 		}, this);
 		if (tokens[tokens.length - 1] === '**') {
-			throw 'Invalid ** wildcard at end pattern';
+			throw 'Invalid ** wildcard at end pattern, use **/* instead';
 		}
 		// TODO invalid more then one **
 		return tokens;
