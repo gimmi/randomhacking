@@ -17,18 +17,15 @@ Make.AntPathMatcher.prototype = {
 		var patternToken;
 		var pathToken;
 		while(true) {
-			pathToken = pathTokens.shift();
 			patternToken = patternTokens.shift();
+			if (patternToken === '**') {
+				pathTokens = pathTokens.slice(-patternTokens.length).reverse();
+				patternTokens = patternTokens.reverse();
+				return this._matchTokens(patternTokens, pathTokens, partialMatch);
+			}
+			pathToken = pathTokens.shift();
 			if (patternToken && pathToken) {
-				if (patternToken === '**') {
-					patternToken = patternTokens.shift();
-					while (!this._matchToken(patternToken, pathToken)) {
-						pathToken = pathTokens.shift();
-						if (!pathToken) {
-							return false;
-						}
-					}
-				} else if (!this._matchToken(patternToken, pathToken)) {
+				if (!this._matchToken(patternToken, pathToken)) {
 					return false;
 				}
 			} else if (patternToken && !pathToken) {
@@ -39,46 +36,6 @@ Make.AntPathMatcher.prototype = {
 				return true;
 			}
 		}
-/*
-			if(patternToken === undefined) {
-				return false;
-			} else if (patternToken === '**') {
-				if((patternToken = patternTokens.shift()) === undefined) {
-					return true;
-				}
-				while(!this._matchToken(patternToken, pathToken)) {
-					if((pathToken = pathTokens.shift()) === undefined) {
-						return false;
-					}
-				}
-			} else {
-				if (!this._matchToken(patternToken, pathToken)) {
-					return false;
-				}
-			}
-		}
-		return true;
-*/
-/*
-		while((patternToken = patternTokens.shift()) !== undefined) {
-			if (patternToken === '**') {
-				if((patternToken = patternTokens.shift()) === undefined) {
-					return true;
-				}
-				do {
-					if((pathToken = pathTokens.shift()) === undefined) {
-						return false;
-					}
-				} while(this._matchToken(patternToken, pathToken))
-			} else {
-				pathToken = pathTokens.shift();
-				if (!this._matchToken(patternToken, pathToken)) {
-					return false;
-				}
-			}
-		}
-		return true;
-*/
 	},
 	_matchToken: function (patternToken, pathToken) {
 		var regex = '';
