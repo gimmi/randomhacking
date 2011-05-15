@@ -1,12 +1,6 @@
 Make.AntPathMatcher = function () {
 };
 Make.AntPathMatcher.prototype = {
-	fileMatch: function (pattern, path) {
-		return this.match(pattern, path);
-	},
-	directoryMatch: function (pattern, path) {
-		return this.match(pattern, path);
-	},
 	match: function (pattern, path) {
 		var patternTokens = this._tokenize(pattern);
 		var pathTokens = this._tokenize(path);
