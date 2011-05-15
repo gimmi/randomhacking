@@ -1,7 +1,6 @@
 Make.AntPathMatcher = function () {
 };
 Make.AntPathMatcher.prototype = {
-	CASE_SENSITIVE: false,
 	fileMatch: function (pattern, path) {
 		return this.match(pattern, path);
 	},
