@@ -18,11 +18,16 @@ project('my project', 'default', function () {
 	
 	task('jslint', [], function () {
 		sys.log('running jslint task');
+		var jsFiles = new Make.FsScanner('src').include('**/*.js').scan();
+		Make.each(jsFiles, function (file) {
+			// JSLINT(source, option);
+			sys.log(file);
+		});
 	});
 	
 	task('files', [], function () {
 		sys.log('running files task');
-		var scanner = new Make.FsScanner('.').include('**/*');
+		var scanner = new Make.FsScanner('src').include('**/*.js');
 		Make.each(scanner.scan(), function (file) {
 			sys.log(file);
 		});
