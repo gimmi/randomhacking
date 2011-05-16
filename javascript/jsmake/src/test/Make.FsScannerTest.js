@@ -76,8 +76,8 @@ describe("Make.FsScanner", function() {
 	});
 	
 	it('should evaluate inclusion', function () {
-		expect(new Make.FsScanner('base')._evaluateInclusion('anything')).toBeFalsy();
-		expect(new Make.FsScanner('base').include('**/*')._evaluateInclusion('anything')).toBeTruthy();
-		expect(new Make.FsScanner('base').include('**/*').exclude('**/*_old.*')._evaluateInclusion('folder/file_old.txt')).toBeFalsy();
+		expect(new Make.FsScanner('base')._evaluatePath('anything')).toBeFalsy();
+		expect(new Make.FsScanner('base').include('**/*')._evaluatePath('anything')).toBeTruthy();
+		expect(new Make.FsScanner('base').include('**/*').exclude('**/*_old.*')._evaluatePath('folder/file_old.txt')).toBeFalsy();
 	});
 });

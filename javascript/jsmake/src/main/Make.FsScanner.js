@@ -21,32 +21,31 @@ Make.FsScanner.prototype = {
 		var fullPath = Make.Sys.combinePath(this._basePath, relativePath);
 		Make.each(Make.Sys.getFiles(fullPath), function (fileName) {
 			fileName = Make.Sys.combinePath(relativePath, fileName);
-			if (this._evaluateInclusion(fileName)) {
+			if (this._evaluatePath(fileName, false)) {
 				fileNames.push(fileName);
 			}
 		}, this);
-		Make.each(Make.Sys.getDirectories(fullPath), function (path) {
-			path = Make.Sys.combinePath(relativePath, path);
-			if (this._evaluateInclusion(path)) {
-				this._scan(path, fileNames);
+		Make.each(Make.Sys.getDirectories(fullPath), function (dir) {
+			dir = Make.Sys.combinePath(relativePath, dir);
+			if (this._evaluatePath(dir, true)) {
+				this._scan(dir, fileNames);
 			}
 		}, this);
 	},
-	_evaluateInclusion: function (path) {
-		var exclude = false;
-		Make.each(this._excludeMatchers, function (matcher) {
-			if(matcher.match(path)) {
-				exclude = true;
-				return true;
-			}
+	_evaluatePath: function (path, def) {
+		if (this._runMatchers(this._excludeMatchers, path)) {
+			return false;
+		}
+		if (this._runMatchers(this._includeMatchers, path)) {
+			return true;
+		}
+		return def;
+	},
+	_runMatchers: function (matchers, value) {
+		var match = false;
+		Make.each(matchers, function (matcher) {
+			match = match || matcher.match(value);
 		}, this);
-		var include = false;
-		Make.each(this._includeMatchers, function (matcher) {
-			if(matcher.match(path)) {
-				include = true;
-				return true;
-			}
-		}, this);
-		return (include && !exclude);
+		return match;
 	}
 };
