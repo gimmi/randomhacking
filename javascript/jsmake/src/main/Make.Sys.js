@@ -1,4 +1,25 @@
 Make.Sys = {
+	readFileToString: function (path) {
+		var inputStream = new java.io.FileInputStream(path);
+		try {
+			var stringWriter = new java.io.StringWriter();
+			var inputStreamReader = new java.io.InputStreamReader(inputStream);
+			var buffer = java.lang.reflect.Array.newInstance(java.lang.Character.TYPE, 4096);
+			var n = 0;
+			while (-1 !== (n = inputStreamReader.read(buffer))) {
+				stringWriter.write(buffer, 0, n);
+			}
+			return this._translateJavaString(stringWriter.toString());
+		} finally {
+			try {
+				if (inputStream) {
+					inputStream.close();
+				}
+			} catch (ioe) {
+				// ignore
+			}
+		}
+	},
 	getCanonicalPath: function (path) {
 		return this._translateJavaString(new java.io.File(basePath).getCanonicalPath());
 	},

@@ -20,8 +20,13 @@ project('my project', 'default', function () {
 		sys.log('running jslint task');
 		var jsFiles = new Make.FsScanner('src').include('**/*.js').scan();
 		Make.each(jsFiles, function (file) {
-			// JSLINT(source, option);
-			sys.log(file);
+			file = sys.combinePath('src', file);
+			if (!JSLINT(content, {})) {
+				Make.each(JSLINT.errors, function (error) {
+					sys.log(file + ':' + error.line + ',' + error.character + ': ' + error.reason);
+				}, this);
+			}
+			sys.log(content);
 		});
 	});
 	
