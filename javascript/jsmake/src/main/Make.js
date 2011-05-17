@@ -8,6 +8,9 @@ Make = {
 	isObject : function(v) {
 		return !!v && Object.prototype.toString.call(v) === '[object Object]';
 	},
+	isNumber: function(v) {
+		return typeof v === 'number' && isFinite(v);
+	},
 	isEmpty : function(v) {
 		return v === null || v === undefined || ((this.isArray(v) && !v.length));
 	},

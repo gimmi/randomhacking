@@ -25,6 +25,15 @@ describe("Make", function() {
 		expect(target.isObject(null)).toBe(false);
 	});
 	
+	it("isNumber", function() {
+		expect(target.isNumber(1)).toBe(true);
+		expect(target.isNumber(-1)).toBe(true);
+		expect(target.isNumber(0)).toBe(true);
+		expect(target.isNumber(undefined)).toBe(false);
+		expect(target.isNumber(null)).toBe(false);
+		expect(target.isNumber(NaN)).toBe(false);
+	});
+
 	it("trim", function() {
 		expect(target.trim(' a ')).toBe('a');
 		expect(target.trim('')).toBe('');
