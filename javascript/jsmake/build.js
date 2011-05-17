@@ -30,7 +30,7 @@ project('my project', 'default', function () {
 		var jsFiles = new Make.FsScanner('src').include('**/*.js').scan();
 		var errors = [];
 		Make.each(jsFiles, function (file) {
-			var content = sys.readFileToString(sys.combinePath('src', file));
+			var content = sys.readFile(sys.combinePath('src', file));
 			JSLINT(content, options);
 			Make.each(JSLINT.errors, function (error) {
 				if (error) {

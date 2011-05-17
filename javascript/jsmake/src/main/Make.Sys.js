@@ -2,27 +2,8 @@
 /*global Make, java */
 
 Make.Sys = {
-	readFileToString: function (path) {
-		var inputStream, stringWriter, inputStreamReader, buffer, n;
-		inputStream = new java.io.FileInputStream(path);
-		try {
-			stringWriter = new java.io.StringWriter();
-			inputStreamReader = new java.io.InputStreamReader(inputStream);
-			buffer = java.lang.reflect.Array.newInstance(java.lang.Character.TYPE, 4096);
-			n = 0;
-			while (-1 !== (n = inputStreamReader.read(buffer))) {
-				stringWriter.write(buffer, 0, n);
-			}
-			return this._translateJavaString(stringWriter.toString());
-		} finally {
-			try {
-				if (inputStream) {
-					inputStream.close();
-				}
-			} catch (ioe) {
-				// ignore
-			}
-		}
+	readFile: function (path) {
+		return readFile(path);
 	},
 	getCanonicalPath: function (path) {
 		return this._translateJavaString(new java.io.File(path).getCanonicalPath());
