@@ -11,11 +11,11 @@ load('tools/JSLint-2011.05.10/jslint.js');
 
 project('my project', 'default', function () {
 	var sys = Make.Sys; // This is like a Java "import" statement
-	
+
 	task('default', ['jslint', 'files'], function () {
 		sys.log('running default task');
 	});
-	
+
 	task('jslint', [], function () {
 		sys.log('running jslint task');
 		var jsFiles = new Make.FsScanner('src').include('**/*.js').scan();
@@ -32,7 +32,7 @@ project('my project', 'default', function () {
 		sys.log('JSLint found ' + errors.length + ' errors');
 		sys.log(errors.join('\n'));
 	});
-	
+
 	task('files', [], function () {
 		sys.log('running files task');
 		var scanner = new Make.FsScanner('src').include('**/*.js');

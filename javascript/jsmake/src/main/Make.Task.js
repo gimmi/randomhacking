@@ -1,5 +1,4 @@
-Make.Task = function (project, name, taskNames, body) {
-	this._project = project;
+Make.Task = function (name, taskNames, body) {
 	this._name = name;
 	this._taskNames = taskNames;
 	this._body = body;
@@ -8,16 +7,10 @@ Make.Task.prototype = {
 	getName: function () {
 		return this._name;
 	},
-	visit: function (tasks, recursionChecker) {
-		recursionChecker.wrap(this._name, function () {
-			Make.each(this._taskNames, function (taskName) {
-				var task = this._project.getTask(taskName);
-				task.visit(tasks, recursionChecker);
-			}, this);
-			tasks.push(this);
-		}, this);
+	getTaskNames: function () {
+		return this._taskNames;
 	},
 	run: function () {
-		this._body();
+		return this._body() || 0;
 	}
 };

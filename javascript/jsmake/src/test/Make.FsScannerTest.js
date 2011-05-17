@@ -14,7 +14,7 @@ describe("Make.FsScanner", function() {
 			'MainTests.js',
 			'CoreTests.js',
 			'HelpersTests.js'
-		],
+		]
 	};
 	var directories = {
 		'base/.': [ 
@@ -23,7 +23,7 @@ describe("Make.FsScanner", function() {
 		'base/./src': [
 			'main',
 			'test'
-		],
+		]
 	};
 	
 	beforeEach(function() {

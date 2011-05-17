@@ -5,7 +5,7 @@ describe("Make.Project", function() {
 	});
 	
 	function createTask (name, tasks, fn) {
-		return target.addTask(new Make.Task(target, name, tasks, fn));
+		return target.addTask(new Make.Task(name, tasks, fn));
 	}
 	
 	function getTaskNames (tasks) {
@@ -58,5 +58,11 @@ describe("Make.Project", function() {
 		target.run('t1');
 		
 		expect(execution).toEqual([ 2, 3, 1 ]);
+	});
+
+	it('should throw exception when trying to get task that does not exists', function () {
+		expect(function () {
+			target.getTask('a task');
+		}).toThrow("Task 'a task' not defined");
 	});
 });
