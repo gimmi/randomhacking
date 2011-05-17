@@ -5,6 +5,11 @@ Make.Sys = {
 	readFile: function (path) {
 		return readFile(path);
 	},
+	createDirectories: function (path) {
+		if (!new java.io.File(path).mkdirs()) {
+			throw "Failed to create directories for path '" + path + "'";
+		}
+	},
 	getCanonicalPath: function (path) {
 		return this._translateJavaString(new java.io.File(path).getCanonicalPath());
 	},
