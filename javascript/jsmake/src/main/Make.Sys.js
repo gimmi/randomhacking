@@ -5,10 +5,23 @@ Make.Sys = {
 	readFile: function (path) {
 		return readFile(path);
 	},
-	createDirectories: function (path) {
-		if (!new java.io.File(path).mkdirs()) {
+	createDirectory: function (path) {
+		var file = new java.io.File(path);
+		if (file.exists() && file.isDirectory()) {
+			return;
+		}
+		if (!file.mkdirs()) {
 			throw "Failed to create directories for path '" + path + "'";
 		}
+	},
+	deletePath: function (path) {
+		Make.each(this.getFiles(path), function (fileName) {
+			new java.io.File(path, fileName)['delete']();
+		}, this);
+		Make.each(this.getDirectories(path), function (dirName) {
+			this.deletePath(this.combinePath(path, dirName));
+		}, this);
+		new java.io.File(path)['delete']();
 	},
 	getCanonicalPath: function (path) {
 		return this._translateJavaString(new java.io.File(path).getCanonicalPath());
@@ -55,6 +68,9 @@ Make.Sys = {
 	},
 	_translateJavaArray: function (javaArray) {
 		var ary = [], i;
+		if (javaArray === null) {
+			return null;
+		}
 		for (i = 0; i < javaArray.length; i += 1) {
 			ary.push(javaArray[i]);
 		}

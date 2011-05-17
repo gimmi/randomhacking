@@ -47,6 +47,8 @@ project('my project', 'default', function () {
 
 	task('files', [], function () {
 		sys.log('running files task');
+		sys.createDirectory('./build');
+		sys.deletePath('a');
 		var scanner = new Make.FsScanner('src').include('**/*.js');
 		Make.each(scanner.scan(), function (file) {
 			sys.log(file);
