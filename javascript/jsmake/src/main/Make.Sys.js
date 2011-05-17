@@ -47,7 +47,7 @@ Make.Sys = {
 	printInputStream: function (inputStream) {
 		var reader = new java.io.BufferedReader(new java.io.InputStreamReader(inputStream));
 		var line;
-		while (line = reader.readLine()) {
+		while ((line = reader.readLine()) !== null) {
 			this.log(line);
 		}
 		reader.close();
@@ -63,8 +63,8 @@ Make.Sys = {
 		}, this);
 	},
 	_translateJavaArray: function (javaArray) {
-		var ary = [];
-		for (var i = 0; i < javaArray.length; i += 1) {
+		var ary = [], i;
+		for (i = 0; i < javaArray.length; i += 1) {
 			ary.push(javaArray[i]);
 		}
 		return ary;

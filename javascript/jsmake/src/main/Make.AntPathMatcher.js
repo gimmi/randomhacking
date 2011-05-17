@@ -32,8 +32,8 @@ Make.AntPathMatcher.prototype = {
 		}
 	},
 	_matchToken: function (patternToken, pathToken) {
-		var regex = '';
-		for (var i = 0; i < patternToken.length; i += 1) {
+		var regex = '', i;
+		for (i = 0; i < patternToken.length; i += 1) {
 			var ch = patternToken.charAt(i);
 			if (ch === '*') {
 				regex += '.*';

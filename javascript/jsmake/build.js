@@ -29,8 +29,11 @@ project('my project', 'default', function () {
 				}
 			});
 		});
-		sys.log('JSLint found ' + errors.length + ' errors');
-		sys.log(errors.join('\n'));
+		if (errors.length) {
+			sys.log('JSLint found ' + errors.length + ' errors');
+			sys.log(errors.join('\n'));
+			throw 'Fatal error, see previous messages.';
+		}
 	});
 
 	task('files', [], function () {

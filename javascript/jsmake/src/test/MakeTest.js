@@ -162,4 +162,24 @@ describe("Make", function() {
 		expect(fn.callCount).toEqual(3);
 		expect(fn.mostRecentCall.object).toBe(scope);
 	});
+
+	it('escapeForRegex', function () {
+		expect(target.escapeForRegex('-')).toEqual('\\-');
+		expect(target.escapeForRegex('[')).toEqual('\\[');
+		expect(target.escapeForRegex(']')).toEqual('\\]');
+		expect(target.escapeForRegex('{')).toEqual('\\{');
+		expect(target.escapeForRegex('}')).toEqual('\\}');
+		expect(target.escapeForRegex('(')).toEqual('\\(');
+		expect(target.escapeForRegex(')')).toEqual('\\)');
+		expect(target.escapeForRegex('*')).toEqual('\\*');
+		expect(target.escapeForRegex('+')).toEqual('\\+');
+		expect(target.escapeForRegex('?')).toEqual('\\?');
+		expect(target.escapeForRegex('.')).toEqual('\\.');
+		expect(target.escapeForRegex(',')).toEqual('\\,');
+		expect(target.escapeForRegex('\\')).toEqual('\\\\');
+		expect(target.escapeForRegex('^')).toEqual('\\^');
+		expect(target.escapeForRegex('$')).toEqual('\\$');
+		expect(target.escapeForRegex('|')).toEqual('\\|');
+		expect(target.escapeForRegex(' ')).toEqual('\\ ');
+	});
 });
