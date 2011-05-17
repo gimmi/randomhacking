@@ -19,15 +19,18 @@ project('my project', 'default', function () {
 	task('jslint', [], function () {
 		sys.log('running jslint task');
 		var jsFiles = new Make.FsScanner('src').include('**/*.js').scan();
+		var errors = [];
 		Make.each(jsFiles, function (file) {
-			file = sys.combinePath('src', file);
-			if (!JSLINT(content, {})) {
-				Make.each(JSLINT.errors, function (error) {
-					sys.log(file + ':' + error.line + ',' + error.character + ': ' + error.reason);
-				}, this);
-			}
-			sys.log(content);
+			var content = sys.readFileToString(sys.combinePath('src', file));
+			JSLINT(content, {});
+			Make.each(JSLINT.errors, function (error) {
+				if (error) {
+					errors.push(file + ':' + error.line + ',' + error.character + ': ' + error.reason);
+				}
+			});
 		});
+		sys.log('JSLint found ' + errors.length + ' errors');
+		sys.log(errors.join('\n'));
 	});
 	
 	task('files', [], function () {
