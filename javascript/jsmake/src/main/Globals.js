@@ -1,19 +1,20 @@
+/*global Make */
+
 (function (global) {
-	var project = null;
-	
-	global.Make = {};
-	
+	var currentProject = null;
+
 	global.project = function (name, defaultTaskName, body) {
-		project = new Make.Project(name);
+		var project = new Make.Project(name);
+		currentProject = project;
 		try {
 			body();
-			project.run(defaultTaskName);
 		} finally {
-			project = null;
+			currentProject = null;
 		}
+		project.run(defaultTaskName);
 	};
 
 	global.task = function (name, tasks, body) {
-		project.addTask(new Make.Task(name, tasks, body));
+		currentProject.addTask(new Make.Task(name, tasks, body));
 	};
 }(this));

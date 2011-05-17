@@ -1,3 +1,5 @@
+/*global Make */
+
 Make.Project = function (name, logger) {
 	this._name = name;
 	this._tasks = {};

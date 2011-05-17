@@ -1,7 +1,9 @@
-describe("Make.AntPathMatcher", function() {
+/*global Make, describe, beforeEach, expect, it */
+
+describe("Make.AntPathMatcher", function () {
 	var target;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		target = new Make.AntPathMatcher('');
 	});
 	

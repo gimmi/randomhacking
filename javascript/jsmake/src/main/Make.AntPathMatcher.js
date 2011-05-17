@@ -1,16 +1,18 @@
+/*global Make */
+
 Make.AntPathMatcher = function (pattern) {
 	this._pattern = pattern;
 };
 Make.AntPathMatcher.prototype = {
 	match: function (path) {
-		var patternTokens = this._tokenize(this._pattern);
-		var pathTokens = this._tokenize(path);
+		var patternTokens, pathTokens;
+		patternTokens = this._tokenize(this._pattern);
+		pathTokens = this._tokenize(path);
 		return this._matchTokens(patternTokens, pathTokens);
 	},
 	_matchTokens: function (patternTokens, pathTokens) {
-		var patternToken;
-		var pathToken;
-		while(true) {
+		var patternToken, pathToken;
+		while (true) {
 			patternToken = patternTokens.shift();
 			if (patternToken === '**') {
 				pathTokens = pathTokens.slice(-patternTokens.length).reverse();
@@ -32,9 +34,9 @@ Make.AntPathMatcher.prototype = {
 		}
 	},
 	_matchToken: function (patternToken, pathToken) {
-		var regex = '', i;
+		var regex = '', i, ch;
 		for (i = 0; i < patternToken.length; i += 1) {
-			var ch = patternToken.charAt(i);
+			ch = patternToken.charAt(i);
 			if (ch === '*') {
 				regex += '.*';
 			} else if (ch === '?') {

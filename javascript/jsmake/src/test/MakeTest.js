@@ -1,11 +1,13 @@
-describe("Make", function() {
+/*global Make, jasmine, describe, beforeEach, expect, it */
+
+describe("Make", function () {
 	var target;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		target = Make;
 	});
 
-	it("isArray", function() {
+	it("isArray", function () {
 		expect(target.isArray()).toBe(false);
 		expect(target.isArray([])).toBe(true);
 		expect(target.isArray({})).toBe(false);
@@ -15,7 +17,7 @@ describe("Make", function() {
 		expect(target.isArray(null)).toBe(false);
 	});
 	
-	it("isObject", function() {
+	it("isObject", function () {
 		expect(target.isObject()).toBe(false);
 		expect(target.isObject([])).toBe(false);
 		expect(target.isObject({})).toBe(true);
@@ -25,7 +27,7 @@ describe("Make", function() {
 		expect(target.isObject(null)).toBe(false);
 	});
 	
-	it("isNumber", function() {
+	it("isNumber", function () {
 		expect(target.isNumber(1)).toBe(true);
 		expect(target.isNumber(-1)).toBe(true);
 		expect(target.isNumber(0)).toBe(true);
@@ -34,19 +36,20 @@ describe("Make", function() {
 		expect(target.isNumber(NaN)).toBe(false);
 	});
 
-	it("trim", function() {
+	it("trim", function () {
 		expect(target.trim(' a ')).toBe('a');
 		expect(target.trim('')).toBe('');
 	});
 	
 	describe('each', function () {
 		it('should call function whit expected params when iterating object', function () {
-			var items = { a: 1, b: 2 };
-			var fn = jasmine.createSpy();
-			var scope = {};
-			
+			var items, fn, scope;
+			items = { a: 1, b: 2 };
+			fn = jasmine.createSpy();
+			scope = {};
+
 			target.each(items, fn, scope);
-			
+
 			expect(fn).toHaveBeenCalledWith(1, 'a', items);
 			expect(fn).toHaveBeenCalledWith(2, 'b', items);
 			expect(fn.callCount).toEqual(2);
@@ -54,12 +57,13 @@ describe("Make", function() {
 		});
 		
 		it('should call function whit expected params when iterating array', function () {
-			var items = [ 'a', 'b' ];
-			var fn = jasmine.createSpy();
-			var scope = {};
-			
+			var items, fn, scope;
+			items = [ 'a', 'b' ];
+			fn = jasmine.createSpy();
+			scope = {};
+
 			target.each(items, fn, scope);
-			
+
 			expect(fn).toHaveBeenCalledWith('a', 0, items);
 			expect(fn).toHaveBeenCalledWith('b', 1, items);
 			expect(fn.callCount).toEqual(2);
@@ -67,9 +71,10 @@ describe("Make", function() {
 		});
 		
 		it('should stop iterating object when fn return trurhy value', function () {
-			var items = { a: 1, b: 2 };
-			var fn = jasmine.createSpy().andReturn(true);
-			
+			var items, fn;
+			items = { a: 1, b: 2 };
+			fn = jasmine.createSpy().andReturn(true);
+
 			target.each({ a: 1, b: 2 }, fn);
 
 			expect(fn).toHaveBeenCalledWith(1, 'a', items);
@@ -77,9 +82,10 @@ describe("Make", function() {
 		});
 		
 		it('should stop iterating array when fn return trurhy value', function () {
-			var items = [ 1, 2 ];
-			var fn = jasmine.createSpy().andReturn(true);
-			
+			var items, fn;
+			items = [ 1, 2 ];
+			fn = jasmine.createSpy().andReturn(true);
+
 			target.each(items, fn);
 
 			expect(fn).toHaveBeenCalledWith(1, 0, items);
@@ -87,12 +93,13 @@ describe("Make", function() {
 		});
 		
 		it('should just pass parameter when not object or array', function () {
-			var items = 123;
-			var fn = jasmine.createSpy();
-			var scope = {};
-			
+			var items, fn, scope;
+			items = 123;
+			fn = jasmine.createSpy();
+			scope = {};
+
 			target.each(items, fn, scope);
-			
+
 			expect(fn).toHaveBeenCalledWith(123, undefined, items);
 			expect(fn.callCount).toEqual(1);
 			expect(fn.mostRecentCall.object).toBe(scope);
@@ -109,13 +116,14 @@ describe("Make", function() {
 	});
 	
 	it('filter', function () {
-		var fn = jasmine.createSpy();
+		var fn, scope, actual;
+		fn = jasmine.createSpy();
 		fn.andCallFake(function (item) {
 			return item % 2;
 		});
-		var scope = {};
-		
-		var actual = target.filter([ 1, 2, 3, 4 ], fn, scope);
+		scope = {};
+
+		actual = target.filter([ 1, 2, 3, 4 ], fn, scope);
 
 		expect(actual).toEqual([ 1, 3 ]);
 		expect(fn.callCount).toEqual(4);
@@ -123,13 +131,14 @@ describe("Make", function() {
 	});
 	
 	it('map', function () {
-		var fn = jasmine.createSpy();
+		var fn, scope, actual;
+		fn = jasmine.createSpy();
 		fn.andCallFake(function (item) {
 			return item.toUpperCase();
 		});
-		var scope = {};
-		
-		var actual = target.map([ 'a', 'b' ], fn, scope);
+		scope = {};
+
+		actual = target.map([ 'a', 'b' ], fn, scope);
 
 		expect(actual).toEqual([ 'A', 'B' ]);
 		expect(fn.mostRecentCall.object).toBe(scope);
@@ -150,13 +159,14 @@ describe("Make", function() {
 	});
 
 	it('reduce', function () {
-		var fn = jasmine.createSpy();
+		var fn, scope, actual;
+		fn = jasmine.createSpy();
 		fn.andCallFake(function (memo, item) {
 			return memo + item;
 		});
-		var scope = {};
-		
-		var actual = target.reduce([ '2', '3', '4' ], fn, '1', scope);
+		scope = {};
+
+		actual = target.reduce([ '2', '3', '4' ], fn, '1', scope);
 
 		expect(actual).toEqual('1234');
 		expect(fn.callCount).toEqual(3);

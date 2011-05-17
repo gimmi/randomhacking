@@ -18,11 +18,20 @@ project('my project', 'default', function () {
 
 	task('jslint', [], function () {
 		sys.log('running jslint task');
+		var options = {
+			white: true,
+			onevar: true,
+			undef: true,
+			regexp: true,
+			plusplus: true,
+			bitwise: true,
+			newcap: true
+		};
 		var jsFiles = new Make.FsScanner('src').include('**/*.js').scan();
 		var errors = [];
 		Make.each(jsFiles, function (file) {
 			var content = sys.readFileToString(sys.combinePath('src', file));
-			JSLINT(content, {});
+			JSLINT(content, options);
 			Make.each(JSLINT.errors, function (error) {
 				if (error) {
 					errors.push(file + ':' + error.line + ',' + error.character + ': ' + error.reason);

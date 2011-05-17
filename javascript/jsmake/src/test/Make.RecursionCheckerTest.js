@@ -1,10 +1,12 @@
-describe("Make.RecursionChecker", function() {
+/*global Make, describe, beforeEach, expect, it */
+
+describe("Make.RecursionChecker", function () {
 	var target;
-	beforeEach(function() {
+	beforeEach(function () {
 		target = new Make.RecursionChecker('Recursion detected');
 	});
 
-	it("should succeed", function() {
+	it("should succeed", function () {
 		target.enter('a');
 		target.enter('b');
 		expect(function () {

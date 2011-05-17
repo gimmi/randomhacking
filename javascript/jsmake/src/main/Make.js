@@ -1,17 +1,19 @@
+/*global Make: true, toString */
+
 Make = {
 	escapeForRegex: function (str) {
-        return str.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
+		return str.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
 	},
-	isArray: function(v) {
+	isArray: function (v) {
 		return toString.apply(v) === '[object Array]';
 	},
-	isObject : function(v) {
+	isObject : function (v) {
 		return !!v && Object.prototype.toString.call(v) === '[object Object]';
 	},
-	isNumber: function(v) {
+	isNumber: function (v) {
 		return typeof v === 'number' && isFinite(v);
 	},
-	isEmpty : function(v) {
+	isEmpty : function (v) {
 		return v === null || v === undefined || ((this.isArray(v) && !v.length));
 	},
 	trim: function (str) {
@@ -31,7 +33,7 @@ Make = {
 				}
 			}
 		} else if (this.isArray(items)) {
-			for(key = 0; key < items.length; key += 1) {
+			for (key = 0; key < items.length; key += 1) {
 				if (fn.call(scope, items[key], key, items)) {
 					return;
 				}

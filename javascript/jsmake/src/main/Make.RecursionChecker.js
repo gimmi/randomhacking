@@ -1,3 +1,5 @@
+/*global Make */
+
 Make.RecursionChecker = function (message) {
 	this._message = message;
 	this._stack = [];
@@ -19,7 +21,7 @@ Make.RecursionChecker.prototype = {
 		}
 	},
 	_check: function (id) {
-		if(Make.contains(this._stack, id)) {
+		if (Make.contains(this._stack, id)) {
 			this._stack.push(id);
 			throw this._message + ': ' + this._stack.join(' => ');
 		}

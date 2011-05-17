@@ -1,20 +1,23 @@
-describe("Make.Project", function() {
+/*global Make, describe, beforeEach, expect, it */
+
+describe("Make.Project", function () {
 	var target;
-	beforeEach(function() {
+	
+	beforeEach(function () {
 		target = new Make.Project('test project');
 	});
 	
-	function createTask (name, tasks, fn) {
+	function createTask(name, tasks, fn) {
 		return target.addTask(new Make.Task(name, tasks, fn));
 	}
 	
-	function getTaskNames (tasks) {
+	function getTaskNames(tasks) {
 		return Make.map(target.getTasks('t1'), function (task) {
 			return task.getName();
 		});
 	}
 
-	it("Should find dependent tasks with correct run order", function() {
+	it("Should find dependent tasks with correct run order", function () {
 		createTask('t1', ['t1.1', 't1.2']);
 		createTask('t1.1', ['t1.1.1', 't1.1.2']);
 		createTask('t1.1.1', []);
@@ -28,7 +31,7 @@ describe("Make.Project", function() {
 		expect(actual).toEqual([ 't1.1.1', 't1.1.2', 't1.1', 't1.2.1', 't1.2.2', 't1.2', 't1' ]);
 	});
 	
-	it("Should remove duplicate tasks", function() {
+	it("Should remove duplicate tasks", function () {
 		createTask('t1', ['t1.1', 't1.2']);
 		createTask('t1.1', ['t dupl']);
 		createTask('t1.2', ['t dupl']);

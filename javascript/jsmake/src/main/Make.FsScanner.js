@@ -1,3 +1,5 @@
+/*global Make */
+
 Make.FsScanner = function (basePath) {
 	this._basePath = basePath;
 	this._includeMatchers = [];

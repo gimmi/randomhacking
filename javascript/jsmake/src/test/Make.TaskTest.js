@@ -1,17 +1,19 @@
-describe("Make.Task", function() {
+/*global Make, jasmine, describe, beforeEach, expect, it */
+
+describe("Make.Task", function () {
 	var target, body;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		body = jasmine.createSpy();
 		target = new Make.Task('a', [ 'b', 'c' ], body);
 	});
 
-	it("should return properties", function() {
+	it("should return properties", function () {
 		expect(target.getName()).toEqual('a');
 		expect(target.getTaskNames()).toEqual([ 'b', 'c' ]);
 	});
 
-	it("when ran, should return body return value or 0", function() {
+	it("when ran, should return body return value or 0", function () {
 		body.andReturn(1);
 		expect(target.run()).toEqual(1);
 
