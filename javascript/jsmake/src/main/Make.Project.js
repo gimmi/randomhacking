@@ -22,7 +22,13 @@ Make.Project.prototype = {
 		return Make.distinct(tasks);
 	},
 	run: function (name) {
-		Make.each(this.getTasks(name), function (task) {
+		var tasks, taskNames;
+		tasks = this.getTasks(name);
+		taskNames = Make.map(tasks, function (task) {
+			return task.getName();
+		}, this);
+		this._logger.log('Runnung tasks ' + taskNames.join(', '));
+		Make.each(tasks, function (task) {
 			task.run();
 		}, this);
 	},

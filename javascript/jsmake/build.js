@@ -38,6 +38,7 @@ project('my project', 'default', function () {
 				}
 			});
 		});
+
 		if (errors.length) {
 			sys.log('JSLint found ' + errors.length + ' errors');
 			sys.log(errors.join('\n'));

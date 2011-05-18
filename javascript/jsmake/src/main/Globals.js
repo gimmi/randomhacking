@@ -4,7 +4,7 @@
 	var currentProject = null;
 
 	global.project = function (name, defaultTaskName, body) {
-		var project = new Make.Project(name);
+		var project = new Make.Project(name, Make.Sys);
 		currentProject = project;
 		try {
 			body();
