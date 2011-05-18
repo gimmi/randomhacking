@@ -27,7 +27,7 @@ Make.Project.prototype = {
 		taskNames = Make.map(tasks, function (task) {
 			return task.getName();
 		}, this);
-		this._logger.log('Runnung tasks ' + taskNames.join(', '));
+		this._logger.log('Task execution order: ' + taskNames.join(', '));
 		Make.each(tasks, function (task) {
 			task.run();
 		}, this);

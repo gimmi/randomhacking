@@ -15,6 +15,6 @@
 	};
 
 	global.task = function (name, tasks, body) {
-		currentProject.addTask(new Make.Task(name, tasks, body));
+		currentProject.addTask(new Make.Task(name, tasks, body, Make.Sys));
 	};
 }(this));

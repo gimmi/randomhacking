@@ -1,11 +1,12 @@
 /*global Make, jasmine, describe, beforeEach, expect, it */
 
 describe("Make.Task", function () {
-	var target, body;
+	var target, body, logger;
 
 	beforeEach(function () {
+		logger = jasmine.createSpyObj('logger', [ 'log' ]);
 		body = jasmine.createSpy();
-		target = new Make.Task('a', [ 'b', 'c' ], body);
+		target = new Make.Task('a', [ 'b', 'c' ], body, logger);
 	});
 
 	it("should return properties", function () {
@@ -13,11 +14,10 @@ describe("Make.Task", function () {
 		expect(target.getTaskNames()).toEqual([ 'b', 'c' ]);
 	});
 
-	it("when ran, should return body return value or 0", function () {
-		body.andReturn(1);
-		expect(target.run()).toEqual(1);
+	it("should log and execute body when run", function () {
+		target.run();
 
-		body.andReturn(undefined);
-		expect(target.run()).toEqual(0);
+		expect(body).toHaveBeenCalled();
+		expect(logger.log).toHaveBeenCalledWith('Executing task a');
 	});
 });

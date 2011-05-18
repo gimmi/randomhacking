@@ -13,11 +13,9 @@ project('my project', 'default', function () {
 	var sys = Make.Sys; // This is like a Java "import" statement
 
 	task('default', ['jslint', 'files'], function () {
-		sys.log('running default task');
 	});
 
 	task('jslint', [], function () {
-		sys.log('running jslint task');
 		var options = {
 			white: true,
 			onevar: true,
@@ -47,7 +45,6 @@ project('my project', 'default', function () {
 	});
 
 	task('files', [], function () {
-		sys.log('running files task');
 		sys.createDirectory('./build');
 		sys.deletePath('a');
 		var scanner = new Make.FsScanner('src').include('**/*.js');

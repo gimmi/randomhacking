@@ -9,7 +9,7 @@ describe("Make.Project", function () {
 	});
 
 	function createTask(name, tasks, fn) {
-		return target.addTask(new Make.Task(name, tasks, fn));
+		return target.addTask(new Make.Task(name, tasks, fn, logger));
 	}
 
 	function getTaskNames(tasks) {
@@ -68,7 +68,7 @@ describe("Make.Project", function () {
 		target.run('t1');
 
 		expect(execution).toEqual([ 2, 3, 1 ]);
-		expect(logger.log).toHaveBeenCalledWith('Runnung tasks t2, t3, t1');
+		expect(logger.log).toHaveBeenCalledWith('Task execution order: t2, t3, t1');
 	});
 
 	it('should throw exception when trying to get task that does not exists', function () {
