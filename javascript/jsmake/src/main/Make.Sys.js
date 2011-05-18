@@ -5,6 +5,20 @@ Make.Sys = {
 	readFile: function (path) {
 		return readFile(path);
 	},
+	writeFile: function (path, data, encoding) {
+		this.createDirectory(this.getParentDirectory(path));
+		var out = new java.io.FileOutputStream(new java.io.File(path));
+		data = new java.lang.String(data || '');
+		try {
+			if (!encoding) {
+				out.write(data.getBytes());
+			} else {
+				out.write(data.getBytes(encoding));
+			}
+		} finally {
+			out.close();
+		}
+	},
 	createDirectory: function (path) {
 		var file = new java.io.File(path);
 		if (file.exists() && file.isDirectory()) {
@@ -25,6 +39,9 @@ Make.Sys = {
 	},
 	getCanonicalPath: function (path) {
 		return this._translateJavaString(new java.io.File(path).getCanonicalPath());
+	},
+	getParentDirectory: function (path) {
+		return this._translateJavaString(new java.io.File(path).getCanonicalFile().getParent());
 	},
 	combinePath: function (path1, path2) {
 		return this._translateJavaString(new java.io.File(path1, path2).getPath());

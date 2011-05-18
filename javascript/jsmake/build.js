@@ -9,11 +9,8 @@ load('src/main/Make.FsScanner.js');
 
 load('tools/JSLint-2011.05.10/jslint.js');
 
-project('my project', 'default', function () {
+project('my project', 'compile', function () {
 	var sys = Make.Sys; // This is like a Java "import" statement
-
-	task('default', ['jslint', 'files'], function () {
-	});
 
 	task('jslint', [], function () {
 		var options = {
@@ -44,12 +41,20 @@ project('my project', 'default', function () {
 		}
 	});
 
-	task('files', [], function () {
-		sys.createDirectory('./build');
-		sys.deletePath('a');
-		var scanner = new Make.FsScanner('src').include('**/*.js');
-		Make.each(scanner.scan(), function (file) {
-			sys.log(file);
+	task('compile', [ 'jslint' ], function () {
+		var mainFiles = [
+			'Make.js',
+			'Make.Sys.js',
+			'Make.Task.js',
+			'Make.Project.js',
+			'Make.AntPathMatcher.js',
+			'Make.FsScanner.js',
+			'Make.RecursionChecker.js',
+			'Globals.js'
+		];
+		mainFiles = Make.map(mainFiles, function (file) {
+			return sys.readFile(sys.combinePath('src/main', file));
 		});
+		sys.writeFile('build/jsmake.js', mainFiles.join('\n'));
 	});
 });
