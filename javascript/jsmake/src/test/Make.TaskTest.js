@@ -14,10 +14,16 @@ describe("Make.Task", function () {
 		expect(target.getTaskNames()).toEqual([ 'b', 'c' ]);
 	});
 
-	it("should log and execute body when run", function () {
+	it('should run body bound to neutral scope and pass parameters', function () {
+		target.run([ 1, 2, 3 ]);
+
+		expect(body).toHaveBeenCalledWith(1, 2, 3);
+		expect(body.mostRecentCall.object).toEqual({});
+	});
+
+	it("should log when run", function () {
 		target.run();
 
-		expect(body).toHaveBeenCalled();
 		expect(logger.log).toHaveBeenCalledWith('Executing task a');
 	});
 });

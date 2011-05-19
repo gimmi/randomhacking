@@ -21,7 +21,7 @@ Make.Project.prototype = {
 		this._fillDependencies(this.getTask(name), tasks, new Make.RecursionChecker('Task recursion found'));
 		return Make.distinct(tasks);
 	},
-	run: function (name) {
+	run: function (name, args) {
 		var tasks, taskNames;
 		tasks = this.getTasks(name);
 		taskNames = Make.map(tasks, function (task) {
@@ -29,7 +29,7 @@ Make.Project.prototype = {
 		}, this);
 		this._logger.log('Task execution order: ' + taskNames.join(', '));
 		Make.each(tasks, function (task) {
-			task.run();
+			task.run(task.getName() === name ? args : []);
 		}, this);
 	},
 	_fillDependencies: function (task, tasks, recursionChecker) {

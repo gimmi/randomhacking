@@ -71,6 +71,25 @@ describe("Make.Project", function () {
 		expect(logger.log).toHaveBeenCalledWith('Task execution order: t2, t3, t1');
 	});
 
+	it('should send arguments to task but not to dependent tasks', function () {
+		var t1Args, t2Args, t3Args;
+		createTask('t1', [ 't2' ], function () {
+			t1Args = arguments;
+		});
+		createTask('t2', [ 't3' ], function () {
+			t2Args = arguments;
+		});
+		createTask('t3', [], function () {
+			t3Args = arguments;
+		});
+
+		target.run('t1', [ 1, 2, 3 ]);
+
+		expect(t1Args).toEqual([ 1, 2, 3 ]);
+		expect(t2Args).toEqual([]);
+		expect(t3Args).toEqual([]);
+	});
+
 	it('should throw exception when trying to get task that does not exists', function () {
 		expect(function () {
 			target.getTask('a task');

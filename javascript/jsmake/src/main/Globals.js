@@ -1,20 +1,16 @@
 /*global Make */
 
-(function (global) {
+(function (global, args) {
 	var currentProject = null;
 
 	global.project = function (name, defaultTaskName, body) {
-		var project = new Make.Project(name, Make.Sys);
-		currentProject = project;
-		try {
-			body();
-		} finally {
-			currentProject = null;
-		}
-		project.run(defaultTaskName);
+		var project = currentProject = new Make.Project(name, Make.Sys);
+		body.apply({}, []);
+		currentProject = null;
+		project.run(args.shift() || defaultTaskName, args);
 	};
 
 	global.task = function (name, tasks, body) {
 		currentProject.addTask(new Make.Task(name, tasks, body, Make.Sys));
 	};
-}(this));
+}(this, arguments));

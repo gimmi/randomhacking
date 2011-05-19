@@ -13,8 +13,8 @@ Make.Task.prototype = {
 	getTaskNames: function () {
 		return this._taskNames;
 	},
-	run: function () {
+	run: function (args) {
 		this._logger.log('Executing task ' + this._name);
-		this._body();
+		this._body.apply({}, args);
 	}
 };
