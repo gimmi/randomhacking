@@ -42,17 +42,17 @@ Make.AntPathMatcher.prototype = {
 			} else if (ch === '?') {
 				regex += '.{1}';
 			} else {
-				regex += Make.escapeForRegex(ch);
+				regex += Make.Utils.escapeForRegex(ch);
 			}
 		}
 		return new RegExp(regex).test(pathToken);
 	},
 	_tokenize: function (pattern) {
 		var tokens = pattern.split(/\\+|\/+/);
-		tokens = Make.map(tokens, function (token) {
-			return Make.trim(token);
+		tokens = Make.Utils.map(tokens, function (token) {
+			return Make.Utils.trim(token);
 		}, this);
-		tokens = Make.filter(tokens, function (token) {
+		tokens = Make.Utils.filter(tokens, function (token) {
 			return !/^[\s\.]*$/.test(token);
 		}, this);
 		if (tokens[tokens.length - 1] === '**') {

@@ -32,10 +32,10 @@ Make.Sys = {
 		}
 	},
 	deletePath: function (path) {
-		Make.each(this.getFiles(path), function (fileName) {
+		Make.Utils.each(this.getFiles(path), function (fileName) {
 			new java.io.File(path, fileName)['delete']();
 		}, this);
-		Make.each(this.getDirectories(path), function (dirName) {
+		Make.Utils.each(this.getDirectories(path), function (dirName) {
 			this.deletePath(this.combinePath(path, dirName));
 		}, this);
 		new java.io.File(path)['delete']();
@@ -82,7 +82,7 @@ Make.Sys = {
 		var fileFilter, files;
 		fileFilter = new java.io.FileFilter({ accept: filter });
 		files = this._translateJavaArray(new java.io.File(basePath).listFiles(fileFilter));
-		return Make.map(files, function (file) {
+		return Make.Utils.map(files, function (file) {
 			return this._translateJavaString(file.getName());
 		}, this);
 	},

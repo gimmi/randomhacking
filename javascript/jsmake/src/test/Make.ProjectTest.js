@@ -13,7 +13,7 @@ describe("Make.Project", function () {
 	}
 
 	function getTaskNames(tasks) {
-		return Make.map(target.getTasks('t1'), function (task) {
+		return Make.Utils.map(target.getTasks('t1'), function (task) {
 			return task.getName();
 		});
 	}

@@ -1,10 +1,10 @@
 /*global Make, jasmine, describe, beforeEach, expect, it */
 
-describe("Make", function () {
+describe("Make.Utils", function () {
 	var target;
 
 	beforeEach(function () {
-		target = Make;
+		target = Make.Utils;
 	});
 
 	it("isArray", function () {

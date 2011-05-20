@@ -21,13 +21,13 @@ Make.FsScanner.prototype = {
 	},
 	_scan: function (relativePath, fileNames) {
 		var fullPath = Make.Sys.combinePath(this._basePath, relativePath);
-		Make.each(Make.Sys.getFiles(fullPath), function (fileName) {
+		Make.Utils.each(Make.Sys.getFiles(fullPath), function (fileName) {
 			fileName = Make.Sys.combinePath(relativePath, fileName);
 			if (this._evaluatePath(fileName, false)) {
 				fileNames.push(fileName);
 			}
 		}, this);
-		Make.each(Make.Sys.getDirectories(fullPath), function (dir) {
+		Make.Utils.each(Make.Sys.getDirectories(fullPath), function (dir) {
 			dir = Make.Sys.combinePath(relativePath, dir);
 			if (this._evaluatePath(dir, true)) {
 				this._scan(dir, fileNames);
@@ -45,7 +45,7 @@ Make.FsScanner.prototype = {
 	},
 	_runMatchers: function (matchers, value) {
 		var match = false;
-		Make.each(matchers, function (matcher) {
+		Make.Utils.each(matchers, function (matcher) {
 			match = match || matcher.match(value);
 		}, this);
 		return match;

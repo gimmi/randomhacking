@@ -1,4 +1,5 @@
 load('src/main/Make.js');
+load('src/main/Make.Utils.js');
 load('src/main/Make.Project.js');
 load('src/main/Make.Task.js');
 load('src/main/Make.RecursionChecker.js');
@@ -13,6 +14,7 @@ var main = new Make.Main();
 
 main.project('my project', 'compile', function () {
 	var sys = Make.Sys; // This is like a Java "import" statement
+	var utils = Make.Utils; // This is like a Java "import" statement
 
 	main.task('jslint', [], function () {
 		var options = {
@@ -26,10 +28,10 @@ main.project('my project', 'compile', function () {
 		};
 		var jsFiles = new Make.FsScanner('src').include('**/*.js').scan();
 		var errors = [];
-		Make.each(jsFiles, function (file) {
+		utils.each(jsFiles, function (file) {
 			var content = sys.readFile(sys.combinePath('src', file));
 			JSLINT(content, options);
-			Make.each(JSLINT.errors, function (error) {
+			utils.each(JSLINT.errors, function (error) {
 				if (error) {
 					errors.push(file + ':' + error.line + ',' + error.character + ': ' + error.reason);
 				}
@@ -54,7 +56,7 @@ main.project('my project', 'compile', function () {
 			'Make.RecursionChecker.js',
 			'Globals.js'
 		];
-		mainFiles = Make.map(mainFiles, function (file) {
+		mainFiles = utils.map(mainFiles, function (file) {
 			return sys.readFile(sys.combinePath('src/main', file));
 		});
 		sys.writeFile('build/jsmake.js', mainFiles.join('\n'));
