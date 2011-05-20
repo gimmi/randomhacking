@@ -1,4 +1,4 @@
-/*global Make, jasmine, describe, beforeEach, expect, it */
+/*global Make, jasmine, describe, beforeEach, expect, it, spyOn */
 
 describe("Make.Main", function () {
 	var target;
