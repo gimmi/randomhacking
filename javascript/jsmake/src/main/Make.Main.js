@@ -6,6 +6,10 @@ Make.Main = function () {
 	this._logger = Make.Sys;
 };
 Make.Main.prototype = {
+	initGlobalScope: function (global) {
+		global.project = this._bind(this.project, this);
+		global.task = this._bind(this.task, this);
+	},
 	run: function (args) {
 		if (!this._definedProject) {
 			throw 'No project defined';
@@ -25,5 +29,10 @@ Make.Main.prototype = {
 			throw 'Tasks must be defined only into projects';
 		}
 		this._currentProject.addTask(new Make.Task(name, tasks, body, this._logger));
+	},
+	_bind: function (fn, scope) {
+		return function () {
+			fn.apply(scope, arguments);
+		};
 	}
 };

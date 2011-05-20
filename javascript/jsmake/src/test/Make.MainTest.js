@@ -8,6 +8,21 @@ describe("Make.Main", function () {
 		target._logger = jasmine.createSpyObj('logger', [ 'log' ]);
 	});
 
+	it('should add function to the global scope', function () {
+		var scope = {};
+		spyOn(target, 'project');
+		spyOn(target, 'task');
+
+		target.initGlobalScope(scope);
+		scope.project(1, 2, 3);
+		scope.task(4, 5, 6);
+
+		expect(target.project).toHaveBeenCalledWith(1, 2, 3);
+		expect(target.project.mostRecentCall.object).toBe(target);
+		expect(target.task).toHaveBeenCalledWith(4, 5, 6);
+		expect(target.task.mostRecentCall.object).toBe(target);
+	});
+
 	it('should throw error when no project defined', function () {
 		expect(function () {
 			target.run([]);

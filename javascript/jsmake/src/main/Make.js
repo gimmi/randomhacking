@@ -1,5 +1,3 @@
 /*global Make: true */
 
 Make = {};
-
-
