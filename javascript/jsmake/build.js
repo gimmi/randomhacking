@@ -11,12 +11,13 @@ load('src/main/Make.Main.js');
 load('tools/JSLint-2011.05.10/jslint.js');
 
 var main = new Make.Main();
+main.initGlobalScope(this);
 
-main.project('my project', 'compile', function () {
+project('my project', 'compile', function () {
 	var sys = Make.Sys; // This is like a Java "import" statement
 	var utils = Make.Utils; // This is like a Java "import" statement
 
-	main.task('jslint', [], function () {
+	task('jslint', [], function () {
 		var options = {
 			white: true,
 			onevar: true,
@@ -45,7 +46,7 @@ main.project('my project', 'compile', function () {
 		}
 	});
 
-	main.task('compile', [ 'jslint' ], function () {
+	task('compile', [ 'jslint' ], function () {
 		var mainFiles = [
 			'Make.js',
 			'Make.Sys.js',
