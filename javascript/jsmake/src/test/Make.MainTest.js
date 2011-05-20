@@ -5,6 +5,13 @@ describe("Make.Main", function () {
 
 	beforeEach(function () {
 		target = new Make.Main();
+		target._logger = jasmine.createSpyObj('logger', [ 'log' ]);
+	});
+
+	it('should throw error when no project defined', function () {
+		expect(function () {
+			target.run([]);
+		}).toThrow('No project defined');
 	});
 
 	it("should define project", function () {
@@ -14,6 +21,14 @@ describe("Make.Main", function () {
 
 		expect(target._definedProject.getName()).toEqual('name');
 		expect(target._currentProject).toBeNull();
+	});
+
+	it('project body should run in neutral scope', function () {
+		var body = jasmine.createSpy();
+
+		target.project('name', 'defaultTaskName', body);
+
+		expect(body.mostRecentCall.object).toEqual({});
 	});
 
 	it("should allow only one project", function () {

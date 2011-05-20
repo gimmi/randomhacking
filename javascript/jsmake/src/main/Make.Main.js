@@ -3,6 +3,7 @@
 Make.Main = function () {
 	this._definedProject = null;
 	this._currentProject = null;
+	this._logger = Make.Sys;
 };
 Make.Main.prototype = {
 	run: function (args) {
@@ -15,7 +16,7 @@ Make.Main.prototype = {
 		if (this._definedProject) {
 			throw 'project already defined';
 		}
-		this._definedProject = this._currentProject = new Make.Project(name, defaultTaskName, Make.Sys);
+		this._definedProject = this._currentProject = new Make.Project(name, defaultTaskName, this._logger);
 		body.apply({}, []);
 		this._currentProject = null;
 	},
@@ -23,6 +24,6 @@ Make.Main.prototype = {
 		if (!this._currentProject) {
 			throw 'Tasks must be defined only into projects';
 		}
-		this._currentProject.addTask(new Make.Task(name, tasks, body, Make.Sys));
+		this._currentProject.addTask(new Make.Task(name, tasks, body, this._logger));
 	}
 };
