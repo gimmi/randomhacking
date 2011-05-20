@@ -5,7 +5,7 @@ describe("Make.Project", function () {
 
 	beforeEach(function () {
 		logger = jasmine.createSpyObj('logger', [ 'log' ]);
-		target = new Make.Project('test project', logger);
+		target = new Make.Project('test project', 'default task', logger);
 	});
 
 	function createTask(name, tasks, fn) {
@@ -88,6 +88,15 @@ describe("Make.Project", function () {
 		expect(t1Args).toEqual([ 1, 2, 3 ]);
 		expect(t2Args).toEqual([]);
 		expect(t3Args).toEqual([]);
+	});
+	
+	it('should run default task if no task specified', function () {
+		var taskBody = jasmine.createSpy();
+		createTask('default task', [], taskBody);
+		
+		target.run();
+		
+		expect(taskBody).toHaveBeenCalled();
 	});
 
 	it('should throw exception when trying to get task that does not exists', function () {

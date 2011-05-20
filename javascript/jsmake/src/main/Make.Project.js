@@ -1,7 +1,8 @@
 /*global Make */
 
-Make.Project = function (name, logger) {
+Make.Project = function (name, defaultTaskName, logger) {
 	this._name = name;
+	this._defaultTaskName = defaultTaskName;
 	this._tasks = {};
 	this._logger = logger;
 };
@@ -23,6 +24,7 @@ Make.Project.prototype = {
 	},
 	run: function (name, args) {
 		var tasks, taskNames;
+		name = name || this._defaultTaskName;
 		tasks = this.getTasks(name);
 		taskNames = Make.map(tasks, function (task) {
 			return task.getName();

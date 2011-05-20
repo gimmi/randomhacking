@@ -2,6 +2,9 @@
 /*global Make, java */
 
 Make.Sys = {
+	loadJavascriptFile: function (file) {
+		load(file);
+	},
 	readFile: function (path) {
 		return readFile(path);
 	},
