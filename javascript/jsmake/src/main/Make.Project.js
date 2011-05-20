@@ -7,6 +7,9 @@ Make.Project = function (name, defaultTaskName, logger) {
 	this._logger = logger;
 };
 Make.Project.prototype = {
+	getName: function () {
+		return this._name;
+	},
 	addTask: function (task) {
 		this._tasks[task.getName()] = task;
 	},

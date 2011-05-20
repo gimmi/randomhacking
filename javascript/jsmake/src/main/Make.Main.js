@@ -3,7 +3,6 @@
 Make.Main = function () {
 	this._definedProject = null;
 	this._currentProject = null;
-	this._currentTask = null;
 };
 Make.Main.prototype = {
 	run: function (args) {
