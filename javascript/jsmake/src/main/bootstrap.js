@@ -1,5 +1,3 @@
-/*global Make */
-
 (function (args) {
 	var main = new Make.Main();
 	main.initGlobalScope(this);

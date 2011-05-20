@@ -21,8 +21,8 @@ project('jsmake', 'compile', function () {
 		var files = new Make.FsScanner('src').include('**/*.js').scan();
 		var errors = [];
 		utils.each(files, function (file) {
-			var content = sys.readFile(sys.combinePath('src', file));
-			JSLINT(content, { white: true, onevar: true, undef: true, regexp: true, plusplus: true, bitwise: true, newcap: true });
+			var content = '/*global Make: true, java, toString */\n' + sys.readFile(sys.combinePath('src', file));
+			JSLINT(content, { white: true, onevar: true, undef: true, regexp: true, plusplus: true, bitwise: true, newcap: true, rhino: true });
 			utils.each(JSLINT.errors, function (error) {
 				if (error) {
 					errors.push(file + ':' + error.line + ',' + error.character + ': ' + error.reason);
@@ -48,6 +48,15 @@ project('jsmake', 'compile', function () {
 		mainFiles = utils.map(mainFiles, function (file) {
 			return sys.readFile(sys.combinePath('src/main', file));
 		});
+
+		var header = [];
+		header.push('/*');
+		header.push('JSMake version ' + sys.readFile('VERSION'));
+		header.push('');
+		header.push(sys.readFile('LICENSE'));
+		header.push('*/');
+		mainFiles.unshift(header.join('\n'));
+
 		sys.writeFile('build/jsmake.js', mainFiles.join('\n'));
 	});
 });

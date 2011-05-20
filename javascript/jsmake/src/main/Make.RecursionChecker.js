@@ -1,5 +1,3 @@
-/*global Make */
-
 Make.RecursionChecker = function (message) {
 	this._message = message;
 	this._stack = [];

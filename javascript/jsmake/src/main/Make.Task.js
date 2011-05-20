@@ -1,5 +1,3 @@
-/*global Make */
-
 Make.Task = function (name, taskNames, body, logger) {
 	this._name = name;
 	this._taskNames = taskNames;

@@ -1,5 +1,3 @@
-/*global Make */
-
 Make.Main = function () {
 	this._definedProject = null;
 	this._currentProject = null;

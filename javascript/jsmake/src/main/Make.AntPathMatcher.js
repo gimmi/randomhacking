@@ -1,5 +1,3 @@
-/*global Make */
-
 Make.AntPathMatcher = function (pattern) {
 	this._pattern = pattern;
 };

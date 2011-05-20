@@ -1,5 +1,3 @@
-/*global Make */
-
 Make.Project = function (name, defaultTaskName, logger) {
 	this._name = name;
 	this._defaultTaskName = defaultTaskName;

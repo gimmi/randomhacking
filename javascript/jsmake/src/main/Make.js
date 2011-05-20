@@ -1,3 +1,1 @@
-/*global Make: true */
-
 Make = {};

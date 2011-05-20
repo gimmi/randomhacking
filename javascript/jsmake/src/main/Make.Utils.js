@@ -1,5 +1,3 @@
-/*global Make, toString */
-
 Make.Utils = {
 	escapeForRegex: function (str) {
 		return str.replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&");
@@ -82,5 +80,3 @@ Make.Utils = {
 		return ret;
 	}
 };
-
-
