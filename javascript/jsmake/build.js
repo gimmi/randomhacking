@@ -13,25 +13,16 @@ load('tools/JSLint-2011.05.10/jslint.js');
 var main = new Make.Main();
 main.initGlobalScope(this);
 
-project('my project', 'compile', function () {
+project('jsmake', 'compile', function () {
 	var sys = Make.Sys; // This is like a Java "import" statement
 	var utils = Make.Utils; // This is like a Java "import" statement
 
 	task('jslint', [], function () {
-		var options = {
-			white: true,
-			onevar: true,
-			undef: true,
-			regexp: true,
-			plusplus: true,
-			bitwise: true,
-			newcap: true
-		};
-		var jsFiles = new Make.FsScanner('src').include('**/*.js').scan();
+		var files = new Make.FsScanner('src').include('**/*.js').scan();
 		var errors = [];
-		utils.each(jsFiles, function (file) {
+		utils.each(files, function (file) {
 			var content = sys.readFile(sys.combinePath('src', file));
-			JSLINT(content, options);
+			JSLINT(content, { white: true, onevar: true, undef: true, regexp: true, plusplus: true, bitwise: true, newcap: true });
 			utils.each(JSLINT.errors, function (error) {
 				if (error) {
 					errors.push(file + ':' + error.line + ',' + error.character + ': ' + error.reason);
@@ -47,16 +38,13 @@ project('my project', 'compile', function () {
 	});
 
 	task('compile', [ 'jslint' ], function () {
-		var mainFiles = [
-			'Make.js',
-			'Make.Sys.js',
-			'Make.Task.js',
-			'Make.Project.js',
-			'Make.AntPathMatcher.js',
-			'Make.FsScanner.js',
-			'Make.RecursionChecker.js',
-			'Globals.js'
-		];
+		var mainFiles = new Make.FsScanner('src/main')
+				.include('**/*.js')
+				.exclude('Make.js')
+				.exclude('bootstrap.js')
+				.scan();
+		mainFiles.unshift('Make.js'); // must be on top
+		mainFiles.push('bootstrap.js'); // must be on bottom
 		mainFiles = utils.map(mainFiles, function (file) {
 			return sys.readFile(sys.combinePath('src/main', file));
 		});

@@ -9,6 +9,9 @@ Make.Sys = {
 		load(file);
 	},
 	readFile: function (path) {
+		if (!this.fileExists(path)) {
+			throw "File '" + path + "' not found";
+		}
 		return readFile(path);
 	},
 	writeFile: function (path, data, encoding) {
