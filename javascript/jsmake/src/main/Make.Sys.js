@@ -2,6 +2,9 @@
 /*global Make, java */
 
 Make.Sys = {
+	getDefaultFileEncoding: function () {
+		return java.lang.System.getProperty("file.encoding", "UTF-8"); // Windows default is "Cp1252"
+	},
 	loadJavascriptFile: function (file) {
 		load(file);
 	},
@@ -21,6 +24,17 @@ Make.Sys = {
 		} finally {
 			out.close();
 		}
+	},
+	pathExists: function (path) {
+		return new java.io.File(path).exists();
+	},
+	directoryExists: function (path) {
+		var file = new java.io.File(path);
+		return file.exists() && file.isDirectory();
+	},
+	fileExists: function (path) {
+		var file = new java.io.File(path);
+		return file.exists() && file.isFile();
 	},
 	createDirectory: function (path) {
 		var file = new java.io.File(path);
