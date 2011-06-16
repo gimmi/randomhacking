@@ -1,6 +1,8 @@
 ﻿Ext.define('Spike.controller.Users', {
 	extend: 'Ext.app.Controller',
 
+	models: [ 'User' ],
+	
 	stores: [ 'Users' ],
 
 	views: [

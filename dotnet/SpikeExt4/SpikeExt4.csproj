@@ -46,6 +46,7 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="app\controller\Users.js" />
+    <Content Include="app\model\User.js" />
     <Content Include="app\store\Users.js" />
     <Content Include="app\view\user\Edit.js" />
     <Content Include="app\view\user\List.js" />
