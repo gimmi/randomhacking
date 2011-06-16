@@ -1,6 +1,7 @@
 # Standard VS.NET and ReSharper Foo
 obj/
 bin/
+packages/
 *.csproj.user
 *ReSharper.user
 _ReSharper*
