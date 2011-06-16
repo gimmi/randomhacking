@@ -3,12 +3,9 @@
 	model: 'Spike.model.User',
 	autoLoad: true,
 	proxy: {
-		type: 'ajax',
-		url: 'users.json',
-		reader: {
-			type: 'json',
-			root: 'users',
-			successProperty: 'success'
+		type: 'direct',
+		api: {
+			read: Spike.server.TicketRepository.getAll
 		}
 	}
 });
