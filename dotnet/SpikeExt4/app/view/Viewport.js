@@ -3,8 +3,7 @@
 	layout: 'fit',
 	initComponent: function () {
 		this.items = [{
-			title: 'Hello Ext',
-			html: 'Hello! Welcome to Ext JS.'
+			xtype: 'userlist'
 		}];
 
 		this.callParent(arguments);

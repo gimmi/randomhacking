@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.js" />
+    <Content Include="app\controller\Users.js" />
+    <Content Include="app\view\user\Edit.js" />
+    <Content Include="app\view\user\List.js" />
     <Content Include="app\view\Viewport.js" />
     <Content Include="index.html" />
     <Content Include="Web.config" />
