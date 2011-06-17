@@ -45,11 +45,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.js" />
-    <Content Include="app\controller\Users.js" />
-    <Content Include="app\model\User.js" />
-    <Content Include="app\store\Users.js" />
-    <Content Include="app\view\user\Edit.js" />
-    <Content Include="app\view\user\List.js" />
+    <Content Include="app\controller\Tickets.js" />
+    <Content Include="app\model\Ticket.js" />
+    <Content Include="app\store\Tickets.js" />
+    <Content Include="app\view\ticket\List.js" />
     <Content Include="app\view\Viewport.js" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />

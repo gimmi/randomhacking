@@ -3,7 +3,7 @@
 	layout: 'fit',
 	initComponent: function () {
 		this.items = [{
-			xtype: 'userlist'
+			xtype: 'ticketlist'
 		}];
 
 		this.callParent(arguments);

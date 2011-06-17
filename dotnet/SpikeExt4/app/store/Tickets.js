@@ -1,6 +1,6 @@
-﻿Ext.define('Spike.store.Users', {
+﻿Ext.define('Spike.store.Tickets', {
 	extend: 'Ext.data.Store',
-	model: 'Spike.model.User',
+	model: 'Spike.model.Ticket',
 	autoLoad: true,
 	proxy: {
 		type: 'direct',

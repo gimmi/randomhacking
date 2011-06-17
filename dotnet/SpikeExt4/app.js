@@ -6,7 +6,7 @@ Ext.onReady(function () {
 	Ext.create('Ext.app.Application', {
 		name: 'Spike',
 		autoCreateViewport: true,
-		controllers: ['Users'],
+		controllers: ['Tickets'],
 		launch: function () {
 			console.log('app launched');
 		}
