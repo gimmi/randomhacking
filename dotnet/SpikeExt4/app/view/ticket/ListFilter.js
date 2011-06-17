@@ -16,11 +16,11 @@
 			region: 'north',
 			xtype: 'ticketfilter',
 			height: 200,
-			collapsible: true,
-			border: false
+			collapsible: true
 		}, {
 			region: 'center',
-			xtype: 'ticketlist'
+			xtype: 'ticketlist',
+			border: false
 		}];
 
 		this.callParent(arguments);
