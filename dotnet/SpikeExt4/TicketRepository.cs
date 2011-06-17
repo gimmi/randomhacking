@@ -7,8 +7,8 @@ namespace SpikeExt4
 		public IEnumerable<Ticket> GetAll()
 		{
 			return new[]{
-				new Ticket{ Name = "Ticket 1", Email = "1@1.com" },
-				new Ticket{ Name = "Ticket 2", Email = "2@2.com" }
+				new Ticket{ Title = "Ticket 1", Description = "t1", State = "Opened" },
+				new Ticket{ Title = "Ticket 2", Description = "t2", State = "Closed" }
 			};
 		}
 	}

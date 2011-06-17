@@ -5,7 +5,8 @@ namespace SpikeExt4
 	public class Ticket
 	{
 		public Guid Id = Guid.NewGuid();
-		public string Name;
-		public string Email;
+		public string Title;
+		public string Description;
+		public string State;
 	}
 }
