@@ -2,9 +2,9 @@
 	extend: 'Ext.container.Viewport',
 	layout: 'fit',
 	initComponent: function () {
-		this.items = [{
-			xtype: 'ticketlist'
-		}];
+		this.items = [ {
+			xtype: 'ticketlistfilter'
+		} ];
 
 		this.callParent(arguments);
 	}

@@ -5,7 +5,11 @@
 
 	stores: ['Tickets'],
 
-	views: ['ticket.List'],
+	views: [
+		'ticket.List',
+		'ticket.Filter',
+		'ticket.ListFilter'
+	],
 
 	init: function () {
 		this.control({

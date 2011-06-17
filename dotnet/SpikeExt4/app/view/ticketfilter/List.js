@@ -1,8 +1,10 @@
-﻿Ext.define('Spike.view.ticket.List', {
+﻿Ext.define('Spike.view.ticketfilter.List', {
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.ticketlist',
 		
 	store: 'Tickets',
+
+	title: 'All Tickets',
 
 	initComponent: function () {
 		this.columns = [
