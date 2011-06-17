@@ -6,9 +6,9 @@
 		this.store = Ext.create('Spike.store.Tickets');
 		
 		this.columns = [
-            { header: 'Title', dataIndex: 'title', flex: 1 },
-            { header: 'Description', dataIndex: 'description', flex: 1 },
-            { header: 'State', dataIndex: 'state', flex: 1 }
+            { header: 'Title', dataIndex: 'title' },
+            { header: 'Description', dataIndex: 'description' },
+            { header: 'State', dataIndex: 'state' }
         ];
 
 		this.callParent(arguments);
