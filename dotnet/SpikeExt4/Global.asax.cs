@@ -11,6 +11,7 @@ namespace SpikeExt4
 		{
 			DirectHttpHandler.SetMetadata(new ReflectionConfigurator()
 			                              	.RegisterType<TicketRepository>()
+			                              	.RegisterType<FilterClauseRepository>()
 			                              	.BuildMetadata());
 		}
 

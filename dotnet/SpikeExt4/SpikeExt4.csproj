@@ -46,7 +46,9 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="app\controller\Tickets.js" />
+    <Content Include="app\model\FilterClause.js" />
     <Content Include="app\model\Ticket.js" />
+    <Content Include="app\store\FilterClauses.js" />
     <Content Include="app\store\Tickets.js" />
     <Content Include="app\view\ticketfilter\List.js" />
     <Content Include="app\view\ticket\ListFilter.js" />
@@ -58,6 +60,8 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FilterClause.cs" />
+    <Compile Include="FilterClauseRepository.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
