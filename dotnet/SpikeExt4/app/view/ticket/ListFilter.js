@@ -14,12 +14,12 @@
 		}];
 		this.items = [{
 			region: 'north',
-			xtype: 'ticketfilter',
+			xtype: 'ticket.Filter',
 			height: 200,
 			collapsible: true
 		}, {
 			region: 'center',
-			xtype: 'ticketlist',
+			xtype: 'ticket.List',
 			border: false
 		}];
 

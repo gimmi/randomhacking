@@ -50,7 +50,6 @@
     <Content Include="app\model\Ticket.js" />
     <Content Include="app\store\FilterClauses.js" />
     <Content Include="app\store\Tickets.js" />
-    <Content Include="app\view\ticketfilter\List.js" />
     <Content Include="app\view\ticket\ListFilter.js" />
     <Content Include="app\view\ticket\Filter.js" />
     <Content Include="app\view\ticket\List.js" />

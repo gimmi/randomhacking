@@ -11,7 +11,7 @@
 
 	init: function () {
 		this.control({
-			'ticketlist': {
+			'ticket.List': {
 				itemdblclick: this.editTicket
 			}
 		});

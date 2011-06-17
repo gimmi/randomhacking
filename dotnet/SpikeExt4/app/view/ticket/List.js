@@ -1,6 +1,6 @@
 ﻿Ext.define('Spike.view.ticket.List', {
 	extend: 'Ext.grid.Panel',
-	alias: 'widget.ticketlist',
+	alias: 'widget.ticket.List',
 
 	initComponent: function () {
 		this.store = Ext.create('Spike.store.Tickets');

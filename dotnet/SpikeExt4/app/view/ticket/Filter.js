@@ -1,6 +1,6 @@
 ﻿Ext.define('Spike.view.ticket.Filter', {
 	extend: 'Ext.grid.Panel',
-	alias: 'widget.ticketfilter',
+	alias: 'widget.ticket.Filter',
 
 	title: 'Ticket Filters',
 
