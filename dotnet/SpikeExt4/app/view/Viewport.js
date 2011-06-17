@@ -3,7 +3,11 @@
 	layout: 'fit',
 	initComponent: function () {
 		this.items = [ {
-			xtype: 'ticketlistfilter'
+			xtype: 'tabpanel',
+			items: {
+				title: 'Tickets',
+				xtype: 'ticketlistfilter'
+			}
 		} ];
 
 		this.callParent(arguments);
