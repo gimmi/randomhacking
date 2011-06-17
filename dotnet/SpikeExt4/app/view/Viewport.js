@@ -5,8 +5,8 @@
 		this.items = [ {
 			xtype: 'tabpanel',
 			items: {
-				title: 'Tickets',
-				xtype: 'ticketlistfilter'
+				title: 'Tasks',
+				xtype: 'taskinfo.List'
 			}
 		} ];
 

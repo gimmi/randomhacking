@@ -1,12 +1,13 @@
 ﻿Ext.define('Spike.controller.Tickets', {
 	extend: 'Ext.app.Controller',
 
-	models: ['Ticket', 'FilterClause'],
+	models: ['Ticket', 'FilterClause', 'TaskInfo' ],
 
 	views: [
 		'ticket.List',
 		'ticket.Filter',
-		'ticket.ListFilter'
+		'ticket.ListFilter',
+		'taskinfo.List'
 	],
 
 	init: function () {
