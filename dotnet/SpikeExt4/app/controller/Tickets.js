@@ -3,8 +3,6 @@
 
 	models: ['Ticket', 'FilterClause'],
 
-	stores: ['Tickets', 'FilterClauses'],
-
 	views: [
 		'ticket.List',
 		'ticket.Filter',

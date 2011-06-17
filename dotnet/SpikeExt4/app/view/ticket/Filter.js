@@ -2,11 +2,11 @@
 	extend: 'Ext.grid.Panel',
 	alias: 'widget.ticketfilter',
 
-	store: 'FilterClauses',
-
 	title: 'Ticket Filters',
 
 	initComponent: function () {
+		this.store = Ext.create('Spike.store.FilterClauses');
+		
 		this.columns = [
             { header: 'Field', dataIndex: 'field' },
             { header: 'Operator', dataIndex: 'operator' },
