@@ -1,4 +1,3 @@
-Ext.require('Ext.app.Application');
 Ext.require('Ext.direct.Manager');
 
 Ext.onReady(function () {
