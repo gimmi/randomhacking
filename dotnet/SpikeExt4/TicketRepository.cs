@@ -1,10 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate;
 
 namespace SpikeExt4
 {
 	public class TicketRepository
 	{
+		private readonly ISession _session;
+
+		public TicketRepository(ISession session)
+		{
+			_session = session;
+		}
+
 		public IEnumerable<Ticket> GetAll()
 		{
 			return new[]{

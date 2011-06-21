@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Web;
+using Castle.MicroKernel;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using ExtDirectHandler;
 using ExtDirectHandler.Configuration;
+using NHibernate;
+using NHibernate.Cfg;
 using log4net;
 using log4net.Config;
 
@@ -12,7 +15,7 @@ namespace SpikeExt4
 	public class Global : HttpApplication
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(Global));
-		private IWindsorContainer _container;
+		private static IWindsorContainer _container;
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
@@ -22,7 +25,9 @@ namespace SpikeExt4
 			_container = new WindsorContainer();
 			_container.Register(
 				Component.For<TicketRepository>().LifeStyle.Transient,
-				Component.For<FilterClauseRepository>().LifeStyle.Transient
+				Component.For<FilterClauseRepository>().LifeStyle.Transient,
+				Component.For<ISessionFactory>().UsingFactoryMethod(CreateSessionFactory),
+				Component.For<ISession>().UsingFactoryMethod(CreateSession).LifeStyle.PerWebRequest
 				);
 
 			DirectHttpHandler.SetMetadata(new ReflectionConfigurator()
@@ -30,6 +35,24 @@ namespace SpikeExt4
 			                              	.RegisterType<FilterClauseRepository>()
 			                              	.BuildMetadata());
 			DirectHttpHandler.SetObjectFactory(new WindsorObjectFactory(_container));
+		}
+
+		private static ISessionFactory CreateSessionFactory()
+		{
+			return new Configuration().Configure().AddAssembly(typeof(Global).Assembly).BuildSessionFactory();
+		}
+
+		private static ISession CreateSession(IKernel kernel)
+		{
+			var sessionFactory = kernel.Resolve<ISessionFactory>();
+			try
+			{
+				return sessionFactory.OpenSession();
+			}
+			finally
+			{
+				kernel.ReleaseComponent(sessionFactory);
+			}
 		}
 
 		protected void Session_Start(object sender, EventArgs e) {}
