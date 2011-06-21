@@ -39,7 +39,10 @@ namespace SpikeExt4
 
 		private static ISessionFactory CreateSessionFactory()
 		{
-			return new Configuration().Configure().AddAssembly(typeof(Global).Assembly).BuildSessionFactory();
+			return new Configuration()
+				.Configure()
+				.AddAssembly(typeof(Global).Assembly)
+				.BuildSessionFactory();
 		}
 
 		private static ISession CreateSession(IKernel kernel)
