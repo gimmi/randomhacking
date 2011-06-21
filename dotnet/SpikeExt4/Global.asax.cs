@@ -14,13 +14,14 @@ namespace SpikeExt4
 {
 	public class Global : HttpApplication
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(Global));
+		private static ILog _logger;
 		private static IWindsorContainer _container;
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
 			XmlConfigurator.Configure();
-			Logger.Info("Starting application");
+			_logger = LogManager.GetLogger(typeof(Global));
+			_logger.Info("Starting application");
 
 			_container = new WindsorContainer();
 			_container.Register(
@@ -34,7 +35,7 @@ namespace SpikeExt4
 			                              	.RegisterType<TicketRepository>()
 			                              	.RegisterType<FilterClauseRepository>()
 			                              	.BuildMetadata());
-			DirectHttpHandler.SetObjectFactory(new WindsorObjectFactory(_container));
+			DirectHttpHandler.SetObjectFactory(new WindsorObjectFactory());
 		}
 
 		private static ISessionFactory CreateSessionFactory()
@@ -72,15 +73,8 @@ namespace SpikeExt4
 
 		#region Nested type: WindsorObjectFactory
 
-		private class WindsorObjectFactory : ObjectFactory
+		public class WindsorObjectFactory : ObjectFactory
 		{
-			private readonly IWindsorContainer _container;
-
-			public WindsorObjectFactory(IWindsorContainer container)
-			{
-				_container = container;
-			}
-
 			public override object GetInstance(Type type)
 			{
 				return _container.Resolve(type);
