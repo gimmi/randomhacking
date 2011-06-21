@@ -4,15 +4,21 @@ using Castle.MicroKernel.Registration;
 using Castle.Windsor;
 using ExtDirectHandler;
 using ExtDirectHandler.Configuration;
+using log4net;
+using log4net.Config;
 
 namespace SpikeExt4
 {
 	public class Global : HttpApplication
 	{
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(Global));
 		private IWindsorContainer _container;
 
 		protected void Application_Start(object sender, EventArgs e)
 		{
+			XmlConfigurator.Configure();
+			Logger.Info("Starting application");
+
 			_container = new WindsorContainer();
 			_container.Register(
 				Component.For<TicketRepository>().LifeStyle.Transient,
