@@ -6,7 +6,7 @@
 	<packaging>war</packaging>
 	<properties>
 		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
-		<gae.version>1.4.2</gae.version>
+		<gae.version>1.5.1</gae.version>
 	</properties>
 	<build>
 		<finalName>spike-maven-gae</finalName>
@@ -37,7 +37,7 @@
 			<plugin>
 				<groupId>net.kindleit</groupId>
 				<artifactId>maven-gae-plugin</artifactId>
-				<version>0.8.2</version>
+				<version>0.8.4</version>
 				<configuration>
 					<jvmFlags>
 						<!-- 
@@ -99,7 +99,7 @@
 		<dependency>
 			<groupId>com.google.appengine</groupId>
 			<artifactId>appengine-testing</artifactId>
-			<version>1.4.2</version>
+			<version>${gae.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
