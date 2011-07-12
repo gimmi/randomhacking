@@ -6,18 +6,10 @@
 	<packaging>jar</packaging>
 	<version>1.0-SNAPSHOT</version>
 	<properties>
-		<project.build.sourceEncoding>Cp1252</project.build.sourceEncoding>
-		<hibernate.version>3.6.2.Final</hibernate.version>
+		<hibernate.version>3.6.3.Final</hibernate.version>
 		<slf4j.version>1.6.1</slf4j.version>
 	</properties>
-	<repositories>
-		<repository>
-			<id>jboss</id>
-			<url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
-		</repository>
-	</repositories>
 	<build>
-		<finalName>${artifactId}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -32,11 +24,6 @@
 	</build>
 	<dependencies>
 		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<version>10.7.1.1</version>
-		</dependency>
-		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>${hibernate.version}</version>
@@ -48,13 +35,19 @@
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
+			<artifactId>slf4j-api</artifactId>
 			<version>${slf4j.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
+			<artifactId>slf4j-simple</artifactId>
 			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- Database driver -->
+		<dependency>
+		    <groupId>com.h2database</groupId>
+		    <artifactId>h2</artifactId>
+		    <version>1.2.140</version>
 		</dependency>
 		<!-- TEST DEPENDENCIES -->
 		<dependency>
