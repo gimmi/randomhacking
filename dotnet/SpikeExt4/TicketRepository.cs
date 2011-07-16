@@ -17,13 +17,19 @@ namespace SpikeExt4
 		{
 			return new[] {
 				new Ticket {
-					Title = "Ticket 1", Description = "t1", State = "Opened", Comments = new List<Comment> {
+					Title = "Ticket 1", 
+					Description = "t1", 
+					State = "Opened", 
+					Comments = new List<Comment> {
 						new Comment { User = "Gimmi", Text = "Ok" },
 						new Comment { User = "Elena", Text = "No!" },
 					}
 				},
 				new Ticket {
-					Title = "Ticket 2", Description = "t2", State = "Closed", Comments = new List<Comment> {
+					Title = "Ticket 2", 
+					Description = "t2", 
+					State = "Closed", 
+					Comments = new List<Comment> {
 						new Comment { User = "Gimmi", Text = "Ok" },
 						new Comment { User = "Elena", Text = "No!" },
 					}
