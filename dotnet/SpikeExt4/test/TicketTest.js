@@ -28,4 +28,25 @@
 			expect(this.commentCount).toEqual(2);
 		});
 	});
+
+	it('should save tickets', function () {
+		runs(function () {
+			ticketStore.load({
+				callback: function () {
+					this.completed = true;
+				},
+				scope: this
+			});
+		});
+
+		waitsFor(function () {
+			return this.completed;
+		}, 'Server call', 1000);
+
+		runs(function () {
+			ticketStore.getAt(0).set('description', 'changed 1');
+			ticketStore.getAt(1).set('description', 'changed 2');
+			ticketStore.sync();
+		});
+	});
 });

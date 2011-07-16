@@ -4,6 +4,7 @@
 	// autoLoad: true,
 	proxy: {
 		type: 'direct',
+		batchActions: false,
 		api: {
 			create: Spike.server.TicketRepository.create,
 			read: Spike.server.TicketRepository.read,

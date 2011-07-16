@@ -19,18 +19,18 @@ namespace SpikeExt4
 		{
 			return new[] {
 				new Ticket {
-					Title = "Ticket 1", 
-					Description = "t1", 
-					State = "Opened", 
+					Title = "Ticket 1",
+					Description = "t1",
+					State = "Opened",
 					Comments = new List<Comment> {
 						new Comment { User = "Gimmi", Text = "Ok" },
 						new Comment { User = "Elena", Text = "No!" },
 					}
 				},
 				new Ticket {
-					Title = "Ticket 2", 
-					Description = "t2", 
-					State = "Closed", 
+					Title = "Ticket 2",
+					Description = "t2",
+					State = "Closed",
 					Comments = new List<Comment> {
 						new Comment { User = "Gimmi", Text = "Ok" },
 						new Comment { User = "Elena", Text = "No!" },
@@ -49,9 +49,10 @@ namespace SpikeExt4
 			Log.Debug("Destroy");
 		}
 
-		public void Update(Ticket ticket)
+		public object Update(Ticket ticket)
 		{
 			Log.Debug("Update");
+			return new { Success = true, Records = new[] { ticket } };
 		}
 
 		public IEnumerable<TaskInfo> GetAllInfo()
