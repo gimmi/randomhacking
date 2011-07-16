@@ -15,17 +15,27 @@ namespace SpikeExt4
 
 		public IEnumerable<Ticket> GetAll()
 		{
-			return new[]{
-				new Ticket{ Title = "Ticket 1", Description = "t1", State = "Opened" },
-				new Ticket{ Title = "Ticket 2", Description = "t2", State = "Closed" }
+			return new[] {
+				new Ticket {
+					Title = "Ticket 1", Description = "t1", State = "Opened", Comments = new List<Comment> {
+						new Comment { User = "Gimmi", Text = "Ok" },
+						new Comment { User = "Elena", Text = "No!" },
+					}
+				},
+				new Ticket {
+					Title = "Ticket 2", Description = "t2", State = "Closed", Comments = new List<Comment> {
+						new Comment { User = "Gimmi", Text = "Ok" },
+						new Comment { User = "Elena", Text = "No!" },
+					}
+				}
 			};
 		}
 
 		public IEnumerable<TaskInfo> GetAllInfo()
 		{
-			return new[]{
-				new TaskInfo{ Id = Guid.NewGuid(), Title = "Ticket 1" },
-				new TaskInfo{ Id = Guid.NewGuid(), Title = "Ticket 2" }
+			return new[] {
+				new TaskInfo { Id = Guid.NewGuid(), Title = "Ticket 1" },
+				new TaskInfo { Id = Guid.NewGuid(), Title = "Ticket 2" }
 			};
 		}
 	}

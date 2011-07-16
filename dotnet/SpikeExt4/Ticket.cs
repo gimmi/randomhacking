@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace SpikeExt4
 {
@@ -8,5 +9,6 @@ namespace SpikeExt4
 		public string Title;
 		public string Description;
 		public string State;
+		public IList<Comment> Comments = new List<Comment>();
 	}
 }
