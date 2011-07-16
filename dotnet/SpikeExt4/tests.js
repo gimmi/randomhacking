@@ -1,21 +1,12 @@
-﻿describe("Tests", function () {
-	var target;
+﻿Ext.Loader.setPath('Spike', 'app');
 
-	beforeEach(function () {
-		target = {};
-	});
+Ext.require('Ext.direct.Manager');
 
-	it("should be able to play a Song", function () {
-		//var ticket = Ext.create('Spike.model.Ticket');
-		var store = Ext.create('Ext.data.Store', {
-			model: 'Spike.model.Ticket',
-			data: [
-				{ title: 'Title 1', description: 'Descr 1', state: 'Open' },
-				{ title: 'Title 2', description: 'Descr 2', state: 'Open' },
-				{ title: 'Title 3', description: 'Descr 3', state: 'Open' }
-			]
-		});
-		expect(store.getCount()).toEqual(3);
-		// var ticket = Ext.create('Spike.model.Ticket');
-	});
+Ext.require('Spike.controller.Tickets');
+
+Ext.onReady(function() {
+	Ext.direct.Manager.addProvider(Spike.server.REMOTING_API);
+
+	jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+	jasmine.getEnv().execute();
 });

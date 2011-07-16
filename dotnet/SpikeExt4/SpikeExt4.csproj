@@ -79,6 +79,7 @@
     <Content Include="index.html" />
     <Content Include="tests.html" />
     <Content Include="tests.js" />
+    <Content Include="test\TicketTest.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
