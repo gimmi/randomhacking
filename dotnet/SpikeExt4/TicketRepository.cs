@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using NHibernate;
+using log4net;
 
 namespace SpikeExt4
 {
 	public class TicketRepository
 	{
+		private static readonly ILog Log = LogManager.GetLogger(typeof(TicketRepository));
 		private readonly ISession _session;
 
 		public TicketRepository(ISession session)
@@ -13,7 +15,7 @@ namespace SpikeExt4
 			_session = session;
 		}
 
-		public IEnumerable<Ticket> GetAll()
+		public IEnumerable<Ticket> Read()
 		{
 			return new[] {
 				new Ticket {
@@ -35,6 +37,21 @@ namespace SpikeExt4
 					}
 				}
 			};
+		}
+
+		public void Create(Ticket ticket)
+		{
+			Log.Debug("Create");
+		}
+
+		public void Destroy(Ticket ticket)
+		{
+			Log.Debug("Destroy");
+		}
+
+		public void Update(Ticket ticket)
+		{
+			Log.Debug("Update");
 		}
 
 		public IEnumerable<TaskInfo> GetAllInfo()

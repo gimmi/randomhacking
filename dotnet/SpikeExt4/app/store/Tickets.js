@@ -1,11 +1,14 @@
 ﻿Ext.define('Spike.store.Tickets', {
 	extend: 'Ext.data.Store',
 	model: 'Spike.model.Ticket',
-	autoLoad: true,
+	// autoLoad: true,
 	proxy: {
 		type: 'direct',
 		api: {
-			read: Spike.server.TicketRepository.getAll
+			create: Spike.server.TicketRepository.create,
+			read: Spike.server.TicketRepository.read,
+			update: Spike.server.TicketRepository.update,
+			destroy: Spike.server.TicketRepository.destroy
 		}
 	}
 });
