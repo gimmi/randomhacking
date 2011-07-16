@@ -1,4 +1,4 @@
-﻿describe("Tests", function () {
+﻿describe("Tickets", function () {
 	var ticketStore;
 
 	beforeEach(function () {
@@ -6,7 +6,6 @@
 	});
 
 	it('should load nested data from store', function () {
-		//var ticket = Ext.create('Spike.model.Ticket');
 		runs(function () {
 			ticketStore.load({
 				callback: function () {
