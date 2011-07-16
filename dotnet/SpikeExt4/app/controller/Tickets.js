@@ -1,7 +1,7 @@
 ﻿Ext.define('Spike.controller.Tickets', {
 	extend: 'Ext.app.Controller',
 
-	models: ['Ticket', 'Comment', 'FilterClause', 'TaskInfo' ],
+	models: ['Ticket', 'Comment', 'FilterClause', 'TaskInfo'],
 
 	views: [
 		'ticket.List',
@@ -12,10 +12,15 @@
 
 	init: function () {
 		this.control({
-			'ticket.List': {
+			'ticketlist': {
+				render: this.onTicketListRender,
 				itemdblclick: this.editTicket
 			}
 		});
+	},
+
+	onTicketListRender: function (sender) {
+		sender.getStore().load();
 	},
 
 	editTicket: function (grid, record) {

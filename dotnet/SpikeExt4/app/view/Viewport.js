@@ -11,7 +11,7 @@
 				title: 'Tickets',
 				layout: 'fit',
 				items: {
-					xtype: 'ticket.List',
+					xtype: 'ticketlist',
 					border: 0
 				}
 			}, {
