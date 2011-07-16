@@ -1,0 +1,28 @@
+﻿<html>
+	<head>
+		<title>Hello Ext</title>
+		<link rel="stylesheet" type="text/css" href="jasmine/jasmine.css">
+		<script type="text/javascript" src="jasmine/jasmine.js"> </script>
+		<script type="text/javascript" src="jasmine/jasmine-html.js"> </script>
+		
+		<script type="text/javascript" src="extjs/ext-debug.js"> </script>
+		<script type="text/javascript" src="rpc?ns=Spike.server"> </script>
+		<script type="text/javascript" src="tests.js"> </script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			Ext.Loader.setPath('Spike', 'app');
+
+			Ext.require('Ext.direct.Manager');
+
+			Ext.require('Spike.controller.Tickets');
+
+			Ext.onReady(function() {
+				Ext.direct.Manager.addProvider(Spike.server.REMOTING_API);
+
+				jasmine.getEnv().addReporter(new jasmine.TrivialReporter());
+				jasmine.getEnv().execute();
+			});
+		</script>
+	</body>
+</html>

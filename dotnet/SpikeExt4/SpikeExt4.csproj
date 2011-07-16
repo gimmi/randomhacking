@@ -63,6 +63,7 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="app\controller\Tickets.js" />
+    <Content Include="app\model\Comment.js" />
     <Content Include="app\model\TaskInfo.js" />
     <Content Include="app\model\FilterClause.js" />
     <Content Include="app\model\Ticket.js" />
@@ -76,6 +77,8 @@
     <Content Include="app\view\Viewport.js" />
     <Content Include="Global.asax" />
     <Content Include="index.html" />
+    <Content Include="tests.html" />
+    <Content Include="tests.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
