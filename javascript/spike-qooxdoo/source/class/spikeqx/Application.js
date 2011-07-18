@@ -13,8 +13,17 @@ qx.Class.define("spikeqx.Application", {
 				qx.log.appender.Native;
 				qx.log.appender.Console;
 			}
-			
+
 			var main = new spikeqx.MainWindow();
+
+			main.addListener("reload", function() {
+				this.debug("reload");
+			}, this);
+
+			main.addListener("post", function(e) {
+				this.debug("post: " + e.getData());
+			}, this);
+
 			main.open();
 			main.moveTo(50, 30);
 
