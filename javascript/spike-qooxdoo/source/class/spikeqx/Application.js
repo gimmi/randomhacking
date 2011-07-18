@@ -13,6 +13,10 @@ qx.Class.define("spikeqx.Application", {
 				qx.log.appender.Native;
 				qx.log.appender.Console;
 			}
+			
+			var main = new spikeqx.MainWindow();
+			main.open();
+			main.moveTo(50, 30);
 
 			var button1 = new qx.ui.form.Button("First Button", "spikeqx/test.png");
 			var doc = this.getRoot();
