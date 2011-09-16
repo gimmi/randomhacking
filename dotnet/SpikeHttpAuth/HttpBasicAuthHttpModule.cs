@@ -46,7 +46,7 @@ namespace SpikeHttpAuth
 		{
 			string type = GetType().FullName;
 
-			if(string.Equals(username, "gimmi"))
+			if (string.Equals(username, "gimmi") && string.Equals(password, "ciao"))
 			{
 				app.Context.User = new GenericPrincipal(new GenericIdentity("Gian Marco Gherardi", type), new[] { "Users", "Administrators" });
 			}
