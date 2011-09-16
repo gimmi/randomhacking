@@ -19,46 +19,41 @@ namespace SpikeHttpAuth
 		{
 			var context = (HttpApplication)source;
 
+			string username = null;
+			string password = null;
+
 			string authorization = context.Request.Headers["Authorization"] ?? "";
-			if(!authorization.StartsWith("Basic ", 0))
+			if(authorization.StartsWith("Basic "))
 			{
-				AccessDenied(context);
-				return;
+				byte[] bytes = Convert.FromBase64String(authorization.Substring(6));
+				string[] usernamePassword = new ASCIIEncoding().GetString(bytes).Split(':');
+				username = usernamePassword[0];
+				password = usernamePassword[1];
 			}
 
-			byte[] bytes = Convert.FromBase64String(authorization.Substring(6));
-			string userInfo = new ASCIIEncoding().GetString(bytes);
-
-			string[] usernamePassword = userInfo.Split(':');
-			string username = usernamePassword[0];
-			string password = usernamePassword[1];
-
-			string[] groups;
-			if(AuthenticateAgent(context, username, password, out groups))
+			if(!AuthenticateAgent(context, username, password))
 			{
-				context.Context.User = new GenericPrincipal(new GenericIdentity(username, GetType().FullName), groups);
+				context.Response.Status = "401 Unauthorized";
+				string realm = ConfigurationSettings.AppSettings[GetType().FullName + ".Realm"];
+				context.Response.AppendHeader("WWW-Authenticate", String.Format("Basic Realm=\"{0}\"", realm));
+				context.Response.ContentType = "text/plain";
+				context.Response.Write(context.Response.StatusDescription);
+				context.CompleteRequest();
+			}
+		}
+
+		protected virtual bool AuthenticateAgent(HttpApplication app, string username, string password)
+		{
+			string type = GetType().FullName;
+
+			if(string.Equals(username, "gimmi"))
+			{
+				app.Context.User = new GenericPrincipal(new GenericIdentity("Gian Marco Gherardi", type), new[] { "Users", "Administrators" });
 			}
 			else
 			{
-				AccessDenied(context);
-				return;
+				app.Context.User = new GenericPrincipal(new GenericIdentity("", type), new string[0]);
 			}
-		}
-
-		private void AccessDenied(HttpApplication app)
-		{
-			app.Response.Status = "401 Unauthorized";
-			var realm = ConfigurationSettings.AppSettings[GetType().FullName + ".Realm"];
-			app.Response.AppendHeader("WWW-Authenticate", String.Format("Basic Realm=\"{0}\"", realm));
-			app.Response.ContentType = "text/plain";
-			app.Response.Write(app.Response.StatusDescription);
-			app.CompleteRequest();
-		}
-
-
-		protected virtual bool AuthenticateAgent(HttpApplication app, string username, string password, out string[] groups)
-		{
-			groups = new string[0];
 			return true;
 		}
 	}
