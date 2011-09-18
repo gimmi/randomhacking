@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using NUnit.Framework;
+using SharpTestsEx;
 
 namespace SpikeAutofac
 {
@@ -8,6 +9,31 @@ namespace SpikeAutofac
 	public class AutofacTest
 	{
 		public const string UnitOfWorkScope = "uow";
+
+		[Test]
+		public void Should_resolve_lazy_components()
+		{
+			var builder = new ContainerBuilder();
+			builder.RegisterType<A>();
+			var container = builder.Build();
+
+			var a = container.Resolve<A>();
+			a = container.Resolve<Lazy<A>>().Value;
+			a = container.Resolve<Func<A>>().Invoke();
+		}
+
+		[Test]
+		public void Should_not_keep_track_of_transient_components()
+		{
+			var builder = new ContainerBuilder();
+			builder.RegisterType<A>().InstancePerDependency();
+			A a;
+			using (var container = builder.Build())
+			{
+				a = container.Resolve<A>();
+			}
+			a.Disposed.Should().Be.False();
+		}
 
 		[Test]
 		public void tt()
@@ -36,6 +62,16 @@ namespace SpikeAutofac
 			public Repository(Func<Session> session)
 			{
 				_session = session;
+			}
+		}
+
+		public class A : IDisposable
+		{
+			public bool Disposed;
+
+			public void Dispose()
+			{
+				Disposed = true;
 			}
 		}
 	}
