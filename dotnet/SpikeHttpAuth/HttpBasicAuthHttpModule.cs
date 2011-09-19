@@ -8,21 +8,28 @@ namespace SpikeHttpAuth
 {
 	public class HttpBasicAuthHttpModule : IHttpModule
 	{
+		private readonly string _realm;
+
+		public HttpBasicAuthHttpModule() : this(ConfigurationSettings.AppSettings[typeof(HttpBasicAuthHttpModule).FullName + ".Realm"]) { }
+
+		public HttpBasicAuthHttpModule(string realm)
+		{
+			_realm = realm;
+		}
+
 		public void Dispose() {}
 
 		public void Init(HttpApplication context)
 		{
-			context.AuthenticateRequest += OnAuthenticateRequest;
+			context.AuthenticateRequest += (source, eventArgs) => AuthenticateRequest((HttpApplication)source);
 		}
 
-		public void OnAuthenticateRequest(object source, EventArgs eventArgs)
+		public void AuthenticateRequest(HttpApplication application)
 		{
-			var context = (HttpApplication)source;
-
 			string username = null;
 			string password = null;
 
-			string authorization = context.Request.Headers["Authorization"] ?? "";
+			string authorization = application.Request.Headers["Authorization"] ?? "";
 			if(authorization.StartsWith("Basic "))
 			{
 				byte[] bytes = Convert.FromBase64String(authorization.Substring(6));
@@ -31,14 +38,13 @@ namespace SpikeHttpAuth
 				password = usernamePassword[1];
 			}
 
-			if(!AuthenticateAgent(context, username, password))
+			if(!AuthenticateAgent(application, username, password))
 			{
-				context.Response.Status = "401 Unauthorized";
-				string realm = ConfigurationSettings.AppSettings[GetType().FullName + ".Realm"];
-				context.Response.AppendHeader("WWW-Authenticate", String.Format("Basic Realm=\"{0}\"", realm));
-				context.Response.ContentType = "text/plain";
-				context.Response.Write(context.Response.StatusDescription);
-				context.CompleteRequest();
+				application.Response.Status = "401 Unauthorized";
+				application.Response.AppendHeader("WWW-Authenticate", String.Format("Basic Realm=\"{0}\"", _realm));
+				application.Response.ContentType = "text/plain";
+				application.Response.Write(application.Response.StatusDescription);
+				application.CompleteRequest();
 			}
 		}
 
