@@ -11,14 +11,43 @@ namespace NHibernateSetup
 	[TestFixture]
 	public class Test
 	{
-		[Test]
-		public void Tt()
+		private ISessionFactory _sessionFactory;
+
+		[SetUp]
+		public void SetUp()
 		{
 			Configuration cfg = BuildConfiguration();
 
 			new SchemaExport(cfg).Create(false, true);
 
-			ISessionFactory sessionFactory = cfg.BuildSessionFactory();
+			_sessionFactory = cfg.BuildSessionFactory();
+		}
+
+		[Test]
+		public void Tt()
+		{
+			var parent = new Parent();
+			Assert.AreEqual(0, parent.RowVersion);
+			using(ISession session = _sessionFactory.OpenSession())
+			{
+				using(session.BeginTransaction())
+				{
+					session.SaveOrUpdate(parent);
+					Assert.AreEqual(1, parent.RowVersion);
+					session.Transaction.Commit();
+				}
+			}
+			using(ISession session = _sessionFactory.OpenSession())
+			{
+				using(session.BeginTransaction())
+				{
+					var parent1 = session.Load<Parent>(parent.Id);
+					Assert.AreNotSame(parent, parent1);
+					Assert.AreEqual(parent.Id, parent1.Id);
+					Assert.AreEqual(parent.RowVersion, parent1.RowVersion);
+					session.Transaction.Commit();
+				}
+			}
 		}
 
 		private static Configuration BuildConfiguration()
@@ -40,8 +69,11 @@ namespace NHibernateSetup
 			});
 
 			var mapper = new ModelMapper();
+			mapper.BeforeMapClass += (mi, type, map) => {
+				map.Id(type.GetProperty("Id"), m => m.Generator(Generators.Assigned));
+				map.Version(type.GetProperty("RowVersion"), m => m.UnsavedValue(0));
+			};
 			mapper.Class<Parent>(m => {
-				m.Id(x => x.Id);
 				m.Property(x => x.Description);
 			});
 

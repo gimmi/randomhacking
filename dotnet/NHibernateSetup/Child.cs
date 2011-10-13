@@ -1,6 +1,6 @@
 namespace NHibernateSetup
 {
-	public class Parent : Entity
+	public class Child : Entity
 	{
 		public virtual string Description { get; set; }
 	}
