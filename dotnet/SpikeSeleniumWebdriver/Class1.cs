@@ -25,10 +25,10 @@ namespace SpikeSeleniumWebdriver
 		[Test]
 		public void Tt()
 		{
-			driver.Navigate().GoToUrl("http://www.google.com");
-			IWebElement query = driver.FindElement(By.Name("q"));
-			query.SendKeys("Cheese");
-			Assert.That(driver.Title, Is.EqualTo("Google"));
+			driver.Url = "http://www.google.com";
+			driver.WaitScript("return !!window.Aplication;");
+
+			Assert.That(driver.ExecuteScript<string>("return document.title;"), Is.EqualTo("Google"));
 		}
 	}
 }
