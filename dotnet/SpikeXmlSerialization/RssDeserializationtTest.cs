@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using NUnit.Framework;
 using SharpTestsEx;
+using System.Xml.XPath;
 
 namespace SpikeXmlSerialization
 {
@@ -39,7 +42,7 @@ namespace SpikeXmlSerialization
 	public class RssDeserializationtTest
 	{
 		[Test]
-		public void Tt()
+		public void ObjectDeserialization()
 		{
 			Rss rss;
 			using(var streamReader = new StreamReader("rss2sample.xml"))
@@ -51,6 +54,16 @@ namespace SpikeXmlSerialization
 			rss.Channel.Title.Should().Be.EqualTo("Liftoff News");
 			rss.Channel.Items.Should().Have.Count.EqualTo(4);
 			rss.Channel.Items.First().Title.Should().Be.EqualTo("Star City");
+		}
+
+		[Test]
+		public void LinqDeserialization()
+		{
+			XDocument doc = XDocument.Load("rss2sample.xml");
+			var el = doc.XPathSelectElement("/rss[@version='2.0']/channel");
+			el.Element("title").Value.Should().Be.EqualTo("Liftoff News");
+			el.Elements("item").Should().Have.Count.EqualTo(4);
+			el.Elements("item").First().Element("title").Value.Should().Be.EqualTo("Star City");
 		}
 	}
 }

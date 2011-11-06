@@ -55,8 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="RssDeserializationtest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RssDeserializationtTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
