@@ -18,7 +18,10 @@ connect.createServer()
 		pg.connect(dbCfg, function(err, client) {
 			client.query("SELECT version();", function(err, result) {
 				res.writeHead(200, {'Content-Type': 'text/plain'});
-				res.end(JSON.stringify(result.rows));
+				res.end([
+					require('url').parse(req.url).pathname,
+					JSON.stringify(result.rows)
+				].join('\n'));
 			});
 		});
 	})
