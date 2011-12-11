@@ -6,7 +6,14 @@ connect.createServer()
 	.use(connect.favicon())
 	.use(connect.logger())
 	.use(rpc.rpc('/rpc', {
-		id: 'id'
+		id: 'id',
+		actions: {
+			'Action1': [{
+				name: 'method1',
+				len: 1,
+				fn: function (val) { return val; }
+			}]
+		}
 	}))
 	.use(connect.directory(__dirname))
 	.use(connect.static(__dirname))
