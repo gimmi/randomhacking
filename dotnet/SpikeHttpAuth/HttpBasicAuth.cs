@@ -7,6 +7,11 @@ namespace SpikeHttpAuth
 {
 	public class HttpBasicAuth
 	{
+		public static void AuthenticateRequest(string realm, Func<string, string, bool> authenticate)
+		{
+			AuthenticateRequest(HttpContext.Current.ApplicationInstance, realm, (application, username, password) => authenticate.Invoke(username, password));
+		}
+
 		public static void AuthenticateRequest(HttpApplication application, string realm, Func<HttpApplication, string, string, bool> authenticate)
 		{
 			string username = null;
