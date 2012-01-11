@@ -26,26 +26,7 @@ namespace SpikeHttpAuth
 
 		public void AuthenticateRequest(HttpApplication application)
 		{
-			string username = null;
-			string password = null;
-
-			string authorization = application.Request.Headers["Authorization"] ?? "";
-			if(authorization.StartsWith("Basic "))
-			{
-				byte[] bytes = Convert.FromBase64String(authorization.Substring(6));
-				string[] usernamePassword = new ASCIIEncoding().GetString(bytes).Split(':');
-				username = usernamePassword[0];
-				password = usernamePassword[1];
-			}
-
-			if(!AuthenticateAgent(application, username, password))
-			{
-				application.Response.Status = "401 Unauthorized";
-				application.Response.AppendHeader("WWW-Authenticate", String.Format("Basic Realm=\"{0}\"", _realm));
-				application.Response.ContentType = "text/plain";
-				application.Response.Write(application.Response.StatusDescription);
-				application.CompleteRequest();
-			}
+			HttpBasicAuth.AuthenticateRequest(application, _realm, AuthenticateAgent);
 		}
 
 		protected virtual bool AuthenticateAgent(HttpApplication app, string username, string password)
@@ -55,12 +36,9 @@ namespace SpikeHttpAuth
 			if (string.Equals(username, "gimmi") && string.Equals(password, "ciao"))
 			{
 				app.Context.User = new GenericPrincipal(new GenericIdentity("Gian Marco Gherardi", type), new[] { "Users", "Administrators" });
+				return true;
 			}
-			else
-			{
-				app.Context.User = new GenericPrincipal(new GenericIdentity("", type), new string[0]);
-			}
-			return true;
+			return false; // app.Context.User = new GenericPrincipal(new GenericIdentity("", type), new string[0]);
 		}
 	}
 }

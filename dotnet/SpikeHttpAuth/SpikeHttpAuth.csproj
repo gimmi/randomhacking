@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CookieAuthHttpModule.cs" />
+    <Compile Include="HttpBasicAuth.cs" />
     <Compile Include="UnitOfWorkHttpModule.cs" />
     <Compile Include="Handler.ashx.cs">
       <DependentUpon>Handler.ashx</DependentUpon>
