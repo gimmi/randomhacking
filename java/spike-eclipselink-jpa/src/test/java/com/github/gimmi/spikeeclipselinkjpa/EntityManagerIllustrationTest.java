@@ -34,6 +34,7 @@ public class EntityManagerIllustrationTest {
 		map.put("eclipselink.logging.logger", "DefaultLogger");
 		map.put("eclipselink.logging.level", "FINEST");
 
+		// See http://wiki.eclipse.org/EclipseLink/Examples/JPA/DDL
 		map.put("eclipselink.ddl-generation", "create-tables");
 
 		emf = Persistence.createEntityManagerFactory("com.github.gimmi.spikeeclipselinkjpa", map);

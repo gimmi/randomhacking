@@ -3,7 +3,10 @@
 		<class>com.github.gimmi.spikeeclipselinkjpa.Task</class>
 		<class>com.github.gimmi.spikeeclipselinkjpa.Comment</class>
 		<properties>
-            <property name="eclipselink.logging.logger" value="JavaLogger"/>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/trackr"/>
+			<property name="javax.persistence.jdbc.user" value="root"/>
+			<property name="javax.persistence.jdbc.password" value="root"/>
 		</properties>
 	</persistence-unit>
 </persistence>

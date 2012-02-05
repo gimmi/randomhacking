@@ -6,7 +6,8 @@ import java.util.UUID;
 @Entity
 public class Comment {
 	@Id
-	private UUID id = UUID.randomUUID();
+	@Column(columnDefinition = "CHAR(36)")
+	private String id = UUID.randomUUID().toString();
 
 	@ManyToOne
 	protected Task task;
@@ -14,7 +15,7 @@ public class Comment {
 	@Version
 	private int version;
 
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 }

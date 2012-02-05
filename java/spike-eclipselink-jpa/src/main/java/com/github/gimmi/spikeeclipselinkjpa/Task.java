@@ -6,7 +6,8 @@ import java.util.*;
 @Entity
 public class Task {
 	@Id
-	private UUID id = UUID.randomUUID();
+	@Column(columnDefinition = "CHAR(36)")
+	private String id = UUID.randomUUID().toString();
 
 	private String title;
 
@@ -42,7 +43,7 @@ public class Task {
 		return version;
 	}
 
-	public UUID getId() {
+	public String getId() {
 		return id;
 	}
 
