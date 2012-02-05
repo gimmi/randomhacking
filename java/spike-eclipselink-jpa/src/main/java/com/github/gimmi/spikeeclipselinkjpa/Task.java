@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.UUID;
 
 @Entity
-public class Event {
+public class Task {
 	@Id
 	private UUID id = UUID.randomUUID();
 

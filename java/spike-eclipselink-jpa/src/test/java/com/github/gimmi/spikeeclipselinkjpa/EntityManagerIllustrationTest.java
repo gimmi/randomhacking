@@ -47,35 +47,35 @@ public class EntityManagerIllustrationTest {
 	public void testBasicUsage() {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		Event event = new Event();
-		event.setTitle("Our very first event!");
-		event.setDate(new Date());
-		entityManager.persist(event);
+		Task task = new Task();
+		task.setTitle("Our very first task!");
+		task.setDate(new Date());
+		entityManager.persist(task);
 		entityManager.getTransaction().commit();
 		entityManager.close();
 
 		entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		List<Event> result = entityManager.createQuery("SELECT e FROM Event e", Event.class).getResultList();
+		List<Task> result = entityManager.createQuery("SELECT e FROM Task e", Task.class).getResultList();
 		assertEquals(1, result.size());
-		assertEquals("Our very first event!", result.get(0).getTitle());
-		assertEquals(event.getId(), result.get(0).getId());
+		assertEquals("Our very first task!", result.get(0).getTitle());
+		assertEquals(task.getId(), result.get(0).getId());
 		entityManager.getTransaction().commit();
 		entityManager.close();
 	}
 
 	@Test
 	public void version_field() {
-		Event event = new Event();
-		assertThat(event.getVersion(), equalTo(0));
+		Task task = new Task();
+		assertThat(task.getVersion(), equalTo(0));
 
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
-		entityManager.persist(event);
-		assertEquals(0, event.getVersion());
+		entityManager.persist(task);
+		assertEquals(0, task.getVersion());
 		entityManager.getTransaction().commit();
 		entityManager.close();
 
-		assertThat(event.getVersion(), equalTo(1));
+		assertThat(task.getVersion(), equalTo(1));
 	}
 }
