@@ -2,13 +2,7 @@
 	<persistence-unit name="com.github.gimmi.spikeeclipselinkjpa" transaction-type="RESOURCE_LOCAL">
 		<class>com.github.gimmi.spikeeclipselinkjpa.Event</class>
 		<properties>
-			<property name="javax.persistence.jdbc.driver" value="org.h2.Driver"/>
-			<property name="javax.persistence.jdbc.url" value="jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE"/>
-			<property name="javax.persistence.jdbc.user" value="sa"/>
-			<property name="javax.persistence.jdbc.password" value=""/>
-
-            <!--<property name="eclipselink.logging.logger" value="JavaLogger"/>-->
-            <property name="eclipselink.ddl-generation" value="create-tables"/>
+            <property name="eclipselink.logging.logger" value="JavaLogger"/>
 		</properties>
 	</persistence-unit>
 </persistence>

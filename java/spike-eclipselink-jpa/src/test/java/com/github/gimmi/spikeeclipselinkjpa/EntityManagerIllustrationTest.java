@@ -8,7 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
@@ -20,7 +22,20 @@ public class EntityManagerIllustrationTest {
 
 	@BeforeClass
 	public static void beforeClass() {
-		entityManagerFactory = Persistence.createEntityManagerFactory("com.github.gimmi.spikeeclipselinkjpa");
+		Map<String, String> map = new HashMap<String, String>();
+
+		map.put("javax.persistence.jdbc.driver", "org.h2.Driver");
+		map.put("javax.persistence.jdbc.url", "jdbc:h2:mem:db1;DB_CLOSE_DELAY=-1;MVCC=TRUE");
+		map.put("javax.persistence.jdbc.user", "sa");
+		map.put("javax.persistence.jdbc.password", "");
+
+		// See http://wiki.eclipse.org/EclipseLink/Examples/JPA/Logging
+		map.put("eclipselink.logging.logger", "DefaultLogger");
+		map.put("eclipselink.logging.level", "FINEST");
+
+		map.put("eclipselink.ddl-generation", "create-tables");
+
+		entityManagerFactory = Persistence.createEntityManagerFactory("com.github.gimmi.spikeeclipselinkjpa", map);
 	}
 
 	@AfterClass
