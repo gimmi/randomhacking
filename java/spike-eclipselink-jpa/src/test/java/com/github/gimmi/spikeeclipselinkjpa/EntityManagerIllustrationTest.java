@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,7 +19,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class EntityManagerIllustrationTest {
-	private static EntityManagerFactory entityManagerFactory;
+	private static EntityManagerFactory emf;
 
 	@BeforeClass
 	public static void beforeClass() {
@@ -35,17 +36,17 @@ public class EntityManagerIllustrationTest {
 
 		map.put("eclipselink.ddl-generation", "create-tables");
 
-		entityManagerFactory = Persistence.createEntityManagerFactory("com.github.gimmi.spikeeclipselinkjpa", map);
+		emf = Persistence.createEntityManagerFactory("com.github.gimmi.spikeeclipselinkjpa", map);
 	}
 
 	@AfterClass
 	public static void afterClass() {
-		entityManagerFactory.close();
+		emf.close();
 	}
 
 	@Test
 	public void testBasicUsage() {
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = emf.createEntityManager();
 		entityManager.getTransaction().begin();
 		Task task = new Task();
 		task.setTitle("Our very first task!");
@@ -54,7 +55,7 @@ public class EntityManagerIllustrationTest {
 		entityManager.getTransaction().commit();
 		entityManager.close();
 
-		entityManager = entityManagerFactory.createEntityManager();
+		entityManager = emf.createEntityManager();
 		entityManager.getTransaction().begin();
 		List<Task> result = entityManager.createQuery("SELECT e FROM Task e", Task.class).getResultList();
 		assertEquals(1, result.size());
@@ -69,7 +70,7 @@ public class EntityManagerIllustrationTest {
 		Task task = new Task();
 		assertThat(task.getVersion(), equalTo(0));
 
-		EntityManager entityManager = entityManagerFactory.createEntityManager();
+		EntityManager entityManager = emf.createEntityManager();
 		entityManager.getTransaction().begin();
 		entityManager.persist(task);
 		assertEquals(0, task.getVersion());
@@ -77,5 +78,25 @@ public class EntityManagerIllustrationTest {
 		entityManager.close();
 
 		assertThat(task.getVersion(), equalTo(1));
+	}
+
+	@Test
+	public void one_to_many() {
+		Task task = new Task();
+		Comment comment = new Comment();
+		task.addComment(comment);
+
+		EntityManager em = emf.createEntityManager();
+		EntityTransaction tx = em.getTransaction();
+		tx.begin();
+		em.persist(task);
+		tx.commit();
+		em.close();
+
+		em = emf.createEntityManager();
+		task = em.find(Task.class, task.getId());
+		assertThat(task.getComments().size(), equalTo(1));
+		assertThat(task.getComments().iterator().next().getId(), equalTo(comment.getId()));
+		em.close();
 	}
 }
