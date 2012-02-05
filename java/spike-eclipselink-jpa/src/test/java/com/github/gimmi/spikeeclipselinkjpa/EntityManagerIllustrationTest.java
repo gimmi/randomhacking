@@ -57,6 +57,7 @@ public class EntityManagerIllustrationTest {
 		EntityManager entityManager = entityManagerFactory.createEntityManager();
 		entityManager.getTransaction().begin();
 		entityManager.persist(event);
+		assertEquals(0, event.getVersion());
 		entityManager.getTransaction().commit();
 		entityManager.close();
 

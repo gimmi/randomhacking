@@ -7,8 +7,10 @@ import java.util.UUID;
 @Entity
 public class Event {
 	@Id
-	private String id = UUID.randomUUID().toString();
+	private UUID id = UUID.randomUUID();
+
 	private String title;
+
 	@Temporal(TemporalType.DATE)
 	private Date date;
 
@@ -19,7 +21,7 @@ public class Event {
 		return version;
 	}
 
-	public String getId() {
+	public UUID getId() {
 		return id;
 	}
 
