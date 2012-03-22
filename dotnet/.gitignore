@@ -2,8 +2,7 @@
 obj/
 bin/
 packages/
-*.csproj.user
-*ReSharper.user
+*.user
 _ReSharper*
 *resharper*
 *.suo

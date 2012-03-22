@@ -4,6 +4,7 @@ using Castle.MicroKernel.Registration;
 using Castle.MicroKernel.Resolvers;
 using Castle.Windsor;
 using NUnit.Framework;
+using Castle.Facilities.TypedFactory;
 
 namespace SpikeWindsor3
 {
@@ -24,15 +25,15 @@ namespace SpikeWindsor3
 		public void Should_release_scoped_component_when_scope_is_disposed()
 		{
 			var container = new WindsorContainer();
-			container.Register(Component.For<AImpl>().LifestyleScoped());
+			container.Register(Component.For<IA>().ImplementedBy<AImpl>().LifestyleScoped());
 
-			AImpl aImpl;
+			IA aImpl;
 			using(container.BeginScope())
 			{
-				aImpl = container.Resolve<AImpl>();
+				aImpl = container.Resolve<IA>();
 			}
 
-			Assert.IsTrue(aImpl.Disposed);
+			Assert.IsTrue(((AImpl)aImpl).Disposed);
 		}
 
 		[Test]
@@ -54,12 +55,26 @@ namespace SpikeWindsor3
 		public void Should_resolve_lazy_components()
 		{
 			var container = new WindsorContainer();
-			container.Register(Component.For<LazyOfTComponentLoader>());
-			container.Register(Component.For<IA>().ImplementedBy<AImpl>().LifeStyle.Transient);
+			container.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>());
+			container.Register(Component.For<IA>().ImplementedBy<AImpl>().LifeStyle.Singleton);
+
+			var a = container.Resolve<IA>();
+			var lazyA = container.Resolve<Lazy<IA>>();
+
+			Assert.AreSame(a, lazyA.Value);
+		}
+
+		[Test]
+		public void Should_resolve_func_components()
+		{
+			var container = new WindsorContainer();
+			container.AddFacility<TypedFactoryFacility>();
+			container.Register(Component.For<IA>().ImplementedBy<AImpl>().LifeStyle.Singleton);
 
 			var a = container.Resolve<IA>();
 			var funcA = container.Resolve<Func<IA>>();
-			var lazyA = container.Resolve<Lazy<IA>>();
+
+			Assert.AreSame(a, funcA.Invoke());
 		}
 
 		[Test]
