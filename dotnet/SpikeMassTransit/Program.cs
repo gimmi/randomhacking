@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using MassTransit;
 
 namespace SpikeMassTransit
@@ -7,24 +8,20 @@ namespace SpikeMassTransit
 	{
 		private static void Main()
 		{
-			Console.WriteLine("starting...");
-
 			Bus.Initialize(sbc => {
-				Console.WriteLine("configuring...");
 				sbc.ReceiveFrom("loopback://localhost/mt_test");
 				sbc.Subscribe(subs => {
-					subs.Handler<YourMessage>(msg => Console.WriteLine(msg.Text));
+					subs.Handler<YourMessage>(msg => Console.WriteLine("{0}: Received '{1}'", Thread.CurrentThread.ManagedThreadId, msg.Text));
 				});
 				sbc.BeforeConsumingMessage(() => {
-					Console.WriteLine("before");
+					Console.WriteLine("{0}: BeforeConsumingMessage", Thread.CurrentThread.ManagedThreadId);
 				});
 				sbc.AfterConsumingMessage(() => {
-					Console.WriteLine("after");
+					Console.WriteLine("{0}: AfterConsumingMessage", Thread.CurrentThread.ManagedThreadId);
 				});
 			});
-			Console.WriteLine("publishing...");
 			Bus.Instance.Publish(new YourMessage { Text = "Hi" });
-			Console.WriteLine("waiting... press a key to exit.");
+			Console.WriteLine("{0}: waiting... press a key to exit.", Thread.CurrentThread.ManagedThreadId);
 			Console.ReadKey();
 		}
 	}
