@@ -11,18 +11,29 @@ namespace SpikeMassTransit
 			Bus.Initialize(sbc => {
 				sbc.ReceiveFrom("loopback://localhost/mt_test");
 				sbc.Subscribe(subs => {
-					subs.Handler<YourMessage>(msg => Console.WriteLine("{0}: Received '{1}'", Thread.CurrentThread.ManagedThreadId, msg.Text));
+					subs.Handler<YourMessage>(OnHandleYourMessage);
 				});
-				sbc.BeforeConsumingMessage(() => {
-					Console.WriteLine("{0}: BeforeConsumingMessage", Thread.CurrentThread.ManagedThreadId);
-				});
-				sbc.AfterConsumingMessage(() => {
-					Console.WriteLine("{0}: AfterConsumingMessage", Thread.CurrentThread.ManagedThreadId);
-				});
+				sbc.BeforeConsumingMessage(OnBeforeConsumingMessage);
+				sbc.AfterConsumingMessage(OnAfterConsumingMessage);
 			});
 			Bus.Instance.Publish(new YourMessage { Text = "Hi" });
 			Console.WriteLine("{0}: waiting... press a key to exit.", Thread.CurrentThread.ManagedThreadId);
 			Console.ReadKey();
+		}
+
+		private static void OnHandleYourMessage(YourMessage msg)
+		{
+			Console.WriteLine("{0}: Received '{1}'", Thread.CurrentThread.ManagedThreadId, msg.Text);
+		}
+
+		private static void OnAfterConsumingMessage()
+		{
+			Console.WriteLine("{0}: AfterConsumingMessage", Thread.CurrentThread.ManagedThreadId);
+		}
+
+		private static void OnBeforeConsumingMessage()
+		{
+			Console.WriteLine("{0}: BeforeConsumingMessage", Thread.CurrentThread.ManagedThreadId);
 		}
 	}
 }
