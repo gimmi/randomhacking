@@ -29,39 +29,39 @@ namespace SpikeWindsor3
 		[Test]
 		public void Shoul_fail_to_resolve_scoped_components_when_out_of_the_scope()
 		{
-			_target.Register(Component.For<SomeService>().LifestyleScoped());
+			_target.Register(Component.For<DisposableService>().LifestyleScoped());
 
-			var e = Assert.Throws<InvalidOperationException>(() => _target.Resolve<SomeService>());
+			var e = Assert.Throws<InvalidOperationException>(() => _target.Resolve<DisposableService>());
 			StringAssert.Contains("Scope was not available", e.Message);
 		}
 
 		[Test]
 		public void Should_release_scoped_component_when_scope_is_disposed()
 		{
-			_target.Register(Component.For<SomeService>().LifestyleScoped());
+			_target.Register(Component.For<DisposableService>().LifestyleScoped());
 
-			SomeService someService;
+			DisposableService disposableService;
 			using(_target.BeginScope())
 			{
-				someService = _target.Resolve<SomeService>();
+				disposableService = _target.Resolve<DisposableService>();
 			}
 
-			Assert.IsTrue(someService.Disposed);
+			Assert.IsTrue(disposableService.Disposed);
 		}
 
 		[Test]
 		public void Should_allow_nested_scopes()
 		{
-			_target.Register(Component.For<SomeService>().LifestyleScoped());
+			_target.Register(Component.For<DisposableService>().LifestyleScoped());
 
-			SomeService instance;
+			DisposableService instance;
 			using(_target.BeginScope())
 			{
-				instance = _target.Resolve<SomeService>();
-				SomeService otherInstance;
+				instance = _target.Resolve<DisposableService>();
+				DisposableService otherInstance;
 				using(_target.BeginScope())
 				{
-					otherInstance = _target.Resolve<SomeService>();
+					otherInstance = _target.Resolve<DisposableService>();
 					Assert.AreNotSame(instance, otherInstance);
 				}
 				Assert.IsTrue(otherInstance.Disposed);
@@ -73,11 +73,11 @@ namespace SpikeWindsor3
 		[Test]
 		public void Should_count_tracked_components()
 		{
-			_target.Register(Component.For<SomeService>().LifestyleTransient());
+			_target.Register(Component.For<DisposableService>().LifestyleTransient());
 
 			Assert.AreEqual(0, GetTrackedComponentcount());
 
-			var someService = _target.Resolve<SomeService>();
+			var someService = _target.Resolve<DisposableService>();
 
 			Assert.AreEqual(1, GetTrackedComponentcount());
 

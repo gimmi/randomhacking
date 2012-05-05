@@ -28,10 +28,10 @@ namespace SpikeWindsor3
 		public void Should_resolve_func_components()
 		{
 			_target.AddFacility<TypedFactoryFacility>();
-			_target.Register(Component.For<ISomeService>().ImplementedBy<SomeService>().LifeStyle.Singleton);
+			_target.Register(Component.For<IDisposableService>().ImplementedBy<DisposableService>().LifeStyle.Singleton);
 
-			var a = _target.Resolve<ISomeService>();
-			var funcA = _target.Resolve<Func<ISomeService>>();
+			var a = _target.Resolve<IDisposableService>();
+			var funcA = _target.Resolve<Func<IDisposableService>>();
 
 			Assert.AreSame(a, funcA.Invoke());
 		}

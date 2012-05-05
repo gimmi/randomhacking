@@ -9,28 +9,32 @@ namespace SpikeWindsor3
 		[ThreadStatic]
 		private static ILifetimeScope _lifetimeScope;
 
-		public static IDisposable BeginScope()
+		public static void BeginScope()
 		{
 			if (_lifetimeScope != null)
 			{
 				throw new InvalidOperationException("already in scope");
 			}
 			_lifetimeScope = new DefaultLifetimeScope();
-			return new Disposable { Action = () => EndScope() };
 		}
 
 		public static void EndScope()
 		{
-			if (_lifetimeScope != null)
+			if (_lifetimeScope == null)
 			{
-				_lifetimeScope.Dispose();
-				_lifetimeScope = null;
+				throw new InvalidOperationException("not in scope");
 			}
+			_lifetimeScope.Dispose();
+			_lifetimeScope = null;
 		}
 
 		public void Dispose()
 		{
-			EndScope();
+			if(_lifetimeScope != null)
+			{
+				_lifetimeScope.Dispose();
+				_lifetimeScope = null;
+			}
 		}
 
 		public ILifetimeScope GetScope(CreationContext context)
@@ -40,15 +44,6 @@ namespace SpikeWindsor3
 				throw new InvalidOperationException("Scope was not available. Did you forget to call CustomScope.BeginScope()?");
 			}
 			return _lifetimeScope;
-		}
-
-		private class Disposable : IDisposable
-		{
-			public Action Action { get; set; }
-			public void Dispose()
-			{
-				Action.Invoke();
-			}
 		}
 	}
 }

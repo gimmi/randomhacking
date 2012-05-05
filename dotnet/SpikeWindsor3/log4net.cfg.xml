@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<log4net>
+	<root>
+		<level value="ALL"/>
+		<appender-ref ref="trace"/>
+		<appender-ref ref="memory"/>
+	</root>
+	<appender name="trace" type="log4net.Appender.TraceAppender">
+		<layout type="log4net.Layout.SimpleLayout"/>
+	</appender>
+	<appender name="memory" type="log4net.Appender.MemoryAppender">
+		<onlyFixPartialEventData value="false" />
+		<fix value="All" />
+	</appender>
+</log4net>

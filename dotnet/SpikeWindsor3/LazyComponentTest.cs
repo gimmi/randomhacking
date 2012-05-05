@@ -28,10 +28,10 @@ namespace SpikeWindsor3
 		public void Should_resolve_lazy_components()
 		{
 			_target.Register(Component.For<ILazyComponentLoader>().ImplementedBy<LazyOfTComponentLoader>());
-			_target.Register(Component.For<ISomeService>().ImplementedBy<SomeService>().LifeStyle.Singleton);
+			_target.Register(Component.For<IDisposableService>().ImplementedBy<DisposableService>().LifeStyle.Singleton);
 
-			var a = _target.Resolve<ISomeService>();
-			var lazyA = _target.Resolve<Lazy<ISomeService>>();
+			var a = _target.Resolve<IDisposableService>();
+			var lazyA = _target.Resolve<Lazy<IDisposableService>>();
 
 			Assert.AreSame(a, lazyA.Value);
 		}
