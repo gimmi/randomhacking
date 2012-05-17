@@ -8,8 +8,13 @@ namespace SpikeMassTransit
 	{
 		private static void Main()
 		{
+			var uri = new Uri("rabbitmq://localhost/SpikeMassTransit");
 			Bus.Initialize(sbc => {
-				sbc.ReceiveFrom("loopback://localhost/mt_test");
+				sbc.ReceiveFrom(uri);
+				if(uri.Scheme == "rabbitmq")
+				{
+					sbc.UseRabbitMqRouting();
+				}
 				sbc.Subscribe(subs => {
 					subs.Handler<YourMessage>(OnHandleYourMessage);
 				});
