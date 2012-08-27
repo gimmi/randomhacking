@@ -1,10 +1,11 @@
 import devwiki.WikiWsgiApp
 
 from wsgiref.simple_server import make_server
+import static
 
-app = devwiki.WikiWsgiApp.WikiWsgiApp(u'c:\\users\\gimmi\\temp\\wiki')
-srv = make_server('localhost', 8000, app)
-srv.serve_forever()
+rootdir = 'c:\\users\\gimmi\\temp\\wiki'
+make_server('localhost', 8000, devwiki.WikiWsgiApp.WikiWsgiApp(rootdir, wsgiapp=static.Cling(rootdir))).serve_forever()
+
 
 
 #for directory, dirnames, filenames in os.walk(wikirootpath):
