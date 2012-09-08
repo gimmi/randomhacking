@@ -1,42 +1,26 @@
 from markdown import markdown
 import os, codecs
-
-class HttpStatusWsgiApp:
-    def __init__(self, status):
-        self.status = status
-
-    def __call__(self, environ, start_response):
-        start_response(self.status, [('Content-Type', 'text/plain')])
-        return [self.status]
-
-
-class FaviconWsgiApp:
-    def __init__(self, wsgiapp):
-        self.wsgiapp = wsgiapp
-
-    def __call__(self, environ, start_response):
-        if environ['REQUEST_METHOD'] == 'GET' and environ.get('PATH_INFO', '/') == '/favicon.ico':
-            return HttpStatusWsgiApp('404 Not Found')(environ, start_response)
-        return self.wsgiapp(environ, start_response)
-
+from webob.dec import wsgify
+from webob import exc
+from webob import Response
 
 class WikiWsgiApp:
-    def __init__(self, rootdir=os.getcwd(), encoding='utf-8', wikiext='.wiki', pagetemplate='<!DOCTYPE html><html><head></head><body>{0}</body></html>', wsgiapp=HttpStatusWsgiApp('404 Not Found')):
+    def __init__(self, rootdir=os.getcwd(), encoding='utf-8', wikiext='.wiki', pagetemplate='<!DOCTYPE html><html><head></head><body>{0}</body></html>', wsgiapp=exc.HTTPNotFound()):
         self.rootdir = rootdir
         self.encoding = encoding
         self.wikiext = wikiext
         self.pagetemplate = unicode(pagetemplate)
         self.wsgiapp = wsgiapp
 
-    def __call__(self, environ, start_response):
-        if environ['REQUEST_METHOD'] != 'GET':
-            return HttpStatusWsgiApp('405 Method Not Allowed')(environ, start_response)
-        file = environ.get('PATH_INFO', '/')
-        file = os.path.join(self.rootdir, file.lstrip('/'))
+    @wsgify
+    def __call__(self, req):
+        if req.method != 'GET':
+            raise exc.HTTPMethodNotAllowed()
+        file = os.path.join(self.rootdir, req.path.lstrip('/'))
         if os.path.isfile(file) and file.endswith(self.wikiext):
-            start_response('200 OK', [('Content-Type', 'text/html; charset=' + self.encoding)])
+            res = Response(content_type='text/html', charset=self.encoding)
             wikitext = codecs.open(file, encoding=self.encoding).read()
             wikitext = markdown(wikitext)
-            body = self.pagetemplate.format(wikitext)
-            return [body.encode(self.encoding)]
-        return self.wsgiapp(environ, start_response)
+            res.text = self.pagetemplate.format(wikitext)
+            return res
+        return req.get_response(self.wsgiapp)
