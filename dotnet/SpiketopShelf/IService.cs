@@ -1,7 +1,9 @@
-﻿namespace SpiketopShelf
+﻿using System;
+
+namespace SpiketopShelf
 {
 	public interface IService
 	{
-		void RunIteration();
+		TimeSpan RunIteration();
 	}
 }

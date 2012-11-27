@@ -39,7 +39,7 @@ namespace SpiketopShelf
 			_name = name;
 		}
 
-		public void RunIteration()
+		public TimeSpan RunIteration()
 		{
 			Log.InfoFormat("{0}: iteration", _name);
 			if (_name == "svc3")
@@ -47,6 +47,7 @@ namespace SpiketopShelf
 				throw new ApplicationException("Oops!");
 			}
 			Thread.Sleep(TimeSpan.FromSeconds(1));
+			return TimeSpan.Zero;
 		}
 
 		public IService Create()
