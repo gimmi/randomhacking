@@ -1,6 +1,6 @@
 ﻿using System.ServiceModel;
 
-namespace WcfServiceApplication
+namespace WcfServiceSdk
 {
     [ServiceContract]
     public interface IService1

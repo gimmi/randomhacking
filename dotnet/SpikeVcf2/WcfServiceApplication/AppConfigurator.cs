@@ -1,6 +1,7 @@
 ﻿using Castle.Facilities.WcfIntegration;
 using Castle.MicroKernel.Registration;
 using Castle.Windsor;
+using WcfServiceSdk;
 
 namespace WcfServiceApplication
 {

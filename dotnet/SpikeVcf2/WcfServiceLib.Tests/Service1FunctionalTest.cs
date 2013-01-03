@@ -4,6 +4,7 @@ using Castle.Facilities.WcfIntegration;
 using NUnit.Framework;
 using SharpTestsEx;
 using WcfServiceApplication;
+using WcfServiceSdk;
 
 namespace WcfServiceLib.Tests
 {
@@ -31,10 +32,9 @@ namespace WcfServiceLib.Tests
         [Test]
         public void Tt()
         {
-            using (var factory = new ChannelFactory<IService1>(new BasicHttpBinding(), _uriString))
+            using (var factory = new ServiceFactory(_uriString))
             {
-                IService1 channel = factory.CreateChannel();
-                channel.Process("xxx").Should().Be.EqualTo("XXX");
+                factory.Create().Process("xxx").Should().Be.EqualTo("XXX");
             }
         }
     }

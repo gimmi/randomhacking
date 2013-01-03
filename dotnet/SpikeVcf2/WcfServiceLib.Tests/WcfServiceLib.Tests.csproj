@@ -76,6 +76,10 @@
       <Project>{15e3c446-2c71-4b7c-92db-e2b2258ec0f4}</Project>
       <Name>WcfServiceApplication</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WcfServiceSdk\WcfServiceSdk.csproj">
+      <Project>{030399a8-0e18-40ef-a05d-45a604e2c3fd}</Project>
+      <Name>WcfServiceSdk</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
