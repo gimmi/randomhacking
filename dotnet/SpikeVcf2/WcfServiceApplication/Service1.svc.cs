@@ -6,22 +6,21 @@ namespace WcfServiceApplication
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class Service1 : IService1
     {
-        public string GetData(int value)
+        private readonly Dependency1 _dependency1;
+
+        public Service1(Dependency1 dependency1)
         {
-            return string.Format("You entered: {0}", value);
+            _dependency1 = dependency1;
         }
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
+        public string Process(string value)
         {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
+            return _dependency1.Process(value);
+        }
+
+        public void ThrowException()
+        {
+            throw new ApplicationException("AHHHH!");
         }
     }
 }
