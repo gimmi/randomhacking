@@ -11,12 +11,16 @@ namespace WcfServiceLib.Tests
     [TestFixture]
     public class Service1FunctionalTest
     {
+        private ServiceHostBase _host;
+        private ClientFactory _clientFactory;
+
         [SetUp]
         public void SetUp()
         {
-            _uriString = "http://localhost:1234/Service1.svc";
+            const string uriString = "http://localhost:1234/Service1.svc";
+            _clientFactory = new ClientFactory(uriString);
             AppConfigurator.BuildContainer();
-            _host = new DefaultServiceHostFactory().CreateServiceHost("WcfServiceApplication.Service1", new[] {new Uri(_uriString)});
+            _host = new DefaultServiceHostFactory().CreateServiceHost("WcfServiceApplication.Service1", new[] {new Uri(uriString)});
             _host.Open();
         }
 
@@ -26,16 +30,16 @@ namespace WcfServiceLib.Tests
             _host.Close();
         }
 
-        private ServiceHostBase _host;
-        private string _uriString;
+        [Test]
+        public void Should_invoke_service()
+        {
+            _clientFactory.Create().Process("xxx").Should().Be.EqualTo("XXX");
+        }
 
         [Test]
-        public void Tt()
+        public void Should_create_disposable_services()
         {
-            using (var factory = new ServiceFactory(_uriString))
-            {
-                factory.Create().Process("xxx").Should().Be.EqualTo("XXX");
-            }
+            _clientFactory.Create().Should().Be.InstanceOf<IDisposable>();
         }
     }
 }
