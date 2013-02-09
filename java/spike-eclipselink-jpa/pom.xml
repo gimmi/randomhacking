@@ -20,51 +20,6 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<!-- See http://stackoverflow.com/a/3972683/66629 -->
-						<!-- This is intended to be run in IntelliJ after Make. See http://www.jetbrains.com/idea/webhelp/configuring-triggers-for-maven-goals.html -->
-						<id>default-cli</id>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<taskdef name="weave" classname="org.eclipse.persistence.tools.weaving.jpa.StaticWeaveAntTask" classpathref="maven.plugin.classpath"/>
-								<weave loglevel="FINEST" source="${project.build.outputDirectory}" target="${project.build.outputDirectory}"/>
-							</target>
-						</configuration>
-					</execution>
-					<execution>
-						<phase>process-classes</phase>
-						<goals>
-							<goal>run</goal>
-						</goals>
-						<configuration>
-							<target>
-								<taskdef name="weave" classname="org.eclipse.persistence.tools.weaving.jpa.StaticWeaveAntTask" classpathref="maven.plugin.classpath"/>
-								<weave loglevel="FINEST" source="${project.build.outputDirectory}" target="${project.build.outputDirectory}"/>
-							</target>
-						</configuration>
-					</execution>
-				</executions>
-				<dependencies>
-					<dependency>
-						<groupId>org.eclipse.persistence</groupId>
-						<artifactId>org.eclipse.persistence.jpa</artifactId>
-						<version>${eclipselink.version}</version>
-					</dependency>
-					<dependency>
-						<groupId>org.eclipse.persistence</groupId>
-						<artifactId>javax.persistence</artifactId>
-						<version>2.0.0</version>
-					</dependency>
-				</dependencies>
-			</plugin>
 		</plugins>
 	</build>
 	<repositories>
@@ -80,20 +35,6 @@
 			<artifactId>org.eclipse.persistence.jpa</artifactId>
 			<version>${eclipselink.version}</version>
 		</dependency>
-
-		<!-- Hibernate 4 invented a new way to log... http://relation.to/21794.lace -->
-
-		<!--<dependency>-->
-		<!--<groupId>org.slf4j</groupId>-->
-		<!--<artifactId>slf4j-api</artifactId>-->
-		<!--<version>${slf4j.version}</version>-->
-		<!--</dependency>-->
-		<!--<dependency>-->
-		<!--<groupId>org.slf4j</groupId>-->
-		<!--<artifactId>slf4j-simple</artifactId>-->
-		<!--<version>${slf4j.version}</version>-->
-		<!--</dependency>-->
-		<!-- Database driver -->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
