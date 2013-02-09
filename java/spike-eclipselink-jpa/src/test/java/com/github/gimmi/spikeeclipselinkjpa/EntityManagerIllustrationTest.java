@@ -1,8 +1,6 @@
 package com.github.gimmi.spikeeclipselinkjpa;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -19,10 +17,10 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class EntityManagerIllustrationTest {
-	private static EntityManagerFactory emf;
+	private EntityManagerFactory emf;
 
-	@BeforeClass
-	public static void beforeClass() {
+	@Before
+	public void beforeClass() {
 		Map<String, String> map = new HashMap<String, String>();
 
 		map.put("javax.persistence.jdbc.driver", "org.h2.Driver");
@@ -35,13 +33,13 @@ public class EntityManagerIllustrationTest {
 		map.put("eclipselink.logging.level", "FINEST");
 
 		// See http://wiki.eclipse.org/EclipseLink/Examples/JPA/DDL
-		map.put("eclipselink.ddl-generation", "create-tables");
+		map.put("eclipselink.ddl-generation", "drop-and-create-tables");
 
 		emf = Persistence.createEntityManagerFactory("com.github.gimmi.spikeeclipselinkjpa", map);
 	}
 
-	@AfterClass
-	public static void afterClass() {
+	@After
+	public void afterClass() {
 		emf.close();
 	}
 
