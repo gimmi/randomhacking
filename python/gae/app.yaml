@@ -1,0 +1,20 @@
+application: 661xi5
+version: 2
+runtime: python27
+api_version: 1
+threadsafe: yes
+
+handlers:
+- url: /favicon\.ico
+  static_files: favicon.ico
+  upload: favicon\.ico
+
+- url: .*
+  script: app.app
+
+libraries:
+- name: webapp2
+  version: "2.5.2"
+
+- name: webob
+  version: "1.1.1"
