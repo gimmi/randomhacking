@@ -10,7 +10,7 @@ handlers:
   upload: favicon\.ico
 
 - url: .*
-  script: app.app
+  script: app.wsgiapp.app
 
 libraries:
 - name: webapp2
