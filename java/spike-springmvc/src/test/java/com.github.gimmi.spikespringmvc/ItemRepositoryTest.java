@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabase;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 
 import java.util.UUID;
 
@@ -29,6 +31,7 @@ public class ItemRepositoryTest {
     @After
     public void after() {
         db.shutdown();
+	    new XmlWebApplicationContext();
     }
 
     @Test

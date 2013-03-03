@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope("prototype")
 public class MyComponent {
-	final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	final Logger logger = LoggerFactory.getLogger(ItemsController.class);
 
 	public MyComponent() {
 		logger.info("MyComponent: ctor");
