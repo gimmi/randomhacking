@@ -1,3 +1,5 @@
+package com.github.gimmi.spikescalaservlet
+
 class Person(val firstName: String, val lastName: String, val position: String) {
 	println("Creating " + toString())
 

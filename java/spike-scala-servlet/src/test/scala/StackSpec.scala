@@ -1,5 +1,7 @@
 import java.util
+import org.eclipse.jetty.server.Server
 import org.scalatest.junit.JUnitRunner
+import org.scalatest.mock.MockitoSugar
 import org.scalatest.{Spec, FunSpec}
 import util.EmptyStackException
 
@@ -18,6 +20,10 @@ class StackSpec extends FunSpec {
 			intercept[EmptyStackException] {
 				emptyStack.pop()
 			}
+		}
+
+		it("xxx") {
+
 		}
 	}
 }
