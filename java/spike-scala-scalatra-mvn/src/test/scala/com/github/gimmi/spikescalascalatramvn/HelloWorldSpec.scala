@@ -1,4 +1,4 @@
-package com.github.gimmi.spikescalaservlet
+package com.github.gimmi.spikescalascalatramvn
 
 import org.specs2.mutable._
 import org.specs2.mock.Mockito
