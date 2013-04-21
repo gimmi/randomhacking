@@ -6,6 +6,8 @@ import scala.slick.driver.H2Driver
 import scala.slick.driver.H2Driver.simple._
 import org.scalatest._
 
+import Database.threadLocalSession
+
 class DaoSpec extends FlatSpec {
 	"Tables" should "return true" in {
 		object app extends SlickProfileComponent with ItemsComponent {
@@ -14,13 +16,16 @@ class DaoSpec extends FlatSpec {
 		}
 
 		app.database withSession {
-			implicit session: Session =>
-				app.Items.ddl.create
-				app.Items.insert("id1", "title1")
+			app.Items.ddl.create
+
+			app.Items.insertAll(
+				("id1", "title1"),
+				("id2", "title2")
+			)
+
+			Query(app.Items) foreach { case (id, title) => println(s"#$id - $title") }
 		}
 
-
-
-		assert(true === false)
+		assert(true === true)
 	}
 }
