@@ -1,0 +1,2 @@
+distribute==0.6.49
+pyzmq==13.1.0
