@@ -1,0 +1,2 @@
+distribute==0.6.49
+gspread==0.1.0
