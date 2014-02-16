@@ -34,23 +34,24 @@ namespace MultiPollerService
 			_threadController.Run();
 			for (var i = 0; i < _pollerNames.Length; i++)
 			{
-				_threads[i] = new Thread(ThreadStart) {Name = _pollerNames[i]};
-				_threads[i].Start(_pollerNames[i]);
+				_threads[i] = new Thread(PollLoop) {Name = _pollerNames[i]};
+				_threads[i].Start();
 			}
 		}
 
-		private void ThreadStart(object pollerName)
+		private void PollLoop()
 		{
 			while (_threadController.IsRunning)
 			{
 				try
 				{
+					TimeSpan nextPollDelay;
 					using (var scope = _container.BeginLifetimeScope())
 					{
-						var poller = scope.ResolveNamed<IPoller>(pollerName.ToString());
-						var nextIterationDelay = poller.Poll();
-						_threadController.WaitWhileRunning(nextIterationDelay);
+						var poller = scope.ResolveNamed<IPoller>(Thread.CurrentThread.Name);
+						nextPollDelay = poller.Poll();
 					}
+					_threadController.WaitWhileRunning(nextPollDelay);
 				}
 				catch (Exception ex)
 				{

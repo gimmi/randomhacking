@@ -68,7 +68,7 @@
   <ItemGroup>
     <Compile Include="IPoller.cs" />
     <Compile Include="MultiPoller.cs" />
-    <Compile Include="MultiPollerServiceTest.cs" />
+    <Compile Include="MultiPollerTest.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
