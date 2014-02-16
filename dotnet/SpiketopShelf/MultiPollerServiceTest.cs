@@ -8,7 +8,7 @@ using SharpTestsEx;
 namespace SpiketopShelf
 {
 	[TestFixture]
-	public class MultiServiceTest
+	public class MultiPollerServiceTest
 	{
 		public const int TestSlowness = 100;
 
@@ -28,14 +28,14 @@ namespace SpiketopShelf
 			}
 		}
 
-		private MultiService _target;
+		private MultiPollerService _target;
 		private ConcurrentQueue<string> _log;
 
 		[Test]
 		public void Should_execute_service_in_loop()
 		{
-			_target = new MultiService(new[] {
-				new TestService("S1", _log)
+			_target = new MultiPollerService(new Func<IService>[] {
+				() => new TestService("S1", _log)
 			}, TimeSpan.Zero);
 
 			_target.Start();
@@ -43,7 +43,6 @@ namespace SpiketopShelf
 			_target.Stop();
 
 			_log.ToArray().Should().Have.SameSequenceAs(new[] {
-				"S1: create", 
 				"S1: work", 
 				"S1: work", 
 				"S1: work", 
@@ -55,9 +54,9 @@ namespace SpiketopShelf
 		[Test]
 		public void Should_execute_services_in_parallel()
 		{
-			_target = new MultiService(new[] {
-				new TestService("S1", _log),
-				new TestService("S2", _log) { CreateDelay = 3 }
+			_target = new MultiPollerService(new Func<IService>[] {
+				() => new TestService("S1", _log),
+				() => new TestService("S2", _log)
 			}, TimeSpan.Zero);
 
 			_target.Start();
@@ -84,8 +83,8 @@ namespace SpiketopShelf
 		[Test]
 		public void Should_reinit_after_exception()
 		{
-			_target = new MultiService(new[] {
-				new TestService("S1", _log) { ExceptionFreq = 2 }
+			_target = new MultiPollerService(new Func<IService>[] {
+				() => new TestService("S1", _log) { ExceptionFreq = 2 }
 			}, TimeSpan.Zero);
 
 			_target.Start();
@@ -107,9 +106,9 @@ namespace SpiketopShelf
 		[Test]
 		public void Failing_service_should_not_interfere_with_other_services()
 		{
-			_target = new MultiService(new[] {
-				new TestService("S1", _log),
-				new TestService("S2", _log) { ExceptionFreq = 1 },
+			_target = new MultiPollerService(new Func<IService>[] {
+				() => new TestService("S1", _log),
+				() => new TestService("S2", _log) { ExceptionFreq = 1 },
 			}, TimeSpan.Zero);
 
 			_target.Start();
@@ -131,7 +130,7 @@ namespace SpiketopShelf
 //		{
 //			var svc1 = new TestService("S1", _log);
 //			var svc2 = new TestService("S2", _log, new[] {3, 4});
-//			_target = new MultiService(new[] {svc1, svc2}, TimeSpan.Zero);
+//			_target = new MultiPollerService(new[] {svc1, svc2}, TimeSpan.Zero);
 //
 //			_target.Start();
 //			Thread.Sleep(TimeSpan.FromMilliseconds(100));
@@ -171,7 +170,7 @@ namespace SpiketopShelf
 //		{
 //			var svc1 = new TestService("svc1", _log);
 //			var svc2 = new TestService("svc2", _log);
-//			_target = new MultiService(new[] {svc1, svc2}, TimeSpan.Zero);
+//			_target = new MultiPollerService(new[] {svc1, svc2}, TimeSpan.Zero);
 //
 //			_target.Start();
 //			Thread.Sleep(TimeSpan.FromMilliseconds(450));
@@ -183,13 +182,12 @@ namespace SpiketopShelf
 //		}
 	}
 
-	public class TestService : IServiceFactory, IService
+	public class TestService : IService
 	{
 		public int ExceptionFreq = int.MaxValue;
 		private readonly ConcurrentQueue<string> _log;
 		private readonly string _name;
 		private int _counter;
-		public int CreateDelay;
 		public int WorkDelay = 10;
 
 		public TestService(string name, ConcurrentQueue<string> log)
@@ -200,7 +198,7 @@ namespace SpiketopShelf
 
 		public TimeSpan RunIteration()
 		{
-			Thread.Sleep(WorkDelay * MultiServiceTest.TestSlowness);
+			Thread.Sleep(WorkDelay * MultiPollerServiceTest.TestSlowness);
 			if ((++_counter % ExceptionFreq) == 0)
 			{
 				Log("exception");
@@ -208,13 +206,6 @@ namespace SpiketopShelf
 			}
 			Log("work");
 			return TimeSpan.Zero;
-		}
-
-		public IService Create()
-		{
-			Thread.Sleep(CreateDelay * MultiServiceTest.TestSlowness);
-			Log("create");
-			return this;
 		}
 
 		private void Log(string action)

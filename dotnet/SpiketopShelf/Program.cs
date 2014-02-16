@@ -12,15 +12,15 @@ namespace SpiketopShelf
 		{
 			BasicConfigurator.Configure();
 
-			var multiService = new MultiService(new[] {
-				new Service("svc1"),
-				new Service("svc2"),
-				new Service("svc3")
+			var multiService = new MultiPollerService(new Func<IService>[] {
+				() => new Service("svc1"),
+				() => new Service("svc2"),
+				() => new Service("svc3")
 			}, TimeSpan.FromSeconds(5));
 
 			HostFactory.Run(hcfg => {
 				hcfg.UseLog4Net();
-				hcfg.Service<MultiService>(scfg => {
+				hcfg.Service<MultiPollerService>(scfg => {
 					scfg.ConstructUsing(() => multiService);
 					scfg.WhenStarted(svc => svc.Start());
 					scfg.WhenStopped(svc => svc.Stop());
@@ -29,9 +29,9 @@ namespace SpiketopShelf
 		}
 	}
 
-	public class Service : IServiceFactory, IService
+	public class Service : IService
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof (MultiService));
+		private static readonly ILog Log = LogManager.GetLogger(typeof (MultiPollerService));
 		private readonly string _name;
 
 		public Service(string name)
