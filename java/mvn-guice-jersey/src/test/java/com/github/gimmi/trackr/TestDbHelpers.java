@@ -33,6 +33,10 @@ public class TestDbHelpers {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        String[] lines = {
+                "Line 1",
+                "Line 2"
+        };
     }
 
     public static List<Map<String, Object>> query(String sql) {

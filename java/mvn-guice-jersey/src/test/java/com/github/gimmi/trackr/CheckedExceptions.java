@@ -11,5 +11,20 @@ public class CheckedExceptions {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
+        multilineString(
+            "<html>",
+            "  <body></body>",
+            "</html>"
+        );
+    }
+
+    public static String multilineString(String... strings) {
+        String lineSeparator = System.getProperty("line.separator");
+        StringBuilder sb = new StringBuilder();
+        for (String string : strings) {
+            sb.append(string).append(lineSeparator);
+        }
+        return sb.toString();
     }
 }
