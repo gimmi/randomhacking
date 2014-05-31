@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.gimmi</groupId>
     <artifactId>trackr</artifactId>
@@ -117,6 +118,27 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.cj.jshintmojo</groupId>
+                <artifactId>jshint-maven-plugin</artifactId>
+                <version>1.3.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>lint</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <version>2.4.1</version>
+                    <failOnError>true</failOnError>
+                    <options>browser, bitwise, camelcase, curly, eqeqeq, forin, freeze, immed, indent: 4, latedef, newcap, noarg, noempty, nonew, undef, unused, strict, trailing</options>
+                    <globals>angular</globals>
+                    <directories>
+                        <directory>src/main/webapp/js</directory>
+                    </directories>
                 </configuration>
             </plugin>
         </plugins>
