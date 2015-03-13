@@ -4,6 +4,7 @@ import javax.json.stream.JsonGenerator;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.process.internal.RequestScoped;
 import org.glassfish.jersey.server.ResourceConfig;
+import org.glassfish.jersey.filter.LoggingFilter;
 
 public class MyApplication extends ResourceConfig {
 
@@ -12,6 +13,8 @@ public class MyApplication extends ResourceConfig {
         
         // register(org.glassfish.jersey.jsonp.JsonProcessingFeature.class);
         property(JsonGenerator.PRETTY_PRINTING, true);
+        
+        register(LoggingFilter.class);
         
         register(new AbstractBinder() {
             @Override
