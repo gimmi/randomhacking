@@ -13,7 +13,7 @@ public class Program {
         sch.setContextPath("/app");
 
         ServletHolder sh = new ServletHolder(ServletContainer.class);
-        sh.setInitParameter("jersey.config.server.provider.packages", "com.github.gimmi.jarweb");
+        sh.setInitParameter("javax.ws.rs.Application", "com.github.gimmi.jarweb.MyApplication");
         sh.setInitOrder(1);
         sch.addServlet(sh, "/webapi/*");
         sch.addServlet(HelloServlet.class, "/hello");
