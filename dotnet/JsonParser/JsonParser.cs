@@ -1,88 +1,74 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace JsonParser
 {
     public static class JsonParser
     {
-		public static object Parse(TextReader reader)
+        public static object Parse(TextReader reader)
 		{
 			reader.ConsumeWhitespace();
-
 			if (reader.PeekCh() == '{')
 			{
-				// TODO call beginObject
-				reader.ReadCh();
-				reader.ConsumeWhitespace();
+			    var dict = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+			    reader.NextCh();
+                reader.ConsumeWhitespace();
 				while (reader.PeekCh() != '}')
 				{
 					while (true)
 					{
-						ParseString(reader);
+					    var key = ParseString(reader);
 						reader.ConsumeWhitespace();
-						if (reader.ReadCh() != ':')
-						{
-							throw new Exception("Unexpected token");
-						}
-						Parse(reader);
+					    reader.ExpectStr(":");
+                        dict.Add(key, Parse(reader));
 						reader.ConsumeWhitespace();
 						if (reader.PeekCh() != ',')
 						{
-							reader.ReadCh();
+                            reader.ExpectStr(",");
 							break;
 						}
 					}
 				}
-				reader.ReadCh();
-				// TODO call endObject
+                reader.ExpectStr("}");
+			    return dict;
 			}
 			if (reader.PeekCh() == '[')
 			{
-				// TODO call beginArray
-				reader.ReadCh();
-				reader.ConsumeWhitespace();
+                reader.NextCh();
+                reader.ConsumeWhitespace();
+                var list = new List<object>();
 				while (reader.PeekCh() != ']')
 				{
 					while (true)
 					{
-						Parse(reader);
+						list.Add(Parse(reader));
 						reader.ConsumeWhitespace();
 						if (reader.PeekCh() != ',')
 						{
-							reader.ReadCh();
+							reader.NextCh();
 							break;
 						}
 					}
 				}
-				reader.ReadCh();
-				// TODO call endArray
+                reader.NextCh();
+                return list;
 			}
 			if (reader.PeekCh() == 'n')
 			{
-				if ("null" != new String(new[] { reader.ReadCh(), reader.ReadCh(), reader.ReadCh(), reader.ReadCh() }))
-				{
-					throw new Exception("Unexpected token");
-				}
-				// TODO call null
+                reader.ExpectStr("null");
+			    return null;
 			}
 			if (reader.PeekCh() == 't')
 			{
-				if ("true" != new String(new[] { reader.ReadCh(), reader.ReadCh(), reader.ReadCh(), reader.ReadCh() }))
-				{
-					throw new Exception("Unexpected token");
-				}
-				// TODO call true
+                reader.ExpectStr("true");
+			    return true;
 			}
 			if (reader.PeekCh() == 'f')
 			{
-				if ("false" != new String(new[] { reader.ReadCh(), reader.ReadCh(), reader.ReadCh(), reader.ReadCh() }))
-				{
-					throw new Exception("Unexpected token");
-				}
-				// TODO call false
+                reader.ExpectStr("false");
+                return false;
 			}
 			if (reader.PeekCh() == '"')
 			{
@@ -101,10 +87,14 @@ namespace JsonParser
 
 	    private static object ParseNumber(TextReader reader)
 	    {
-		    throw new NotImplementedException();
+	        var sb = new StringBuilder();
+	        while (true)
+	        {
+	            var readCh = reader.PeekCh();
+	        }
 	    }
 
-	    private static object ParseString(TextReader reader)
+	    private static string ParseString(TextReader reader)
 	    {
 			reader.ConsumeWhitespace();
 		    if (reader.ReadCh() != '"')
@@ -146,6 +136,31 @@ namespace JsonParser
 				throw new Exception("Unexpected end of stream");
 			}
 			return (char) ret;
+		}
+
+		private static void NextCh(this TextReader reader)
+		{
+			var ret = reader.Read();
+			if (ret == -1)
+			{
+				throw new Exception("Unexpected end of stream");
+			}
+		}
+
+		private static void ExpectStr(this TextReader reader, string str)
+		{
+            foreach (var ch in str)
+		    {
+                var ret = reader.Read();
+                if (ret == -1)
+                {
+                    throw new Exception("Unexpected end of stream");
+                }
+                if (ch != (char)ret)
+                {
+                    throw new Exception("Expected char");
+                }
+		    }
 		}
 	}
 }
