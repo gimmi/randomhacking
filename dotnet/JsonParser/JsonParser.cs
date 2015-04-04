@@ -76,7 +76,7 @@ namespace JsonParser
             }
         }
 
-        public static char ReadCh(this TextReader tr)
+        public static char ReadOrFail(this TextReader tr)
         {
             var read = tr.Read();
             if (read == -1)
@@ -86,7 +86,7 @@ namespace JsonParser
             return (char) read;
         }
 
-        public static char PeekCh(this TextReader tr)
+        public static char PeekOrFail(this TextReader tr)
         {
             var peek = tr.Peek();
             if (peek == -1)
@@ -96,7 +96,7 @@ namespace JsonParser
             return (char) peek;
         }
 
-        public static void ConsumeWhitespace(this TextReader tr)
+        public static void EatWhitespaces(this TextReader tr)
         {
             var next = tr.Peek();
             while (next != -1 && char.IsWhiteSpace((char)next))
@@ -108,52 +108,54 @@ namespace JsonParser
 
         public static object Parse(TextReader en)
         {
-            en.ConsumeWhitespace();
-            var ch = en.ReadCh();
-            if (ch == '{')
+            en.EatWhitespaces();
+            var ch = en.PeekOrFail();
+			if (en.PeekOrFail() == '{')
             {
+	            en.Read();
                 var dict = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
-                en.ConsumeWhitespace();
-                ch = en.ReadCh();
-                while (ch != '}')
+                en.EatWhitespaces();
+                while (en.PeekOrFail() != '}')
                 {
-                    var key = ParseString(en.ReadCh(), en);
-                    en.ConsumeWhitespace();
-                    ch = en.ReadCh();
+                    var key = ParseString(en);
+                    en.EatWhitespaces();
+                    ch = en.ReadOrFail();
                     if (ch != ':')
                     {
                         throw new JsonParserException("TODO");
                     }
                     dict.Add(key, Parse(en));
-                    en.ConsumeWhitespace();
-                    ch = en.ReadCh();
-                    if (ch != ',' && ch != '}')
+                    en.EatWhitespaces();
+                    if (en.PeekOrFail() == ',')
                     {
-                        throw new JsonParserException("TODO");
+	                    en.Read();
+						en.EatWhitespaces();
                     }
                 }
+				en.Read();
                 return dict;
             }
             if (ch == '[')
             {
+	            en.Read();
                 var list = new List<object>();
-                en.ConsumeWhitespace();
-                ch = en.ReadCh();
-                while (ch != ']')
+                en.EatWhitespaces();
+				while (en.PeekOrFail() != ']')
                 {
                     list.Add(Parse(en));
-                    en.ConsumeWhitespace();
-                    ch = en.ReadCh();
-                    if (ch != ',' && ch != '}')
+                    en.EatWhitespaces();
+                    if (en.PeekOrFail() == ',')
                     {
-                        throw new JsonParserException("TODO");
+	                    en.Read();
+						en.EatWhitespaces();
                     }
                 }
+	            en.Read();
                 return list;
             }
             if (ch == 'n')
             {
-                if (new String(new[] {ch, en.ReadCh(), en.ReadCh(), en.ReadCh()}) != "null")
+				if (new String(new[] { en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail() }) != "null")
                 {
                     throw new JsonParserException("TODO");
                 }
@@ -161,7 +163,7 @@ namespace JsonParser
             }
             if (ch == 't')
             {
-                if (new String(new[] { ch, en.ReadCh(), en.ReadCh(), en.ReadCh() }) != "true")
+				if (new String(new[] { en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail() }) != "true")
                 {
                     throw new JsonParserException("TODO");
                 }
@@ -169,7 +171,7 @@ namespace JsonParser
             }
             if (ch == 'f')
             {
-                if (new String(new[] { ch, en.ReadCh(), en.ReadCh(), en.ReadCh(), en.ReadCh() }) != "false")
+				if (new String(new[] { en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail() }) != "false")
                 {
                     throw new JsonParserException("TODO");
                 }
@@ -177,24 +179,20 @@ namespace JsonParser
             }
             if (ch == '"')
             {
-                return ParseString(ch, en);
+                return ParseString(en);
             }
             if (ch == '-' || char.IsDigit(ch))
             {
                 var sb = new StringBuilder();
-                while (true)
+				while (ch == '+' || ch == '.' || ch == '-' || ch == 'e' || ch == 'E' || char.IsDigit(ch))
                 {
-                    sb.Append(ch);
+                    sb.Append(en.ReadOrFail());
                     var peek = en.Peek();
                     if (peek == -1)
                     {
                         break;
                     }
                     ch = (char) peek;
-                    if (ch == '+' || ch == '.' || ch == '-' || ch == 'e' || ch == 'E' || char.IsDigit(ch))
-                    {
-                        en.Read();
-                    }
                 }
                 decimal result;
                 if (decimal.TryParse(sb.ToString(), NumberStyles.Float, CultureInfo.InvariantCulture, out result))
@@ -206,8 +204,10 @@ namespace JsonParser
             throw new JsonParserException("Unexpected char '{0}'", ch);
         }
 
-        private static string ParseString(char ch, TextReader en)
+        private static string ParseString(TextReader en)
         {
+			en.EatWhitespaces();
+	        var ch = en.ReadOrFail();
             if (ch != '"')
             {
                 throw new JsonParserException("TODO");
@@ -215,10 +215,10 @@ namespace JsonParser
             var sb = new StringBuilder();
             while (true)
             {
-                ch = en.ReadCh();
+                ch = en.ReadOrFail();
                 if (ch == '\\')
                 {
-                    ch = en.ReadCh();
+                    ch = en.ReadOrFail();
                     switch (ch)
                     {
                         case '\\':
@@ -260,7 +260,7 @@ namespace JsonParser
             }
         }
 
-        private static void ConsumeWhitespace(this IEnumerator<char> en)
+        private static void EatWhitespaces(this IEnumerator<char> en)
         {
             while (char.IsWhiteSpace(en.Current) && en.MoveNext())
             {
