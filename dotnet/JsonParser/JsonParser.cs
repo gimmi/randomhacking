@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 namespace JsonParser
@@ -94,9 +93,9 @@ namespace JsonParser
                 {
                     return result;
                 }
-                throw new JsonParserException("Unable to parse '{0}' as number", sb.ToString());
+				throw new FormatException(string.Format("Unable to parse '{0}' as number", sb));
             }
-            throw new JsonParserException("Unexpected char '{0}'", ch);
+            throw new FormatException(string.Format("Unexpected char '{0}'", ch));
         }
 
         private static string ParseString(TextReader en)
@@ -105,7 +104,7 @@ namespace JsonParser
 	        var ch = en.ReadOrFail();
             if (ch != '"')
             {
-                throw new JsonParserException("Expected '\"', found '{0}'", ch);
+                throw new FormatException(string.Format("Expected '\"', found '{0}'", ch));
             }
             var sb = new StringBuilder();
             while (true)
@@ -141,7 +140,7 @@ namespace JsonParser
                             sb.Append('\v');
                             break;
                         default:
-                            throw new JsonParserException(@"Unexpected escaped char \{0}", ch);
+                            throw new FormatException(string.Format(@"Unexpected escaped char \{0}", ch));
                     }
                 }
                 else if (ch == '"')
@@ -162,7 +161,7 @@ namespace JsonParser
 				var actual = tr.ReadOrFail();
 				if (actual != expected)
 				{
-					throw new JsonParserException("Expected '{0}', found '{1}'", expected, actual);
+					throw new FormatException(string.Format("Expected '{0}', found '{1}'", expected, actual));
 				}
 			}
 		}
@@ -172,7 +171,7 @@ namespace JsonParser
 			var read = tr.Read();
 			if (read == -1)
 			{
-				throw new JsonParserException("");
+				throw new FormatException("Unexpected end of stream");
 			}
 			return (char)read;
 		}
@@ -182,7 +181,7 @@ namespace JsonParser
 			var peek = tr.Peek();
 			if (peek == -1)
 			{
-				throw new JsonParserException("");
+				throw new FormatException("Unexpected end of stream");
 			}
 			return (char)peek;
 		}
@@ -197,17 +196,4 @@ namespace JsonParser
 			}
 		}
 	}
-
-    public class JsonParserException : Exception
-    {
-        public JsonParserException(string message)
-            : base(message)
-        {
-        }
-
-        public JsonParserException(string format, params object[] args)
-            : base(string.Format(format, args))
-        {
-        }
-    }
 }
