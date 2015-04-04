@@ -20,7 +20,7 @@ namespace JsonParser
                 'emptyAry': [],
                 'emptyObj': {}    
             }".Replace('\'', '"');
-            dynamic o = JsonParser.Parse(new StringReader(json));
+            dynamic o = JsonParser.Parse(json);
 
 			Assert.That(o, Has.Count.EqualTo(9));
 			Assert.That(o["strProp"], Is.EqualTo("val"));
@@ -39,5 +39,21 @@ namespace JsonParser
 			Assert.That(o["emptyAry"], Has.Count.EqualTo(0));
 			Assert.That(o["emptyObj"], Has.Count.EqualTo(0));
         }
+
+	    [Test]
+	    public void Should_parse_numbers()
+	    {
+			Assert.That(JsonParser.Parse("1"), Is.EqualTo(1));
+			Assert.That(JsonParser.Parse("  1  "), Is.EqualTo(1));
+			Assert.That(JsonParser.Parse("3.14"), Is.EqualTo(3.14));
+			Assert.That(JsonParser.Parse("3.14"), Is.EqualTo(3.14));
+			Assert.That(JsonParser.Parse("-1"), Is.EqualTo(-1));
+	    }
+
+	    [Test]
+	    public void Should_parse_strings()
+	    {
+			Assert.That(JsonParser.Parse("  \" a b c \"  "), Is.EqualTo(" a b c "));
+	    }
     }
 }

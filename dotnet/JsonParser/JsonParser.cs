@@ -2,109 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace JsonParser
 {
     public static class JsonParser
     {
-        public class Tokenizer
-        {
-            private readonly IEnumerator<char> _en;
-            private char? _last;
-
-            public Tokenizer(IEnumerable<char> en)
-            {
-                _en = en.GetEnumerator();
-                _last = null;
-            }
-
-            public bool MoveNext()
-            {
-                if (_last.HasValue)
-                {
-                    _last = null;
-                    return true;
-                }
-                return _en.MoveNext();
-            }
-
-            public char Current
-            {
-                get { return _last ?? _en.Current; }
-            }
-
-            public void StepBack()
-            {
-                if (_last.HasValue)
-                {
-                    throw new JsonParserException("Cannot prepend more than once");
-                }
-                _last = _en.Current;
-            }
-
-            public void ConsumeWhitespace()
-            {
-                while (char.IsWhiteSpace(Current) && MoveNext())
-                {
-                }
-            }
-
-            public void MoveNextOrFail()
-            {
-                if (!MoveNext())
-                {
-                    throw new JsonParserException("Unexpected end of stream");
-                }
-            }
-
-            public void ExpectStr(string str)
-            {
-                bool move = false;
-                foreach (var ch in str)
-                {
-                    if (move)
-                    {
-                        MoveNextOrFail();
-                    }
-                    move = true;
-                    if (Current != ch)
-                    {
-                        throw new JsonParserException("Expected '{0}', found '{1}'", ch, Current);
-                    }
-                }
-            }
-        }
-
-        public static char ReadOrFail(this TextReader tr)
-        {
-            var read = tr.Read();
-            if (read == -1)
-            {
-                throw new JsonParserException("");
-            }
-            return (char) read;
-        }
-
-        public static char PeekOrFail(this TextReader tr)
-        {
-            var peek = tr.Peek();
-            if (peek == -1)
-            {
-                throw new JsonParserException("");
-            }
-            return (char) peek;
-        }
-
-        public static void EatWhitespaces(this TextReader tr)
-        {
-            var next = tr.Peek();
-            while (next != -1 && char.IsWhiteSpace((char)next))
-            {
-                tr.Read();
-                next = tr.Peek();
-            }
-        }
+	    public static object Parse(string json)
+	    {
+		    return Parse(new StringReader(json));
+	    }
 
         public static object Parse(TextReader en)
         {
@@ -119,10 +27,7 @@ namespace JsonParser
                 {
                     var key = ParseString(en);
                     en.EatWhitespaces();
-                    if (en.ReadOrFail() != ':')
-                    {
-                        throw new JsonParserException("TODO");
-                    }
+					en.ReadExpected(":");
                     dict.Add(key, Parse(en));
                     en.EatWhitespaces();
                     if (en.PeekOrFail() == ',')
@@ -154,27 +59,18 @@ namespace JsonParser
             }
             if (ch == 'n')
             {
-				if (new String(new[] { en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail() }) != "null")
-                {
-                    throw new JsonParserException("TODO");
-                }
+				en.ReadExpected("null");
                 return null;
             }
             if (ch == 't')
             {
-				if (new String(new[] { en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail() }) != "true")
-                {
-                    throw new JsonParserException("TODO");
-                }
-                return true;
+				en.ReadExpected("true");
+				return true;
             }
             if (ch == 'f')
             {
-				if (new String(new[] { en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail(), en.ReadOrFail() }) != "false")
-                {
-                    throw new JsonParserException("TODO");
-                }
-                return false;
+				en.ReadExpected("false");
+				return false;
             }
             if (ch == '"')
             {
@@ -209,7 +105,7 @@ namespace JsonParser
 	        var ch = en.ReadOrFail();
             if (ch != '"')
             {
-                throw new JsonParserException("TODO");
+                throw new JsonParserException("Expected '\"', found '{0}'", ch);
             }
             var sb = new StringBuilder();
             while (true)
@@ -259,38 +155,48 @@ namespace JsonParser
             }
         }
 
-        private static void EatWhitespaces(this IEnumerator<char> en)
-        {
-            while (char.IsWhiteSpace(en.Current) && en.MoveNext())
-            {
-            }
-        }
+		public static void ReadExpected(this TextReader tr, string str)
+		{
+			foreach (var expected in str)
+			{
+				var actual = tr.ReadOrFail();
+				if (actual != expected)
+				{
+					throw new JsonParserException("Expected '{0}', found '{1}'", expected, actual);
+				}
+			}
+		}
 
-        private static void MoveNextOrFail(this IEnumerator<char> en)
-        {
-            if (!en.MoveNext())
-            {
-                throw new JsonParserException("Unexpected end of stream");
-            }
-        }
+		public static char ReadOrFail(this TextReader tr)
+		{
+			var read = tr.Read();
+			if (read == -1)
+			{
+				throw new JsonParserException("");
+			}
+			return (char)read;
+		}
 
-        private static void ExpectStr(this IEnumerator<char> en, string str)
-        {
-            bool move = false;
-            foreach (var ch in str)
-            {
-                if (move)
-                {
-                    en.MoveNextOrFail();
-                }
-                move = true;
-                if (en.Current != ch)
-                {
-                    throw new JsonParserException("Expected '{0}', found '{1}'", ch, en.Current);
-                }
-            }
-        }
-    }
+		public static char PeekOrFail(this TextReader tr)
+		{
+			var peek = tr.Peek();
+			if (peek == -1)
+			{
+				throw new JsonParserException("");
+			}
+			return (char)peek;
+		}
+
+		public static void EatWhitespaces(this TextReader tr)
+		{
+			var next = tr.Peek();
+			while (next != -1 && char.IsWhiteSpace((char)next))
+			{
+				tr.Read();
+				next = tr.Peek();
+			}
+		}
+	}
 
     public class JsonParserException : Exception
     {
