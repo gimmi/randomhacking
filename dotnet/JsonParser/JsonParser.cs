@@ -110,7 +110,7 @@ namespace JsonParser
         {
             en.EatWhitespaces();
             var ch = en.PeekOrFail();
-			if (en.PeekOrFail() == '{')
+			if (ch == '{')
             {
 	            en.Read();
                 var dict = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
@@ -119,8 +119,7 @@ namespace JsonParser
                 {
                     var key = ParseString(en);
                     en.EatWhitespaces();
-                    ch = en.ReadOrFail();
-                    if (ch != ':')
+                    if (en.ReadOrFail() != ':')
                     {
                         throw new JsonParserException("TODO");
                     }
