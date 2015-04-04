@@ -167,7 +167,7 @@ namespace JsonParser
 			}
 		}
 
-		public static char ReadOrFail(this TextReader tr)
+	    private static char ReadOrFail(this TextReader tr)
 		{
 			var read = tr.Read();
 			if (read == -1)
@@ -177,7 +177,7 @@ namespace JsonParser
 			return (char)read;
 		}
 
-		public static char PeekOrFail(this TextReader tr)
+	    private static char PeekOrFail(this TextReader tr)
 		{
 			var peek = tr.Peek();
 			if (peek == -1)
@@ -187,7 +187,7 @@ namespace JsonParser
 			return (char)peek;
 		}
 
-		public static void EatWhitespaces(this TextReader tr)
+	    private static void EatWhitespaces(this TextReader tr)
 		{
 			var next = tr.Peek();
 			while (next != -1 && char.IsWhiteSpace((char)next))
