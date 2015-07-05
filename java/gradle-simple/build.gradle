@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+group = 'com.github.gimmi'
+version = '1.0.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.eclipse.jetty:jetty-servlet:9.3.0.v20150612'
+}
+
+jar {
+	from configurations.compile.collect { zipTree it }
+	manifest {
+		attributes 'Implementation-Version': version 
+		attributes 'Main-Class': 'com.github.gimmi.gradlesimple.Main' 
+	}
+}
+
