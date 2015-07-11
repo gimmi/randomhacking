@@ -13,6 +13,7 @@ public class JerseyApplication extends ResourceConfig {
         // Enable for debug
         property(ServerProperties.TRACING, "ALL");
         property(ServerProperties.TRACING_THRESHOLD, "VERBOSE");
+        property(ServerProperties.WADL_FEATURE_DISABLE, "true");
         
         
     }
