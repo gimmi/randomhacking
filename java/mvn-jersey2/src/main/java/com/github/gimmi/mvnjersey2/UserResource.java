@@ -1,7 +1,7 @@
 package com.github.gimmi.mvnjersey2;
 
-import java.util.Arrays;
-import java.util.List;
+import javax.json.Json;
+import javax.json.JsonArray;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -12,22 +12,14 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<User> getJson() {
-        return Arrays.asList(new User("myself"), new User("other"));
+    public JsonArray getJson() {
+        return Json.createArrayBuilder()
+            .add(Json.createObjectBuilder()
+                .add("name", "Agamemnon")
+                .add("age", 32))
+            .add(Json.createObjectBuilder()
+                .add("name", "Attila")
+                .add("age", 68))
+            .build();
     }
-
-    @javax.xml.bind.annotation.XmlRootElement
-    public static class User {
-
-        public String name;
-
-        public User() {
-        }
-
-        public User(String name) {
-            this.name = name;
-        }
-
-    }
-
 }
