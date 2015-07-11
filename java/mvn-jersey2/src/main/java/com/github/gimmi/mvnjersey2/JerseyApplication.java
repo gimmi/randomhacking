@@ -8,7 +8,7 @@ public class JerseyApplication extends ResourceConfig {
     public JerseyApplication() {
         packages("com.github.gimmi.mvnjersey2");
         //register(MoxyJsonFeature.class);
-
+        register(new AppBinder());
 
         // Enable for debug
         property(ServerProperties.TRACING, "ALL");

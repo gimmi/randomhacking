@@ -1,5 +1,6 @@
 package com.github.gimmi.mvnjersey2;
 
+import javax.inject.Inject;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.ws.rs.GET;
@@ -9,6 +10,12 @@ import javax.ws.rs.core.MediaType;
 
 @Path("users")
 public class UserResource {
+
+    @Inject
+    MyRequestScopedService requestScopedService;
+
+    @Inject
+    MySingletonScopedService singletonScopedService;
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -21,5 +28,19 @@ public class UserResource {
                 .add("name", "Attila")
                 .add("age", 68))
             .build();
+    }
+
+    @GET
+    @Path("requestscopedservice")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getRequestScoped() {
+        return requestScopedService.getString();
+    }
+
+    @GET
+    @Path("singletonscopedservice")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getSingletonScoped() {
+        return singletonScopedService.getString();
     }
 }
