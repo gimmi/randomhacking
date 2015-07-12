@@ -1,11 +1,16 @@
 package com.github.gimmi.mvnjersey2;
 
+import javax.enterprise.context.RequestScoped;
+
+@RequestScoped
 public class MyRequestScopedService {
+    private static Integer i = 0;
 
-    private Integer i = 0;
-
-    public String getString() {
-        return String.format("RequestScoped call count: %d", ++i);
+    public MyRequestScopedService() {
+        i++;
     }
 
+    public String getString() {
+        return String.format("Request instance #%d", i);
+    }
 }

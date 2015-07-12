@@ -2,6 +2,10 @@ package com.github.gimmi.mvnjersey2;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -9,20 +13,20 @@ import javax.servlet.http.HttpServletResponse;
 
 public class HelloWorldServlet extends HttpServlet {
 
+    @Inject
+    MySingletonScopedService singletonScopedService;
+
+    @Inject
+    MyRequestScopedService requestScopedService;
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/plain");
         try (final PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet HelloWorldServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet HelloWorldServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            out.println(new SimpleDateFormat("yyyy/MM/dd HH:mm:ss").format(new Date()));
+            out.println(singletonScopedService.getString());
+            out.println(requestScopedService.getString());
+            out.println("Hello world");
         }
     }
 }
