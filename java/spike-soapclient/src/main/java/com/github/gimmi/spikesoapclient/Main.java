@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
 
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.soap.*;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
@@ -26,13 +28,21 @@ public class Main {
 
 			SOAPMessage soapRequest = MessageFactory.newInstance().createMessage();
 			soapRequest.getMimeHeaders().addHeader("SOAPAction", "http://ws.cdyne.com/VerifyEmail");
-			SOAPBody requestEl = soapRequest.getSOAPBody();
-			SOAPElement soapBodyElem = requestEl.addChildElement("VerifyEmail", "", "http://ws.cdyne.com/");
+			SOAPBody soapBody = soapRequest.getSOAPBody();
 
-			soapBodyElem.addChildElement("email").addTextNode("mutantninja@gmail.com");
-			soapBodyElem.addChildElement("LicenseKey").addTextNode("123");
+			Document reqDoc = DocumentBuilderFactory.newInstance()
+				.newDocumentBuilder()
+				.newDocument();
+			Element verifyEmailEl = reqDoc.createElementNS("http://ws.cdyne.com/", "VerifyEmail");
+			Element emailEl = reqDoc.createElementNS("http://ws.cdyne.com/", "email");
+			emailEl.appendChild(reqDoc.createTextNode("mutantninja@gmail.com"));
+			verifyEmailEl.appendChild(emailEl);
+			Element licenseKeyEl = reqDoc.createElementNS("http://ws.cdyne.com/", "LicenseKey");
+			licenseKeyEl.appendChild(reqDoc.createTextNode("123"));
+			verifyEmailEl.appendChild(licenseKeyEl);
+			reqDoc.appendChild(verifyEmailEl);
 
-			soapRequest.saveChanges();
+			soapBody.addDocument(reqDoc);
 
 			saveMessage("input.xml", soapRequest);
 
