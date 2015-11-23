@@ -40,6 +40,7 @@ public class Main {
 			soapResponse.writeTo(respOs);
 
 			soapConnection.close();
+			logger.info("Done.");
 		} catch (Exception e) {
 			logger.error("Exception thrown", e);
 		}
