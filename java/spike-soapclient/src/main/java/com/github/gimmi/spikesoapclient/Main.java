@@ -23,6 +23,8 @@ public class Main {
 	public static void main(String args[]) throws Exception {
 		logger.info("Application started");
 		try {
+			// http://ws.cdyne.com/emailverify/Emailvernotestemail.asmx?wsdl
+
 			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
