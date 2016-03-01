@@ -26,7 +26,7 @@ public class Main {
 
       logger.info("Starting {} v{} - {}", pkg.getSpecificationTitle(), pkg.getSpecificationVersion(), pkg.getImplementationVersion());
 
-      String contextPath = "/app";
+      String contextPath = "/";
       DeploymentInfo servletBuilder = Servlets.deployment()
          .setClassLoader(Main.class.getClassLoader())
          .setContextPath(contextPath)
@@ -35,7 +35,7 @@ public class Main {
          .addInitParameter("contextClass", AnnotationConfigWebApplicationContext.class.getName())
          .addInitParameter("contextConfigLocation", WebApiConfig.class.getName())
          .addServlets(
-            Servlets.servlet("helloHttpRequestHandler", HttpRequestHandlerServlet.class).addMapping("/hello")
+            Servlets.servlet("pushHttpRequestHandler", HttpRequestHandlerServlet.class).addMapping("/push")
          );
 
       DeploymentManager manager = Servlets.defaultContainer().addDeployment(servletBuilder);
