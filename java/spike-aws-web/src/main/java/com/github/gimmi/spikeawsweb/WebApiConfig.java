@@ -1,7 +1,5 @@
 package com.github.gimmi.spikeawsweb;
 
-import com.amazonaws.auth.*;
-import com.amazonaws.auth.profile.ProfileCredentialsProvider;
 import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
@@ -32,6 +30,11 @@ public class WebApiConfig {
    }
 
    @Bean
+   public PopHttpRequestHandler popHttpRequestHandler() {
+      return new PopHttpRequestHandler(amazonSQS(), messagePublisher(), docRepository());
+   }
+
+   @Bean
    public AmazonS3 amazonS3() {
       String regionName = "eu-west-1";
 
@@ -57,8 +60,8 @@ public class WebApiConfig {
    }
 
    @Bean
-   public MessagePublisher messagePublisher() {
-      return new MessagePublisher(amazonSQS(), gson());
+   public MessageBus messagePublisher() {
+      return new MessageBus(amazonSQS(), gson());
    }
 
    @Bean

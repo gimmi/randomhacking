@@ -35,7 +35,8 @@ public class Main {
          .addInitParameter("contextClass", AnnotationConfigWebApplicationContext.class.getName())
          .addInitParameter("contextConfigLocation", WebApiConfig.class.getName())
          .addServlets(
-            Servlets.servlet("pushHttpRequestHandler", HttpRequestHandlerServlet.class).addMapping("/push")
+            Servlets.servlet("pushHttpRequestHandler", HttpRequestHandlerServlet.class).addMapping("/push"),
+            Servlets.servlet("popHttpRequestHandler", HttpRequestHandlerServlet.class).addMapping("/pop")
          );
 
       DeploymentManager manager = Servlets.defaultContainer().addDeployment(servletBuilder);

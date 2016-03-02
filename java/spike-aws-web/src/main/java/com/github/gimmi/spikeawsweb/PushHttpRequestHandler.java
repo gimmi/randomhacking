@@ -13,11 +13,11 @@ import java.io.IOException;
 public class PushHttpRequestHandler implements HttpRequestHandler {
    private static final Logger logger = LoggerFactory.getLogger(PushHttpRequestHandler.class);
    private final DocRepository docRepository;
-   private final MessagePublisher messagePublisher;
+   private final MessageBus messageBus;
 
-   public PushHttpRequestHandler(DocRepository docRepository, MessagePublisher messagePublisher) {
+   public PushHttpRequestHandler(DocRepository docRepository, MessageBus messageBus) {
       this.docRepository = docRepository;
-      this.messagePublisher = messagePublisher;
+      this.messageBus = messageBus;
    }
 
    @Override
@@ -38,7 +38,7 @@ public class PushHttpRequestHandler implements HttpRequestHandler {
 
       String docId = docRepository.put(doc);
 
-      messagePublisher.notifyIncomingDoc(docId);
+      messageBus.notifyIncomingDoc(docId);
 
       response.setStatus(201);
    }
