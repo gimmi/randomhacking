@@ -31,7 +31,7 @@ public class WebApiConfig {
 
    @Bean
    public PopHttpRequestHandler popHttpRequestHandler() {
-      return new PopHttpRequestHandler(amazonSQS(), messagePublisher(), docRepository());
+      return new PopHttpRequestHandler(messagePublisher(), docRepository());
    }
 
    @Bean
