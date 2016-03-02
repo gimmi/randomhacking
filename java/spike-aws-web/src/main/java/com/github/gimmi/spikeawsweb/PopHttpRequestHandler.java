@@ -1,6 +1,5 @@
 package com.github.gimmi.spikeawsweb;
 
-import com.amazonaws.services.sqs.AmazonSQS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.HttpRequestHandler;
@@ -13,12 +12,10 @@ import java.util.Optional;
 
 public class PopHttpRequestHandler implements HttpRequestHandler {
    private static final Logger logger = LoggerFactory.getLogger(PopHttpRequestHandler.class);
-   private final AmazonSQS sqs;
    private final MessageBus messageBus;
    private final DocRepository docRepository;
 
-   public PopHttpRequestHandler(AmazonSQS sqs, MessageBus messageBus, DocRepository docRepository) {
-      this.sqs = sqs;
+   public PopHttpRequestHandler(MessageBus messageBus, DocRepository docRepository) {
       this.messageBus = messageBus;
       this.docRepository = docRepository;
    }
@@ -28,11 +25,13 @@ public class PopHttpRequestHandler implements HttpRequestHandler {
       Optional<String> doc = messageBus.consumeIncomingDoc(docRepository::get);
 
       if (doc.isPresent()) {
+         logger.info("Doc found");
          response.setStatus(200);
          response.setContentType("text/plain");
          response.setCharacterEncoding("utf-8");
          response.getWriter().write(doc.get());
       } else {
+         logger.info("No docs available");
          response.sendError(404, "Not Found");
       }
       response.flushBuffer();
