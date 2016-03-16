@@ -22,6 +22,7 @@ public class TenantBeanFactory {
    private ApplicationContext buildCtx(Tenant tenant) {
       AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
       ctx.setParent(rootCtx);
+      ctx.register(TenantConfig.class);
       ctx.scan(tenant.getPkg());
       ctx.getBeanFactory().registerSingleton("tenant", tenant);
       ctx.refresh();
