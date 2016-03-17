@@ -41,5 +41,6 @@ public class TenantBeanFactory implements DisposableBean {
          logger.info("Destroying context for tenant {}", tenantId);
          ctx.close();
       });
+      cache.clear();
    }
 }
