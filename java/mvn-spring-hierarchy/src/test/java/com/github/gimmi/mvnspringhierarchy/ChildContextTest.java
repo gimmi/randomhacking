@@ -1,6 +1,8 @@
 package com.github.gimmi.mvnspringhierarchy;
 
 import com.github.gimmi.mvnspringhierarchy.tenant1.Tenant1Bean;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -8,11 +10,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.StrictAssertions.assertThatThrownBy;
 
 public class ChildContextTest {
+
+   private AnnotationConfigApplicationContext rootCtx;
+
+   @Before
+   public void before() {
+      rootCtx = new AnnotationConfigApplicationContext(RootConfig.class);
+   }
+
+   @After
+   public void after() {
+      rootCtx.close();
+   }
+
    @Test
    public void should_resolve_scoped_beans() {
-      AnnotationConfigApplicationContext rootCtx = new AnnotationConfigApplicationContext(RootConfig.class);
-//      rootCtx.registerShutdownHook();
-
       assertThat(rootCtx.getBean(Service.class)).isInstanceOf(RootService.class);
       assertThatThrownBy(() -> rootCtx.getBean(Tenant1Bean.class)).hasMessage("No qualifying bean of type [com.github.gimmi.mvnspringhierarchy.tenant1.Tenant1Bean] is defined");
 
