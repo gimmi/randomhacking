@@ -5,7 +5,6 @@ module.exports = function(grunt) {
                 options: {
                     // https://github.com/gruntjs/grunt-contrib-connect#options
                     base: 'public',
-                    keepalive: true,
                     open: true,
                     debug: true,
                     middleware: function (connect, options, middlewares) {
@@ -19,6 +18,12 @@ module.exports = function(grunt) {
                     port: 80
                 }]
             }
+        },
+        watch: {
+            scripts: {
+                files: '**/*.js',
+                tasks: 'compile'
+            }
         }
     });
 
@@ -28,6 +33,12 @@ module.exports = function(grunt) {
     // See https://github.com/drewzboto/grunt-connect-proxy/pull/140
     grunt.loadNpmTasks('grunt-connect-proxy');
 
+    grunt.loadNpmTasks('grunt-contrib-watch');
+
     // grunt
-    grunt.registerTask('default', ['configureProxies:server', 'connect:server']);
+    grunt.registerTask('default', ['configureProxies:server', 'connect:server', 'watch:scripts']);
+
+    grunt.registerTask('compile', 'A fake compiler', function() {
+        grunt.log.writeln('Compiling...');
+    });
 };
