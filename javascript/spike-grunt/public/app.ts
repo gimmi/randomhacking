@@ -1,3 +1,3 @@
-import * as msgs from "./messages";
+import { MESSAGE } from "./messages";
 
-console.log(msgs.MESSAGE);
+console.log(MESSAGE);
