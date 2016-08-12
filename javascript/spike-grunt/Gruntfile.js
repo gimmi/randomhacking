@@ -21,8 +21,17 @@ module.exports = function(grunt) {
         },
         watch: {
             scripts: {
-                files: 'public/**/*.js',
-                tasks: 'compile'
+                files: 'public/**/*.ts',
+                tasks: 'ts'
+            }
+        },
+        ts: {
+            default: {
+                src: 'public/**/*.ts',
+                // out: 'public/app.js',
+                options: {
+                    module: 'amd'
+                }
             }
         }
     });
@@ -35,8 +44,10 @@ module.exports = function(grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-watch');
 
+    grunt.loadNpmTasks("grunt-ts");
+
     // grunt
-    grunt.registerTask('default', ['configureProxies:server', 'connect:server', 'watch:scripts']);
+    grunt.registerTask('default', ['ts', 'configureProxies:server', 'connect:server', 'watch:scripts']);
 
     grunt.registerTask('compile', 'A fake compiler', function() {
         grunt.log.writeln('Compiling...');
