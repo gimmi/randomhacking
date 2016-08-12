@@ -1,3 +1,3 @@
 import { MESSAGE } from "./messages";
 
-console.log(MESSAGE);
+document.getElementById('par').innerText = MESSAGE;

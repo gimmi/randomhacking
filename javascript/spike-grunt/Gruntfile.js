@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
     grunt.initConfig({
         connect: {
             server: {
@@ -36,8 +36,8 @@ module.exports = function(grunt) {
     });
 
     grunt.loadNpmTasks('grunt-contrib-connect');
-    grunt.loadNpmTasks('grunt-connect-proxy'); // See https://github.com/drewzboto/grunt-connect-proxy/pull/140
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-connect-proxy'); // See https://github.com/drewzboto/grunt-connect-proxy/pull/140
     grunt.loadNpmTasks("grunt-ts");
 
     grunt.registerTask('default', ['ts', 'configureProxies:server', 'connect:server', 'watch:scripts']);
