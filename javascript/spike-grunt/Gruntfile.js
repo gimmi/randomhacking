@@ -22,7 +22,7 @@ module.exports = function (grunt) {
         ts: {
             default: {
                 src: 'public/**/*.ts',
-                options: {
+                options: { // TODO copy from tsconfig.json
                     module: 'amd'
                 }
             }
