@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "removeComments": true,
+        "sourceMap": true
+    },
+    "compileOnSave": true,
+    "buildOnSave": false,
+    "atom": {
+        "rewriteTsconfig": false
+    },
+    "files": [
+      "app.ts",
+      "messages.ts"
+    ]
+}
