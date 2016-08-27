@@ -1,0 +1,17 @@
+{
+  "name": "systemjs-geting-started",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+  	"server": "lite-server"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "systemjs": "^0.19.37"
+  },
+  "devDependencies": {
+    "lite-server": "^2.2.2"
+  }
+}
