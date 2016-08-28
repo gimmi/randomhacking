@@ -1,0 +1,14 @@
+{
+  "name": "webpack-angular2",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "webpack-dev-server",
+    "webpack": "webpack"
+  },
+  "devDependencies": {
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.15.0"
+  },
+  "dependencies": {
+  }
+}
