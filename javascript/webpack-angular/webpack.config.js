@@ -8,7 +8,7 @@ module.exports = {
     },
     devtool: 'source-map',
     output: {
-        path: path.join(__dirname, 'dist'),
+        path: './dist',
         filename: "[name].js"
     },
     plugins: [
