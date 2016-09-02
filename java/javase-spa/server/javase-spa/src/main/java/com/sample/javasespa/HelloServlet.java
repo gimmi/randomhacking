@@ -6,7 +6,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 
-// @WebServlet(name = "HelloServlet", urlPatterns = {"/hello"})
+//@WebServlet(name = "HelloServlet", urlPatterns = {"/annotation"})
 public class HelloServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
