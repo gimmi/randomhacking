@@ -1,7 +1,6 @@
 package com.sample.javasespadevsrv;
 
-import com.sample.javasespa.SpringServletContainerInitializer;
-import com.sample.javasespa.WebApplicationInitializerImpl;
+import com.sample.javasespa.JavasespaInitializer;
 import io.undertow.Handlers;
 import io.undertow.Undertow;
 import io.undertow.server.handlers.PathHandler;
@@ -9,39 +8,34 @@ import io.undertow.servlet.Servlets;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.api.DeploymentManager;
 import io.undertow.servlet.api.ServletContainerInitializerInfo;
+import org.springframework.web.SpringServletContainerInitializer;
 
+import java.util.Collections;
 import java.util.HashSet;
-import java.util.Set;
 
 public class Main {
-    public static final int PORT = 8078;
-    public static final String HOST = "127.0.0.1";
-    public static final String CONTEXT_PATH = "/";
+    private static final String HOST = "127.0.0.1";
+    private static final int PORT = 8078;
+    private static final String CONTEXT_PATH = "/";
 
     public static void main(String[] args) throws Exception {
-
         DeploymentInfo servletBuilder = Servlets.deployment()
                 .setClassLoader(Main.class.getClassLoader())
                 .setContextPath(CONTEXT_PATH)
                 .setDeploymentName("javasespadevsrv.war")
-                .addServletContainerInitalizer(buildServletContainerInitializer());
+                .addServletContainerInitalizer(new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, new HashSet<>(Collections.singletonList(JavasespaInitializer.class))));
 
-        DeploymentManager manager = Servlets.defaultContainer().addDeployment(servletBuilder);
-        manager.deploy();
-        PathHandler path = Handlers.path(Handlers.redirect(CONTEXT_PATH)).addPrefixPath(CONTEXT_PATH, manager.start());
+        DeploymentManager deploymentManager = Servlets.defaultContainer().addDeployment(servletBuilder);
+        deploymentManager.deploy();
+        PathHandler pathHandler = Handlers.path(Handlers.redirect(CONTEXT_PATH)).addPrefixPath(CONTEXT_PATH, deploymentManager.start());
 
         Undertow server = Undertow.builder()
-                .addHttpListener(PORT, HOST) // TODO for ssl see http://stackoverflow.com/a/26603219
-                .setHandler(path)
+                .addHttpListener(PORT, HOST)
+                .setHandler(pathHandler)
                 .build();
         server.start();
 
         System.out.println("Listening on http://" + HOST + ":" + PORT + CONTEXT_PATH);
     }
 
-    private static ServletContainerInitializerInfo buildServletContainerInitializer() {
-        Set<Class<?>> handlesTypes = new HashSet<>();
-        handlesTypes.add(WebApplicationInitializerImpl.class);
-        return new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, handlesTypes);
-    }
 }
