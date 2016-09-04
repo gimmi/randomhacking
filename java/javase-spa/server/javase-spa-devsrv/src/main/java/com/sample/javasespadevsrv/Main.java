@@ -22,7 +22,7 @@ public class Main {
         DeploymentInfo servletBuilder = Servlets.deployment()
                 .setClassLoader(Main.class.getClassLoader())
                 .setContextPath(CONTEXT_PATH)
-                .setDeploymentName("javasespadevsrv.war")
+                .setDeploymentName("app.war")
                 .addServletContainerInitalizer(new ServletContainerInitializerInfo(SpringServletContainerInitializer.class, new HashSet<>(Collections.singletonList(JavasespaInitializer.class))));
 
         DeploymentManager deploymentManager = Servlets.defaultContainer().addDeployment(servletBuilder);
