@@ -1,0 +1,23 @@
+{
+  "name": "typescript-webpack",
+  "version": "1.0.0",
+  "description": "typescript-webpack",
+  "repository": {},
+  "license": "UNLICENSED",
+  "scripts": {
+    "postinstall": "typings install",
+    "dev": "webpack-dev-server",
+    "dist": "webpack",
+    "typings": "typings"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^2.22.0",
+    "jasmine-core": "^2.5.0",
+    "ts-loader": "^0.8.2",
+    "typescript": "^1.8.10",
+    "typings": "^1.3.2",
+    "webpack": "^1.13.2",
+    "webpack-dev-server": "^1.15.0"
+  },
+  "dependencies": {}
+}
