@@ -1,0 +1,8 @@
+{
+  "compilerOptions": {
+  	"moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true
+  }
+}

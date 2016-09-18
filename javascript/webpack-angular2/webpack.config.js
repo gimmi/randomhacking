@@ -1,8 +1,27 @@
+var webpack = require('webpack');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
+
 module.exports = {
-	entry: "./entry.js",
-	devtool: 'source-map',
-	output: {
-		path: __dirname,
-		filename: "bundle.js"
-	}
+    entry: {
+        app: './src/main.js'
+    },
+    devtool: 'source-map',
+    output: {
+        path: './dist',
+        filename: '[name].js'
+    },
+    resolve: {
+        extensions: ['', '.js', '.ts']
+    },
+    module: {
+        loaders: [
+            { test: /\.ts$/, loader: 'ts-loader' }
+        ]
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './src/index.html', 
+            filename: 'index.html'
+        })
+    ]
 };
