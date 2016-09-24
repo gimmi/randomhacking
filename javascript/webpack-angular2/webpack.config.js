@@ -3,6 +3,17 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
+        vendor: [
+            'core-js/shim.js',
+            'zone.js/dist/zone.js',
+            'reflect-metadata',
+            'rxjs',
+            '@angular/core',
+            '@angular/forms',
+            '@angular/router',
+            '@angular/platform-browser',
+            '@angular/platform-browser-dynamic',
+        ],
         app: './src/main.js'
     },
     devtool: 'source-map',
@@ -20,8 +31,11 @@ module.exports = {
         ]
     },
     plugins: [
+        new webpack.optimize.CommonsChunkPlugin({
+            name: ['app', 'vendor']
+        }),
         new HtmlWebpackPlugin({
-            template: './src/index.html', 
+            template: './src/index.html',
             filename: 'index.html'
         })
     ]
