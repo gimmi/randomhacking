@@ -5,7 +5,7 @@ import { Hero }  from './hero';
 	selector: 'my-hero-detail',
 	template: require('./hero-detail.component.html'),
 })
-export default class HeroDetailComponent {
+export class HeroDetailComponent {
 	@Input()
 	hero: Hero
 }
