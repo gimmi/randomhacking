@@ -21,13 +21,9 @@ module.exports = {
         path: './dist',
         filename: '[name].js'
     },
-    resolve: {
-        extensions: ['', '.js', '.ts']
-    },
     module: {
         loaders: [
-            { test: /\.html$/, loader: 'raw' },
-            { test: /\.ts$/, loader: 'ts-loader' }
+            { test: /\.html$/, loader: 'raw' }
         ]
     },
     plugins: [

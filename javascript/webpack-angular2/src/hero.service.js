@@ -1,7 +1,8 @@
-import { Injectable } from '@angular/core';
-import { Hero } from './hero';
+var Injectable = require('@angular/core').Injectable;
+var Class = require('@angular/core').Class;
+var Hero = require('./hero');
 
-const HEROES: Hero[] = [
+const HEROES = [
   { id: 11, name: 'Mr. Nice' },
   { id: 12, name: 'Narco' },
   { id: 13, name: 'Bombasto' },
@@ -14,9 +15,9 @@ const HEROES: Hero[] = [
   { id: 20, name: 'Tornado' }
 ];
 
-@Injectable()
-export class HeroService {
-	getHeroes(): Promise<Hero[]> {
-		return Promise.resolve(HEROES);
-	}
-}
+module.exports = Class({
+  constructor: function () { },
+  getHeroes: function () {
+    return Promise.resolve(HEROES);
+  }
+})
