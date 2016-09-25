@@ -1,3 +1,5 @@
+'use strict';
+
 var Component = require('@angular/core').Component;
 var HeroService = require('./hero.service');
 

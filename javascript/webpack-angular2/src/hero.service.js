@@ -1,6 +1,7 @@
+'use strict';
+
 var Injectable = require('@angular/core').Injectable;
 var Class = require('@angular/core').Class;
-var Hero = require('./hero');
 
 const HEROES = [
   { id: 11, name: 'Mr. Nice' },

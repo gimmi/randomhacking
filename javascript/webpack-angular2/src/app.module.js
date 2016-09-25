@@ -1,3 +1,5 @@
+'use strict';
+
 var NgModule = require('@angular/core').NgModule;
 var BrowserModule = require('@angular/platform-browser').BrowserModule;
 var FormsModule = require('@angular/forms').FormsModule;
