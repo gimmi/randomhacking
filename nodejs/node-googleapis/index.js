@@ -1,10 +1,9 @@
-const googleUtils = require('./google-utils')
+const googleFacade = require('./google-facade')
 const google = require('googleapis')
 
-googleUtils.createAuth().then(auth => {
-  var sheets = google.sheets('v4');
+googleFacade.createAuth().then(auth => {
+  var sheets = google.sheets({ version: 'v4', auth: auth});
   sheets.spreadsheets.values.get({
-    auth: auth,
     spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
     range: 'Class Data!A2:E',
   }, function(err, response) {
