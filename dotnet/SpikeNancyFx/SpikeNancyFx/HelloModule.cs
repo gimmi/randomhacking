@@ -1,6 +1,7 @@
 ﻿using System;
 using Nancy;
 using Nancy.ModelBinding;
+using Newtonsoft.Json.Linq;
 
 namespace SpikeNancyFx
 {
@@ -9,14 +10,11 @@ namespace SpikeNancyFx
         public HelloModule()
         {
             Get["/"] = GetHome;
-            Post["/data"] = GetData;
-
-            
-        }
-
-        private object GetData(object arg)
-        {
-            return this.Bind<Dto>();
+            Post["/echo"] = arg => {
+                dynamic o = this.Bind();
+                Console.WriteLine(o.id);
+                return o;
+            };
         }
 
         private dynamic GetHome(dynamic p)
@@ -29,5 +27,6 @@ namespace SpikeNancyFx
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public JObject Props { get; set; }
     }
 }
