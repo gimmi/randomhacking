@@ -1,54 +1,37 @@
 const pathlib = require('path')
 const chokidar = require('chokidar')
-const colors = require('colors/safe')
 const fs = require('fs-extra')
 
 const mappings = [
     { src: './src', dest: './dest' },
-]
-
-console.log('Watching paths:')
-mappings.forEach(mapping => {
+].map(mapping => {
     mapping.src = pathlib.join(__dirname, mapping.src)
     mapping.dest = pathlib.join(__dirname, mapping.dest)
-    
-    console.log('    ' + mapping.src + ' => ' + mapping.dest)
+    return mapping
 })
 
 const watcher = chokidar.watch(mappings.map(x => x.src), {})
-    .on('add', srcPath => {
-        const destPath = getDestPath(srcPath)
-        fs.copy(srcPath, destPath)
-            .then(() => console.log(`${srcPath} => ${destPath}`))
-    })
-    .on('change', srcPath => {
-        const destPath = getDestPath(srcPath)
-        fs.copy(srcPath, destPath)
-            .then(() => console.log(`${srcPath} => ${destPath}`))
-    })
-    .on('unlink', srcPath => {
-        const destPath = getDestPath(srcPath)
-        fs.remove(destPath)
-            .then(() => console.log(` => ${destPath}`))
-    })
-    .on('addDir', srcPath => {
-        const destPath = getDestPath(srcPath)
-        fs.remove(destPath)
-            .then(() => fs.mkdir(destPath))
-            .then(() => console.log(` => ${destPath}`))
-    })
-    .on('unlinkDir', srcPath => {
-        const destPath = getDestPath(srcPath)
-        fs.remove(destPath)
-            .then(() => console.log(` => ${destPath}`))
-    })
-    .on('ready', () => {
-        console.log('Initial scan complete. Ready for changes')
-    })
+    .on('add', copy)
+    .on('change', copy)
+    .on('unlink', del)
     .on('error', fatalError)
 
 process.on('uncaughtException', fatalError)
 process.on('unhandledRejection', fatalError)
+
+function copy(srcPath) {
+    const destPath = getDestPath(srcPath)
+    const destDir = pathlib.dirname(destPath)
+    fs.ensureDir(destDir)
+        .then(() => fs.copy(srcPath, destPath))
+        .then(() => console.log(`${srcPath} => ${destPath}`))
+}
+
+function del(srcPath) {
+    const destPath = getDestPath(srcPath)
+    fs.remove(destPath)
+        .then(() => console.log(` => ${destPath}`))
+}
 
 function getDestPath(srcPath) {
     const mapping = mappings.find(mapping => srcPath.startsWith(mapping.src))
