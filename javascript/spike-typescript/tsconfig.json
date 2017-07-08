@@ -1,0 +1,21 @@
+{
+    "include": [
+      "src/**/*.ts"
+    ],
+    "compilerOptions": {
+        "forceConsistentCasingInFileNames": true,
+        "target": "ES5",
+        "lib": [
+            "DOM",
+            "ES5",
+            "ES2015.Promise"
+        ],
+        "module": "ES6",
+        "moduleResolution": "node",
+        "sourceMap": true,
+
+        "listFiles": true,
+        "listEmittedFiles": true,
+        "traceResolution": true
+    }
+}

@@ -1,7 +1,3 @@
 /node_modules/
-/.tscache/
-/typings/
-/client/*.js
-/client/*.js.map
-/server/*.js
-/server/*.js.map
+/src/**/*.js
+/src/**/*.js.map
