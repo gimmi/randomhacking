@@ -8,9 +8,11 @@ namespace SpikeCefSharp
         [STAThread]
         static void Main()
         {
+            Backend backend = new Backend();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm());
+            Application.Run(new MainForm(backend));
         }
     }
 }

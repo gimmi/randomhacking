@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src="http://code.jquery.com/jquery-2.1.1.js"></script>
+
+    <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.css" rel="stylesheet">
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.7/angular.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.7/angular-route.js"></script>
+
+    <script src="script.js"></script>
+</head>
+
+<body ng-controller="appMainCtrl">
+    <p>
+        <button class="btn btn-primary" ng-click="run()">Run sample</button>
+    </p>
+    <p>Backend.greet: <code>{{model.message}}</code></p>
+    <p>Backend.roundtripComplexObj: <code>{{model.complexObj | json}}</code></p>
+</body>
+
+</html>
