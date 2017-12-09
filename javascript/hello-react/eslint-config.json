@@ -1,0 +1,44 @@
+{
+  "extends": ["eslint:all", "plugin:react/all"],
+  "env": {
+    "browser": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "impliedStrict": true
+    }
+  },
+  "rules": {
+    "arrow-parens": ["error", "as-needed"],
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "linebreak-style": ["error", "windows"],
+    "padded-blocks": "off",
+    "quote-props": ["error", "consistent-as-needed"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "never", { "beforeStatementContinuationChars": "always" }],
+    "space-before-function-paren": ["error", { "named": "never" }],
+
+    "capitalized-comments": "off",
+    "class-methods-use-this": "off",
+    "func-style": "off",
+    "id-length": "off",
+    "max-len": "off",
+    "max-statements-per-line": "off",
+    "no-magic-numbers": "off",
+    "require-jsdoc": "off",
+    "sort-keys": "off",
+
+    "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
+
+    "react/destructuring-assignment": "off",
+    "react/jsx-max-props-per-line": "off",
+    "react/jsx-no-literals": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/jsx-sort-props": "off",
+    "react/no-set-state": "off"
+  }
+}

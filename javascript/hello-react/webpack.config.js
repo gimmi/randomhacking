@@ -14,11 +14,18 @@ module.exports = {
     module: {
         rules: [{
             test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-            options: {
-                presets: ['env', 'react']
-            }
+            include: path.resolve(__dirname, 'src'),
+            use: [{
+                loader: 'babel-loader',
+                options: {
+                    presets: ['env', 'react']
+                }
+            }, {
+                loader: 'eslint-loader',
+                options: {
+                    configFile: path.resolve(__dirname, 'eslint-config.json')
+                }
+            }]
         }]
     },
     plugins: [
