@@ -18,7 +18,12 @@ module.exports = {
             use: [{
                 loader: 'babel-loader',
                 options: {
-                    presets: ['env', 'react']
+                    presets: [
+                        ['env', {
+                            "modules": false // See https://github.com/babel/babel-loader/issues/138
+                        }],
+                        ['react']
+                    ]
                 }
             }, {
                 loader: 'eslint-loader',
