@@ -4,7 +4,11 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        app: ['babel-polyfill', './src/app']
+        app: [
+        	'bootstrap/dist/css/bootstrap.css',
+        	'babel-polyfill',
+        	'./src/app'
+    	]
     },
     devtool: 'source-map',
     output: {
@@ -28,7 +32,10 @@ module.exports = {
             }, {
                 loader: 'eslint-loader'
             }]
-        }]
+        }, {
+        	test: /\.css$/,
+        	use: ['style-loader', 'css-loader'] 
+    	}]
     },
     plugins: [
         new HtmlWebpackPlugin({

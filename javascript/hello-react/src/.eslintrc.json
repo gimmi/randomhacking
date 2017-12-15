@@ -31,6 +31,9 @@
     "no-magic-numbers": "off",
     "require-jsdoc": "off",
     "sort-keys": "off",
+    "array-element-newline": "off",
+    "sort-imports": "off",
+    "no-console": "off",
 
     "react/jsx-filename-extension": ["error", { "extensions": [".js"] }],
 
