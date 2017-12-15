@@ -26,10 +26,7 @@ module.exports = {
                     ]
                 }
             }, {
-                loader: 'eslint-loader',
-                options: {
-                    configFile: path.resolve(__dirname, 'eslint-config.json')
-                }
+                loader: 'eslint-loader'
             }]
         }]
     },
