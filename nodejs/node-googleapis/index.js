@@ -1,11 +1,10 @@
 const util = require('util');
 const fs = require('fs');
 const readline = require('readline');
-const google = require('googleapis');
+const googleapis = require('googleapis');
 const GoogleAuth = require('google-auth-library');
 const path = require('path');
 const os = require('os');
-const clientSecretFile = require('./client_secret');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly'];
 const TOKEN_DIR = path.join(os.homedir(), '.credentials');
@@ -20,7 +19,11 @@ main().then(() => {
 
 async function main() {
     const oauth2Client = await authorize();
-    await listMajors(oauth2Client);
+
+    // See https://github.com/google/google-api-nodejs-client/#setting-global-or-service-level-auth
+    googleapis.options({ auth: oauth2Client });
+
+    await listMajors();
 }
 
 async function authorize() {
@@ -99,12 +102,11 @@ function question(question, validationRegex) {
     });
 }
 
-async function listMajors(auth) {
-    const sheets = google.sheets('v4');
+async function listMajors() {
+    const sheets = googleapis.sheets('v4');
     const get = util.promisify(sheets.spreadsheets.values.get.bind(sheets.spreadsheets.values));
 
     const response = await get({
-        auth: auth,
         spreadsheetId: '1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms',
         range: 'Class Data!A2:E',
     });
