@@ -7,7 +7,7 @@ module.exports = {
         app: [
         	'bootstrap/dist/css/bootstrap.css',
         	'babel-polyfill',
-        	'./src/app'
+        	'./src/main'
     	]
     },
     devtool: 'source-map',
@@ -34,17 +34,18 @@ module.exports = {
             }]
         }, {
         	test: /\.css$/,
-        	use: ['style-loader', 'css-loader'] 
+        	use: ['style-loader', 'css-loader']
     	}]
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/index.html', 
+            template: './src/index.html',
             filename: 'index.html',
             chunks: ['app']
         })
     ],
     devServer: {
+        historyApiFallback: true,
         inline: false
     }
 };

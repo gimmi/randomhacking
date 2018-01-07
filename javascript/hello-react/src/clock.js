@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default class Clock extends React.Component {
+export class Clock extends React.Component {
     constructor(props) {
         super(props)
 
@@ -28,7 +28,7 @@ export default class Clock extends React.Component {
     }
 
     handleClick() {
-        console.log(this.state.counter)
+        // console.log(this.state.counter)
     }
 
     render() {
