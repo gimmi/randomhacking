@@ -1,5 +1,3 @@
-#### [Node.js Quickstart](https://developers.google.com/sheets/api/quickstart/nodejs)
-
 #### Setup account for Google Sheets API Access
 
 * Go to [Google Cloud Console](https://console.cloud.google.com)
@@ -15,3 +13,8 @@
     * Application type: Other
     * Name: MyApp
     * Click on "Download JSON" icon. This is your `client_secret.json`
+
+#### Links
+
+* [Introduction to the Google Sheets API](https://developers.google.com/sheets/api/guides/concepts)
+* [Node.js Quickstart](https://developers.google.com/sheets/api/quickstart/nodejs)
