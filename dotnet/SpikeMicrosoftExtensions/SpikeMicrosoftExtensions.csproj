@@ -67,6 +67,9 @@
   <ItemGroup>
     <Compile Include="FooService.cs" />
     <Compile Include="IFooService.cs" />
+    <Compile Include="IPlugin.cs" />
+    <Compile Include="Plugin1.cs" />
+    <Compile Include="Plugin2.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

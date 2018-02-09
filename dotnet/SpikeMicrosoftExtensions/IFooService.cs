@@ -2,6 +2,6 @@
 {
     public interface IFooService
     {
-        void Serve();
+        void LogSomething();
     }
 }

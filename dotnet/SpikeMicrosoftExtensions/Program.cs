@@ -16,17 +16,47 @@ namespace SpikeMicrosoftExtensions
                     builder.SetMinimumLevel(LogLevel.Trace);
                     builder.AddConsole();
                 })
-                .AddSingleton<IFooService, FooService>()
+                .AddScoped<IFooService, FooService>()
+                .AddSingleton<IPlugin, Plugin1>()
+                .AddSingleton<IPlugin, Plugin2>()
                 .BuildServiceProvider();
 
             var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
-            logger.LogInformation("Starting...");
+            logger.LogInformation("Starting");
 
-            var fooService = serviceProvider.GetRequiredService<IFooService>();
+//            TestLoggingConfiguration(serviceProvider);
 
-            fooService.Serve();
+//            TestPluginSystem(serviceProvider);
 
+            using (var serviceScope = serviceProvider.CreateScope())
+            {
+                serviceScope.ServiceProvider.GetRequiredService<IFooService>();
+            }
+            using (var serviceScope = serviceProvider.CreateScope())
+            {
+                serviceScope.ServiceProvider.GetRequiredService<IFooService>();
+            }
+            using (var serviceScope = serviceProvider.CreateScope())
+            {
+                serviceScope.ServiceProvider.GetRequiredService<IFooService>();
+            }
+
+            logger.LogInformation("Stopping");
             serviceProvider.Dispose();
+        }
+
+        private static void TestPluginSystem(ServiceProvider serviceProvider)
+        {
+            foreach (var plugin in serviceProvider.GetServices<IPlugin>())
+            {
+                plugin.Action();
+            }
+        }
+
+        private static void TestLoggingConfiguration(IServiceProvider serviceProvider)
+        {
+            var fooService = serviceProvider.GetRequiredService<IFooService>();
+            fooService.LogSomething();
         }
     }
 }
