@@ -55,6 +55,9 @@ namespace SpikeMicrosoftExtensions
 
         private static void TestLoggingConfiguration(IServiceProvider serviceProvider)
         {
+            var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
+            logger.LogInformation("Starting {useless} - {useless} - {useless} - {useless,6} - {useless,-6} - {useless:o}", "a", new[] {1, 2, 3}, null, 3.14, 3.14, DateTime.Now);
+
             var fooService = serviceProvider.GetRequiredService<IFooService>();
             fooService.LogSomething();
         }
