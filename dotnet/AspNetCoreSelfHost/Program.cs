@@ -2,9 +2,12 @@
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using SpikeMicrosoftExtensions;
 
 namespace AspNetCoreSelfHost
@@ -23,8 +26,16 @@ namespace AspNetCoreSelfHost
                     options.ValidateScopes = true;
                 })
                 .ConfigureServices(services => {
+                    services.AddMvc()
+                        .AddJsonOptions(json => {
+                            json.SerializerSettings.Formatting = Formatting.Indented;
+                            json.SerializerSettings.ContractResolver = new DefaultContractResolver {
+                                NamingStrategy = new CamelCaseNamingStrategy {
+                                    ProcessDictionaryKeys = false
+                                }
+                            };
+                        });
                     services.AddScoped<IFooService, FooService>();
-                    services.AddMvc();
                 })
                 .ConfigureLogging(logging => {
                     logging.SetMinimumLevel(LogLevel.Warning);
