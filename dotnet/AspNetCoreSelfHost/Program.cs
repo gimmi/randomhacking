@@ -16,7 +16,14 @@ namespace AspNetCoreSelfHost
     {
         public static void Main(string[] args)
         {
-            var webHost = new WebHostBuilder()
+            var webHost = CreateWebHostBuilder().Build();
+
+            webHost.Run();
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder()
+        {
+            return new WebHostBuilder()
                 .UseKestrel(options => {
                     options.AddServerHeader = false;
                 })
@@ -50,10 +57,7 @@ namespace AspNetCoreSelfHost
                     }
 
                     app.UseMvc();
-                })
-                .Build();
-
-            webHost.Run();
+                });
         }
     }
 }
