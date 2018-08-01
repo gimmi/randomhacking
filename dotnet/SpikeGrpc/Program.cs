@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Grpc.Core;
+using Grpc.Core.Interceptors;
+using Grpc.Core.Logging;
 using Spikegrpc.Proto;
 
 namespace SpikeGrpc
@@ -9,10 +11,12 @@ namespace SpikeGrpc
     {
         public static async Task Main()
         {
+            GrpcEnvironment.SetLogger(new LogLevelFilterLogger(new ConsoleLogger(), LogLevel.Debug));
+            
             const int port = 50052;
             var server = new Server {
-                Services = { EchoService.BindService(new EchoServiceServer()) },
-                Ports = { new ServerPort("localhost", port, ServerCredentials.Insecure) }
+                Services = { EchoService.BindService(new EchoServiceServer()).Intercept(new ServerInterceptor()) },
+                Ports = { new ServerPort("localhost", port, ServerCredentials.Insecure) },
             };
             server.Start();
             
