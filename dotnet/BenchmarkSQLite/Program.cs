@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SQLite;
 using System.Diagnostics;
 using System.IO;
@@ -12,7 +13,8 @@ namespace BenchmarkSQLite
         {
             File.Delete("mydb.sqlite");
             SQLiteConnection.CreateFile("mydb.sqlite");
-            using (var conn = new SQLiteConnection("Data Source=mydb.sqlite;Version=3;"))
+
+            using (var conn = new SQLiteConnection("Data Source=mydb.sqlite;Journal Mode=Wal"))
             {
                 await conn.OpenAsync();
                 var cmd = new SQLiteCommand("create table highscores (name varchar(20), score int)", conn);
@@ -31,7 +33,7 @@ namespace BenchmarkSQLite
                         await cmd.ExecuteNonQueryAsync();
                     }
                     sw.Stop();
-                    await Console.Out.WriteLineAsync($"{count/sw.Elapsed.TotalSeconds}");
+                    await Console.Out.WriteLineAsync($"{count/sw.Elapsed.TotalSeconds:0.}");
                 }
             }
 
