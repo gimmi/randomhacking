@@ -35,7 +35,7 @@ namespace BenchmarkSQLite
                 }
             }
 
-            await Console.In.ReadLineAsync();
+            await Console.Out.WriteLineAsync("Done.");
         }
     }
 }
