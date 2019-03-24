@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -9,8 +10,7 @@ namespace SpikeMicrosoftExtensions
         public static void Main()
         {
             var serviceProvider = new ServiceCollection()
-                .AddLogging(builder =>
-                {
+                .AddLogging(builder => {
                     // See https://msdn.microsoft.com/en-us/magazine/mt694089.aspx
 
                     builder.SetMinimumLevel(LogLevel.Trace);
@@ -19,14 +19,22 @@ namespace SpikeMicrosoftExtensions
                 .AddScoped<IFooService, FooService>()
                 .AddSingleton<IPlugin, Plugin1>()
                 .AddSingleton<IPlugin, Plugin2>()
+                .AddSingleton<MyDiagnosticListener>()
+                .AddSingleton(sp => {
+                    var listener = sp.GetRequiredService<MyDiagnosticListener>();
+
+                    var diagnosticListener = new DiagnosticListener("xxx");
+                    diagnosticListener.SubscribeWithAdapter(listener);
+                    return diagnosticListener;
+                })
                 .BuildServiceProvider();
 
             var logger = serviceProvider.GetRequiredService<ILogger<Program>>();
             logger.LogInformation("Starting");
 
-//            TestLoggingConfiguration(serviceProvider);
+            TestLoggingConfiguration(serviceProvider);
 
-//            TestPluginSystem(serviceProvider);
+            // TestPluginSystem(serviceProvider);
 
             using (var serviceScope = serviceProvider.CreateScope())
             {

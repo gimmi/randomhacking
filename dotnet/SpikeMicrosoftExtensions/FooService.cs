@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.Extensions.Logging;
 
 namespace SpikeMicrosoftExtensions
@@ -6,16 +7,22 @@ namespace SpikeMicrosoftExtensions
     public class FooService : IFooService, IDisposable
     {
         private readonly ILogger<FooService> _logger;
+        private readonly DiagnosticListener _diagnosticListener;
 
-        public FooService(ILogger<FooService> logger)
+        public FooService(ILogger<FooService> logger, DiagnosticListener diagnosticListener)
         {
             _logger = logger;
 
             _logger.LogInformation(".ctor");
+            _diagnosticListener = diagnosticListener;
         }
 
         public void LogSomething()
         {
+            if (_diagnosticListener.IsEnabled("IncomingCall"))
+            {
+                _diagnosticListener.Write("IncomingCall", 123);
+            }
             _logger.LogTrace("This is a Trace level log entry");
             _logger.LogDebug("This is a Debug level log entry");
             _logger.LogInformation("This is a Information level log entry");
