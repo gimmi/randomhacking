@@ -19,6 +19,7 @@ namespace SpikeMicrosoftExtensions
                 .AddScoped<IFooService, FooService>()
                 .AddSingleton<IPlugin, Plugin1>()
                 .AddSingleton<IPlugin, Plugin2>()
+                .AddSingleton<PluginManager>()
                 .AddSingleton<MyDiagnosticListener>()
                 .AddSingleton(sp => {
                     var listener = sp.GetRequiredService<MyDiagnosticListener>();
@@ -34,7 +35,7 @@ namespace SpikeMicrosoftExtensions
 
             TestLoggingConfiguration(serviceProvider);
 
-            // TestPluginSystem(serviceProvider);
+            serviceProvider.GetRequiredService<PluginManager>().Action();
 
             using (var serviceScope = serviceProvider.CreateScope())
             {
@@ -51,14 +52,6 @@ namespace SpikeMicrosoftExtensions
 
             logger.LogInformation("Stopping");
             serviceProvider.Dispose();
-        }
-
-        private static void TestPluginSystem(ServiceProvider serviceProvider)
-        {
-            foreach (var plugin in serviceProvider.GetServices<IPlugin>())
-            {
-                plugin.Action();
-            }
         }
 
         private static void TestLoggingConfiguration(IServiceProvider serviceProvider)
