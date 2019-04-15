@@ -67,5 +67,29 @@ namespace BestEffortQueue
                 }
             }
         }
+        
+        [Test]
+        public async Task Should_stop_consuming_after_cancellation()
+        {
+            var sut = new BestEffortQueue<string>(100);
+            sut.TryEnqueue("1");
+
+            Assert.That(await sut.MoveNextAsync(CancellationToken.None), Is.True);
+            Assert.That(sut.Current, Is.EqualTo("1"));
+
+            var moveNextTask = Task.Run(() => sut.MoveNextAsync(new CancellationTokenSource(10).Token));
+            await Task.Delay(100);
+            sut.TryEnqueue("2");
+            Assert.That(await moveNextTask, Is.False);
+            Assert.That(sut.Current, Is.Null);
+
+            var cts = new CancellationTokenSource();
+            cts.Cancel();
+            Assert.That(await sut.MoveNextAsync(cts.Token), Is.False);
+            Assert.That(sut.Current, Is.Null);
+            
+            Assert.That(await sut.MoveNextAsync(CancellationToken.None), Is.True);
+            Assert.That(sut.Current, Is.EqualTo("2"));
+        }
     }
 }

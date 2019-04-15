@@ -48,6 +48,7 @@ namespace BestEffortQueue
             }
             catch (OperationCanceledException)
             {
+                _current = default;
                 return false;
             }
             return _concurrentQueue.TryDequeue(out _current);
