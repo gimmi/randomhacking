@@ -1,116 +1,49 @@
-﻿using System;
-using System.Security.Cryptography;
-using System.Text.RegularExpressions;
+﻿using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Running;
 
 namespace SpikeBenchmarkDotNet
 {
-    [MemoryDiagnoser, ShortRunJob]
+//    [MemoryDiagnoser, ShortRunJob]
+    [ShortRunJob]
     public class StructVsClass
     {
-        private readonly string[] _strings;
-
-        private readonly SHA256 sha256 = SHA256.Create();
-        private readonly MD5 md5 = MD5.Create();
-
-        public StructVsClass()
-        {
-            _strings = new[] {"String 1", "String 2", "String 3", "String 4", "String 5"};
-        }
+        private const int Count = 10_000;
+        private ImmutableSortedDictionary<string, object> _isd;
+        private ConcurrentDictionary<string, object> _d;
         
         [GlobalSetup]
         public void GlobalSetup()
         {
-            bytes = new byte[100];
-        }
-
-        [Benchmark]
-        public StrVal Str() => new StrVal(123, 456); 
-
-        [Benchmark]
-        public ClassVal Cls() => new ClassVal(123, 456);
-
-        [Benchmark]
-        public StructWithArray StructWithArray()
-        { 
-            return new StructWithArray(123, );
-        }
-    }
-
-    public struct AmsAddress
-    {
-        private readonly ulong _val;
-
-        public static AmsAddress Parse(string amsAddress)
-        {
-            var match = Regex.Match(amsAddress, @"^(\d+)\.(\d+)\.(\d+)\.(\d+)\.(\d+)\.(\d+)(:(?<port>\d+))?$");
-            if (!match.Success)
+            _d = new ConcurrentDictionary<string, object>();
+            var builder = ImmutableSortedDictionary.CreateBuilder<string, object>();
+            foreach (var key in Enumerable.Range(0, Count).Select(i => "symbol-" + i)) 
             {
-                throw new ApplicationException("Invalid AMS address: " + amsAddress);
+                builder.Add(key, new object());
+                _d.TryAdd(key, new object());
             }
-            
-            ulong val = (ulong) (Convert.ToByte(match.Groups[1].Value) << 56) +
-                 (ulong) (Convert.ToByte(match.Groups[2].Value) << 48) +
-                 (ulong) (Convert.ToByte(match.Groups[3].Value) << 40) +
-                 (ulong) (Convert.ToByte(match.Groups[4].Value) << 32) +
-                 (ulong) (Convert.ToByte(match.Groups[5].Value) << 24) +
-                 (ulong) (Convert.ToByte(match.Groups[6].Value) << 16);
-
-            if (match.Groups["port"].Success)
-            {
-                val += Convert.ToUInt32(match.Groups["port"].Value);
-            }
-            return new AmsAddress(val);
+            _isd = builder.ToImmutable();
         }
+        
+        [Params("symbol-2500", "symbol-5000", "symbol-7500")]
+        public string Key { get; set; }
 
-        public AmsAddress(ulong val)
+        [Benchmark]
+        public object ReadImmutable()
         {
-            _val = val;
+            _isd.TryGetValue(Key, out var val);
+            return val;
         }
 
-        public UInt16 Port { get; private set; }
-        public byte[] ToBytes()
+        [Benchmark]
+        public object ReadDictionary()
         {
-            return new[] {
-                
-            }
+            _d.TryGetValue(Key, out var val);
+            return val;
         }
-    }
-    public struct StructWithArray
-    {
-        public readonly int Port;
-        public readonly byte[] Bytes;
-
-        public StructWithArray(int port, byte[] bytes)
-        {
-            Port = port;
-            Bytes = bytes;
-        }
-    }
-
-    public struct StrVal
-    {
-        public StrVal(int value1, int value2)
-        {
-            Value1 = value1;
-            Value2 = value2;
-        }
-
-        public readonly int Value1;
-        public readonly int Value2;
-    }
-
-    public class ClassVal
-    {
-        public ClassVal(int value1, int value2)
-        {
-            Value1 = value1;
-            Value2 = value2;
-        }
-
-        public int Value1 { get; }
-        public int Value2 { get; }
     }
 
     public class Program
