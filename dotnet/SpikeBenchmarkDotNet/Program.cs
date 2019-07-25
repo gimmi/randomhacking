@@ -11,37 +11,55 @@ namespace SpikeBenchmarkDotNet
     [ShortRunJob]
     public class StructVsClass
     {
-        private const int Count = 10_000;
         private ImmutableSortedDictionary<string, object> _isd;
-        private ConcurrentDictionary<string, object> _d;
-        
+        private ImmutableDictionary<string, object> _id;
+        private ConcurrentDictionary<string, object> _concurrentDictionary;
+        private Dictionary<string, object> _dictionary;
+
+        [Params(100, 1_000)]
+        public int Count { get; set; }
+
         [GlobalSetup]
         public void GlobalSetup()
         {
-            _d = new ConcurrentDictionary<string, object>();
-            var builder = ImmutableSortedDictionary.CreateBuilder<string, object>();
-            foreach (var key in Enumerable.Range(0, Count).Select(i => "symbol-" + i)) 
+            _concurrentDictionary = new ConcurrentDictionary<string, object>();
+            _dictionary = new Dictionary<string, object>();
+            var idb = ImmutableDictionary.CreateBuilder<string, object>();
+            foreach (var key in Enumerable.Range(0, Count).Select(i => "symbol-" + i))
             {
-                builder.Add(key, new object());
-                _d.TryAdd(key, new object());
+                idb.Add(key, new object());
+                _concurrentDictionary.TryAdd(key, new object());
+                _dictionary.TryAdd(key, new object());
             }
-            _isd = builder.ToImmutable();
+            _isd = idb.ToImmutableSortedDictionary();
+            _id = idb.ToImmutableDictionary();
         }
-        
-        [Params("symbol-2500", "symbol-5000", "symbol-7500")]
-        public string Key { get; set; }
+
+        [Benchmark]
+        public object ReadImmutableSorted()
+        {
+            _isd.TryGetValue("symbol-5000", out var val);
+            return val;
+        }
 
         [Benchmark]
         public object ReadImmutable()
         {
-            _isd.TryGetValue(Key, out var val);
+            _id.TryGetValue("symbol-5000", out var val);
+            return val;
+        }
+
+        [Benchmark]
+        public object ReadConcurrentDictionary()
+        {
+            _concurrentDictionary.TryGetValue("symbol-5000", out var val);
             return val;
         }
 
         [Benchmark]
         public object ReadDictionary()
         {
-            _d.TryGetValue(Key, out var val);
+            _dictionary.TryGetValue("symbol-5000", out var val);
             return val;
         }
     }
