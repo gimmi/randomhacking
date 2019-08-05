@@ -12,9 +12,10 @@ namespace FTPServer
         public static async Task Main(string[] args)
         {
             var ct = BindCtrlC();
-            var theServer = new TheServer();
+            var theServer = new TcpServer();
             await theServer.ConnectAsync(22);
 
+            await Task.Yield();
             try
             {
                 await Task.Delay(Timeout.Infinite, ct);
@@ -23,6 +24,8 @@ namespace FTPServer
             {
             }
 
+
+            await Console.Out.WriteLineAsync("Calling disconnect");
             await theServer.DisconnectAsync();
         }
 
