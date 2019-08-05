@@ -42,33 +42,75 @@ namespace FTPServer
                 }
 
                 // TODO what to do with this??
-                var clientTask = Task.Run(() => ClientLoop(tcpClient), _stopCts.Token);
+
+                var clientTask = Task.Run(new FtpControlConnection(tcpClient, _stopCts.Token).LoopAsync, _stopCts.Token);
             }
         }
+    }
 
-        private async Task ClientLoop(TcpClient tcpClient)
+    public class FtpControlConnection
+    {
+        private readonly TcpClient _tcpClient;
+        private readonly CancellationToken _stopCt;
+
+        public FtpControlConnection(TcpClient tcpClient, CancellationToken stopCt)
+        {
+            _tcpClient = tcpClient;
+            _stopCt = stopCt;
+        }
+
+        public async Task LoopAsync()
         {
             await Console.Out.WriteLineAsync("Connected");
             try
             {
-                var stream = tcpClient.GetStream();
+                var stream = _tcpClient.GetStream();
                 var streamReader = new StreamReader(stream, Encoding.ASCII);
+                var streamWriter = new StreamWriter(stream, Encoding.ASCII);
+
+                // See https://www.ncftp.com/libncftp/doc/ftp_overview.html
+                await streamWriter.WriteLineAsync("220 Service ready for new user");
+                await streamWriter.FlushAsync();
 
                 while (true)
                 {
-                    var line = await streamReader.ReadLineAsync()
-                        .DefaultIfCanceledAsync(_stopCts.Token);
+                    var cmd = await streamReader.ReadLineAsync()
+                        .DefaultIfCanceledAsync(_stopCt);
 
-                    if (line == default)
+                    if (cmd == default)
                     {
                         break;
                     }
-                    await Console.Out.WriteLineAsync(line);
+
+                    await Console.Out.WriteLineAsync("=> " + cmd);
+
+                    if (cmd.StartsWith("USER "))
+                    {
+                        await streamWriter.WriteLineAsync("230 User logged in");
+                        await streamWriter.FlushAsync();
+                    }
+                    else if (cmd == "QUIT")
+                    {
+                        await streamWriter.WriteLineAsync("221 Service closing control connection");
+                        await streamWriter.FlushAsync();
+                        break;
+                    }
+                    else if (cmd == "PASV")
+                    {
+                        await streamWriter.WriteLineAsync("227 Entering Passive Mode (h1,h2,h3,h4,p1,p2)");
+                        await streamWriter.FlushAsync();
+                        break;
+                    }
+                    else
+                    {
+                        await streamWriter.WriteLineAsync("202 Command not implemented");
+                        await streamWriter.FlushAsync();
+                    }
                 }
             }
             finally
             {
-                tcpClient.Dispose();
+                _tcpClient.Dispose();
             }
             await Console.Out.WriteLineAsync("Disconnected");
         }
