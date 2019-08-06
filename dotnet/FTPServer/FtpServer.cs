@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -7,85 +8,101 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace FTPServer
 {
     public class FtpServer
     {
+        private readonly ILogger _logger;
         private CancellationTokenSource _stopCts;
-        private TcpListener _tcpListener;
         private Task _acceptTask;
         private IPAddress _ipAddress;
         private List<ClientData> _clients;
+        private int _controlPort;
 
-        public async Task ConnectAsync(IPAddress ipAddress, int controlPort, int dataPortBase, int dataportCount)
+        public FtpServer(ILogger<FtpServer> logger)
         {
-            await Console.Out.WriteLineAsync($"Listening on {ipAddress}:{controlPort}");
-            _clients = Enumerable.Range(dataPortBase, dataportCount)
-                .Select(i => new ClientData {Port = i, Task = Task.CompletedTask})
-                .ToList();
-            _ipAddress = ipAddress;
-            _stopCts = new CancellationTokenSource();
-            _tcpListener = new TcpListener(ipAddress, controlPort);
-            _tcpListener.Start();
-            _acceptTask = Task.Run(AcceptLoop);
+            _logger = logger;
         }
 
-        public async Task DisconnectAsync()
+        public Task StartAsync(IPAddress ipAddress, int controlPort, int dataPortBase, int dataportCount)
         {
-            await Console.Out.WriteLineAsync("Stopping");
-            _tcpListener.Stop();
+            _ipAddress = ipAddress;
+            _controlPort = controlPort;
+            _clients = Enumerable.Range(dataPortBase, dataportCount)
+                .Select(port => new ClientData {Port = port, Task = Task.CompletedTask})
+                .ToList();
+            _stopCts = new CancellationTokenSource();
+            _acceptTask = Task.Run(AcceptLoop);
+            return Task.CompletedTask;
+        }
+
+        public async Task StopAsync()
+        {
             _stopCts.Cancel();
             await _acceptTask;
-            foreach (var client in _clients)
-            {
-                await client.Task;
-            }
         }
 
         private async Task AcceptLoop()
         {
-            while (true)
+            while (!_stopCts.IsCancellationRequested)
             {
-                var tcpClient = await _tcpListener.AcceptTcpClientAsync()
-                    .DefaultIfCanceledAsync(_stopCts.Token);
-                if (tcpClient == default)
+                try
                 {
-                    break;
-                }
+                    var tcpListener = new TcpListener(_ipAddress, _controlPort);
+                    tcpListener.Start();
+                    while (!_stopCts.IsCancellationRequested)
+                    {
+                        var tcpClient = await tcpListener.AcceptTcpClientAsync()
+                            .DefaultIfCanceledAsync(_stopCts.Token);
+                        if (tcpClient == default)
+                        {
+                            break;
+                        }
 
-                var client = _clients.FirstOrDefault(x => x.Task.IsCompleted);
-                if (client == null)
-                {
-                    var stream = tcpClient.GetStream();
-                    var writer = new StreamWriter(stream, Encoding.ASCII);
-                    await writer.WriteLineAsync("421 Too Many Connections");
-                    await writer.FlushAsync();
-                    tcpClient.Dispose();
+                        var client = _clients.FirstOrDefault(x => x.Task.IsCompleted);
+                        if (client == null)
+                        {
+                            var stream = tcpClient.GetStream();
+                            var writer = new StreamWriter(stream, Encoding.ASCII);
+                            await writer.WriteLineAsync("421 Too Many Connections");
+                            await writer.FlushAsync();
+                            tcpClient.Dispose();
+                        }
+                        else
+                        {
+                            await client.Task;
+                            var ftpClientHandler = new FtpClientHandler(_logger, tcpClient, _stopCts.Token, new IPEndPoint(_ipAddress, client.Port));
+                            client.Task = Task.Run(ftpClientHandler.HandleAsync, _stopCts.Token);
+                        }
+                    }
+                    tcpListener.Stop();
+                    await Task.WhenAll(_clients.Select(x => x.Task));
                 }
-                else
+                catch (Exception ex)
                 {
-                    await client.Task;
-                    var ftpClientHandler = new FtpClientHandler(tcpClient, _stopCts.Token, new IPEndPoint(_ipAddress, client.Port));
-                    client.Task = Task.Run(ftpClientHandler.HandleAsync, _stopCts.Token);
+                    _logger.LogError(ex, "Error in FTP command listener");
                 }
             }
         }
 
         private class ClientData
         {
-            public int Port { get; set; }
-            public Task Task { get; set; }
+            public int Port;
+            public Task Task;
         }
 
         public class FtpClientHandler
         {
+            private readonly ILogger _logger;
             private readonly TcpClient _tcpClient;
             private readonly CancellationToken _stopCt;
             private readonly IPEndPoint _dataIpEndPoint;
 
-            public FtpClientHandler(TcpClient tcpClient, CancellationToken stopCt, IPEndPoint dataIpEndPoint)
+            public FtpClientHandler(ILogger logger, TcpClient tcpClient, CancellationToken stopCt, IPEndPoint dataIpEndPoint)
             {
+                _logger = logger;
                 _tcpClient = tcpClient;
                 _stopCt = stopCt;
                 _dataIpEndPoint = dataIpEndPoint;
@@ -93,7 +110,6 @@ namespace FTPServer
 
             public async Task HandleAsync()
             {
-                await Console.Out.WriteLineAsync("Connected");
                 try
                 {
                     var stream = _tcpClient.GetStream();
@@ -117,7 +133,7 @@ namespace FTPServer
                             break;
                         }
 
-                        await Console.Out.WriteLineAsync("=> " + cmd);
+                        _logger.LogDebug("Client #{} => {}", _dataIpEndPoint.Port, cmd);
 
                         if (cmd == "QUIT")
                         {
@@ -185,12 +201,14 @@ namespace FTPServer
 
                     dataTcpListener.Stop();
                 }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex, "Error in FTP client handler");
+                }
                 finally
                 {
                     _tcpClient.Dispose();
                 }
-
-                await Console.Out.WriteLineAsync("Disconnected");
             }
         }
     }
