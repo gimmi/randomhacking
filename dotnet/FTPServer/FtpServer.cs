@@ -38,7 +38,7 @@ namespace FTPServer
                 .ToList();
             _fileReceivedAsync = fileReceivedAsync;
             _stopCts = new CancellationTokenSource();
-            _acceptTask = Task.Run(AcceptLoop);
+            _acceptTask = Task.Run(AcceptLoopAsync);
             return Task.CompletedTask;
         }
 
@@ -48,7 +48,7 @@ namespace FTPServer
             await _acceptTask;
         }
 
-        private async Task AcceptLoop()
+        private async Task AcceptLoopAsync()
         {
             while (!_stopCts.IsCancellationRequested)
             {
@@ -77,10 +77,10 @@ namespace FTPServer
                         else
                         {
                             await client.Task;
-                            var ftpClientHandler = new FtpClientHandler(_logger, tcpClient, _stopCts.Token, new IPEndPoint(_ipAddress, client.Port), _fileReceivedAsync);
-                            client.Task = Task.Run(ftpClientHandler.HandleAsync, _stopCts.Token);
+                            client.Task = Task.Run(() => ClientLoopAsync(tcpClient, client.Port), _stopCts.Token);
                         }
                     }
+
                     tcpListener.Stop();
                     await Task.WhenAll(_clients.Select(x => x.Task));
                 }
@@ -91,126 +91,109 @@ namespace FTPServer
             }
         }
 
+        private async Task ClientLoopAsync(TcpClient tcpClient, int dataPort)
+        {
+            try
+            {
+                var stream = tcpClient.GetStream();
+                var reader = new StreamReader(stream, Encoding.ASCII);
+                var writer = new StreamWriter(stream, Encoding.ASCII);
+
+                // See https://www.ncftp.com/libncftp/doc/ftp_overview.html
+                await writer.WriteLineAsync("220 Service ready for new user");
+                await writer.FlushAsync();
+
+                var dataTcpListener = new TcpListener(_ipAddress, dataPort);
+                dataTcpListener.Start();
+
+                while (true)
+                {
+                    var cmd = await reader.ReadLineAsync()
+                        .DefaultIfCanceledAsync(_stopCts.Token);
+
+                    if (cmd == default)
+                    {
+                        break;
+                    }
+
+                    _logger.LogDebug("Client #{} => {}", dataPort, cmd);
+
+                    if (cmd == "QUIT")
+                    {
+                        await writer.WriteLineAsync("221 Service closing control connection");
+                        await writer.FlushAsync();
+                        break;
+                    }
+
+                    if (cmd.StartsWith("USER "))
+                    {
+                        await writer.WriteLineAsync("230 User logged in");
+                        await writer.FlushAsync();
+                    }
+                    else if (cmd == "PASV")
+                    {
+                        var addr = new StringBuilder("(")
+                            .AppendJoin(',', _ipAddress.GetAddressBytes())
+                            .Append(',').Append(dataPort >> 8)
+                            .Append(',').Append(dataPort & 0xFF)
+                            .Append(")")
+                            .ToString();
+                        await writer.WriteLineAsync("227 Entering Passive Mode " + addr);
+                        await writer.FlushAsync();
+                    }
+                    else if (cmd == "NOOP")
+                    {
+                        await writer.WriteLineAsync("200 OK");
+                        await writer.FlushAsync();
+                    }
+                    else if (cmd == "TYPE I")
+                    {
+                        await writer.WriteLineAsync("200 Type set to BINARY");
+                        await writer.FlushAsync();
+                    }
+                    else if (cmd.StartsWith("STOR "))
+                    {
+                        var filePath = cmd.Substring(5);
+                        await writer.WriteLineAsync("150 About to open data connection");
+                        await writer.FlushAsync();
+
+                        using (var dataTcpClient = await dataTcpListener.AcceptTcpClientAsync().DefaultIfCanceledAsync(_stopCts.Token))
+                        {
+                            if (dataTcpClient == default)
+                            {
+                                break;
+                            }
+
+                            await _fileReceivedAsync.Invoke(filePath, dataTcpClient.GetStream());
+                        }
+
+                        await writer.WriteLineAsync("226 Transfer complete");
+                        await writer.FlushAsync();
+                    }
+                    else
+                    {
+                        await writer.WriteLineAsync("202 Command not implemented");
+                        await writer.FlushAsync();
+                    }
+                }
+
+                dataTcpListener.Stop();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in FTP client handler");
+            }
+            finally
+            {
+                tcpClient.Dispose();
+            }
+        }
+
+
         private class ClientData
         {
             public int Port;
             public Task Task;
-        }
-
-        public class FtpClientHandler
-        {
-            private readonly ILogger _logger;
-            private readonly TcpClient _tcpClient;
-            private readonly CancellationToken _stopCt;
-            private readonly IPEndPoint _dataIpEndPoint;
-            private readonly FileReceivedAsync _fileReceivedAsync;
-
-            public FtpClientHandler(ILogger logger, TcpClient tcpClient, CancellationToken stopCt, IPEndPoint dataIpEndPoint, FileReceivedAsync fileReceivedAsync)
-            {
-                _logger = logger;
-                _tcpClient = tcpClient;
-                _stopCt = stopCt;
-                _dataIpEndPoint = dataIpEndPoint;
-                _fileReceivedAsync = fileReceivedAsync;
-            }
-
-            public async Task HandleAsync()
-            {
-                try
-                {
-                    var stream = _tcpClient.GetStream();
-                    var reader = new StreamReader(stream, Encoding.ASCII);
-                    var writer = new StreamWriter(stream, Encoding.ASCII);
-
-                    // See https://www.ncftp.com/libncftp/doc/ftp_overview.html
-                    await writer.WriteLineAsync("220 Service ready for new user");
-                    await writer.FlushAsync();
-
-                    var dataTcpListener = new TcpListener(_dataIpEndPoint);
-                    dataTcpListener.Start();
-
-                    while (true)
-                    {
-                        var cmd = await reader.ReadLineAsync()
-                            .DefaultIfCanceledAsync(_stopCt);
-
-                        if (cmd == default)
-                        {
-                            break;
-                        }
-
-                        _logger.LogDebug("Client #{} => {}", _dataIpEndPoint.Port, cmd);
-
-                        if (cmd == "QUIT")
-                        {
-                            await writer.WriteLineAsync("221 Service closing control connection");
-                            await writer.FlushAsync();
-                            break;
-                        }
-
-                        if (cmd.StartsWith("USER "))
-                        {
-                            await writer.WriteLineAsync("230 User logged in");
-                            await writer.FlushAsync();
-                        }
-                        else if (cmd == "PASV")
-                        {
-                            var addr = new StringBuilder("(")
-                                .AppendJoin(',', _dataIpEndPoint.Address.GetAddressBytes())
-                                .Append(',').Append(_dataIpEndPoint.Port >> 8)
-                                .Append(',').Append(_dataIpEndPoint.Port & 0xFF)
-                                .Append(")")
-                                .ToString();
-                            await writer.WriteLineAsync("227 Entering Passive Mode " + addr);
-                            await writer.FlushAsync();
-                        }
-                        else if (cmd == "NOOP")
-                        {
-                            await writer.WriteLineAsync("200 OK");
-                            await writer.FlushAsync();
-                        }
-                        else if (cmd == "TYPE I")
-                        {
-                            await writer.WriteLineAsync("200 Type set to BINARY");
-                            await writer.FlushAsync();
-                        }
-                        else if (cmd.StartsWith("STOR "))
-                        {
-                            var filePath = cmd.Substring(5);
-                            await writer.WriteLineAsync("150 About to open data connection");
-                            await writer.FlushAsync();
-
-                            using (var tcpClient = await dataTcpListener.AcceptTcpClientAsync().DefaultIfCanceledAsync(_stopCt))
-                            {
-                                if (tcpClient == default)
-                                {
-                                    break;
-                                }
-
-                                await _fileReceivedAsync.Invoke(filePath, tcpClient.GetStream());
-                            }
-
-                            await writer.WriteLineAsync("226 Transfer complete");
-                            await writer.FlushAsync();
-                        }
-                        else
-                        {
-                            await writer.WriteLineAsync("202 Command not implemented");
-                            await writer.FlushAsync();
-                        }
-                    }
-
-                    dataTcpListener.Stop();
-                }
-                catch(Exception ex)
-                {
-                    _logger.LogError(ex, "Error in FTP client handler");
-                }
-                finally
-                {
-                    _tcpClient.Dispose();
-                }
-            }
         }
     }
 }
