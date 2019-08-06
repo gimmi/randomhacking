@@ -13,15 +13,14 @@ namespace FTPServer
         public static async Task Main(string[] args)
         {
             var ct = BindCtrlC();
-            var theServer = new TcpServer();
-            await theServer.ConnectAsync(22);
+            var theServer = new FtpServer();
+            await theServer.ConnectAsync(IPAddress.Parse("127.0.0.1"), 22, 2222, 10);
 
             var filePath = "myfile.txt";
             var fileContents = Encoding.ASCII.GetBytes("Hello world");
 
             await FtpUploadAsync(filePath, fileContents);
 
-            await Task.Yield();
             try
             {
                 await Task.Delay(Timeout.Infinite, ct);
