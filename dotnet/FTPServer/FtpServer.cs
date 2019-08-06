@@ -14,25 +14,29 @@ namespace FTPServer
 {
     public class FtpServer
     {
+        public delegate Task FileReceivedAsync(string filePath, Stream fileStream);
+
         private readonly ILogger _logger;
         private CancellationTokenSource _stopCts;
         private Task _acceptTask;
         private IPAddress _ipAddress;
         private List<ClientData> _clients;
         private int _controlPort;
+        private FileReceivedAsync _fileReceivedAsync;
 
         public FtpServer(ILogger<FtpServer> logger)
         {
             _logger = logger;
         }
 
-        public Task StartAsync(IPAddress ipAddress, int controlPort, int dataPortBase, int dataportCount)
+        public Task StartAsync(IPAddress ipAddress, int controlPort, int dataPortBase, int dataportCount, FileReceivedAsync fileReceivedAsync)
         {
             _ipAddress = ipAddress;
             _controlPort = controlPort;
             _clients = Enumerable.Range(dataPortBase, dataportCount)
                 .Select(port => new ClientData {Port = port, Task = Task.CompletedTask})
                 .ToList();
+            _fileReceivedAsync = fileReceivedAsync;
             _stopCts = new CancellationTokenSource();
             _acceptTask = Task.Run(AcceptLoop);
             return Task.CompletedTask;
@@ -73,7 +77,7 @@ namespace FTPServer
                         else
                         {
                             await client.Task;
-                            var ftpClientHandler = new FtpClientHandler(_logger, tcpClient, _stopCts.Token, new IPEndPoint(_ipAddress, client.Port));
+                            var ftpClientHandler = new FtpClientHandler(_logger, tcpClient, _stopCts.Token, new IPEndPoint(_ipAddress, client.Port), _fileReceivedAsync);
                             client.Task = Task.Run(ftpClientHandler.HandleAsync, _stopCts.Token);
                         }
                     }
@@ -99,13 +103,15 @@ namespace FTPServer
             private readonly TcpClient _tcpClient;
             private readonly CancellationToken _stopCt;
             private readonly IPEndPoint _dataIpEndPoint;
+            private readonly FileReceivedAsync _fileReceivedAsync;
 
-            public FtpClientHandler(ILogger logger, TcpClient tcpClient, CancellationToken stopCt, IPEndPoint dataIpEndPoint)
+            public FtpClientHandler(ILogger logger, TcpClient tcpClient, CancellationToken stopCt, IPEndPoint dataIpEndPoint, FileReceivedAsync fileReceivedAsync)
             {
                 _logger = logger;
                 _tcpClient = tcpClient;
                 _stopCt = stopCt;
                 _dataIpEndPoint = dataIpEndPoint;
+                _fileReceivedAsync = fileReceivedAsync;
             }
 
             public async Task HandleAsync()
@@ -181,12 +187,7 @@ namespace FTPServer
                                     break;
                                 }
 
-                                var ms = new MemoryStream();
-                                await tcpClient.GetStream().CopyToAsync(ms);
-                                var fileContent = ms.ToArray(); // TODO avoid mem copy
-
-                                // TODO do something with data
-                                await Console.Out.WriteLineAsync($"{filePath}: {Encoding.ASCII.GetString(fileContent)}");
+                                await _fileReceivedAsync.Invoke(filePath, tcpClient.GetStream());
                             }
 
                             await writer.WriteLineAsync("226 Transfer complete");

@@ -26,12 +26,13 @@ namespace FTPServer
             var ct = BindCtrlC();
 
             var theServer = serviceProvider.GetRequiredService<FtpServer>();
-            await theServer.StartAsync(IPAddress.Parse("127.0.0.1"), 22, 2222, 10);
+            await theServer.StartAsync(IPAddress.Parse("127.0.0.1"), 22, 2222, 10, async (filePath, stream) => {
+                var ms = new MemoryStream();
+                await stream.CopyToAsync(ms);
+                await Console.Out.WriteLineAsync($"{filePath}: {Encoding.ASCII.GetString(ms.ToArray())}");
+            });
 
-            var filePath = "myfile.txt";
-            var fileContents = Encoding.ASCII.GetBytes("Hello world");
-
-            await FtpUploadAsync(filePath, fileContents);
+            await FtpUploadAsync("myfile.txt", Encoding.ASCII.GetBytes("Hello world"));
 
             try
             {
