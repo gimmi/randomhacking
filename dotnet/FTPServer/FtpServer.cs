@@ -183,7 +183,7 @@ namespace FTPServer
 
                                 var ms = new MemoryStream();
                                 await tcpClient.GetStream().CopyToAsync(ms);
-                                var fileContent = ms.ToArray();
+                                var fileContent = ms.ToArray(); // TODO avoid mem copy
 
                                 // TODO do something with data
                                 await Console.Out.WriteLineAsync($"{filePath}: {Encoding.ASCII.GetString(fileContent)}");
