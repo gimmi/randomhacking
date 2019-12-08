@@ -9,7 +9,7 @@ namespace SpikeAsyncDebounce
         private readonly TimeSpan _interval;
         private readonly Action _action;
 
-        private CancellationTokenSource _cts;
+        private CancellationTokenSource _cts = new CancellationTokenSource();
 
         public DebouncedAction(TimeSpan interval, Action action)
         {
@@ -19,17 +19,19 @@ namespace SpikeAsyncDebounce
 
         public void Invoke()
         {
-            _cts?.Cancel();
-            _cts?.Dispose();
-            _cts = new CancellationTokenSource();
-            Task.Delay(_interval, _cts.Token)
-                .ContinueWith(_ => _action(), _cts.Token, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
+            var newCts = new CancellationTokenSource();
+            var oldCts = Interlocked.Exchange(ref _cts, newCts);
+            oldCts.Cancel();
+            oldCts.Dispose();
+            Task.Delay(_interval, newCts.Token)
+                .ContinueWith(_ => _action(), newCts.Token, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
         }
 
         public void Dispose()
         {
-            _cts?.Cancel();
-            _cts?.Dispose();
+            var oldCts = Interlocked.Exchange(ref _cts, null);
+            oldCts.Cancel();
+            oldCts.Dispose();
         }
     }
 }
