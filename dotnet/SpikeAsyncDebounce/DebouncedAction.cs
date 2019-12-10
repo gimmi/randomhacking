@@ -20,11 +20,12 @@ namespace SpikeAsyncDebounce
         public void Invoke()
         {
             var newCts = new CancellationTokenSource();
+            var newCt = newCts.Token;
             var oldCts = Interlocked.Exchange(ref _cts, newCts);
             oldCts.Cancel();
             oldCts.Dispose();
-            Task.Delay(_interval, newCts.Token)
-                .ContinueWith(_ => _action(), newCts.Token, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
+            Task.Delay(_interval, newCt)
+                .ContinueWith(_ => _action(), newCt, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
         }
 
         public void Dispose()
