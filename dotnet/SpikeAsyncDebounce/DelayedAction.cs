@@ -4,20 +4,20 @@ using System.Threading.Tasks;
 
 namespace SpikeAsyncDebounce
 {
-    public class DebouncedAction : IDisposable
+    public class DelayedAction : IDisposable
     {
         private readonly TimeSpan _interval;
         private readonly Action _action;
 
         private CancellationTokenSource _cts = new CancellationTokenSource();
 
-        public DebouncedAction(TimeSpan interval, Action action)
+        public DelayedAction(TimeSpan interval, Action action)
         {
             _interval = interval;
             _action = action;
         }
 
-        public void Invoke()
+        public void Reset()
         {
             var newCts = new CancellationTokenSource();
             var newCt = newCts.Token;

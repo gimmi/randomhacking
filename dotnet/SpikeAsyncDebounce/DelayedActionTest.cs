@@ -6,7 +6,7 @@ using NUnit.Framework;
 
 namespace SpikeAsyncDebounce
 {
-    public class Program
+    public class DelayedActionTest
     {
 /*
         public static void Main()
@@ -33,12 +33,12 @@ namespace SpikeAsyncDebounce
         public async Task Should_invoke_as_expected()
         {
             var count = 0;
-            var sut = new DebouncedAction(TimeSpan.FromSeconds(.5), () => Interlocked.Increment(ref count));
+            var sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => Interlocked.Increment(ref count));
 
             await Task.Delay(1_000);
             Assert.That(count, Is.EqualTo(0));
 
-            sut.Invoke();
+            sut.Reset();
 
             await Task.Delay(200);
             Assert.That(count, Is.EqualTo(0));
@@ -49,12 +49,12 @@ namespace SpikeAsyncDebounce
             await Task.Delay(1_000);
             Assert.That(count, Is.EqualTo(1));
 
-            sut.Invoke();
+            sut.Reset();
 
             await Task.Delay(250);
             Assert.That(count, Is.EqualTo(1));
 
-            sut.Invoke();
+            sut.Reset();
 
             await Task.Delay(250);
             Assert.That(count, Is.EqualTo(1));
@@ -69,12 +69,12 @@ namespace SpikeAsyncDebounce
         public async Task Should_tolerate_concurrent_invoke_calls()
         {
             var count = 0;
-            var sut = new DebouncedAction(TimeSpan.FromSeconds(.5), () => Interlocked.Increment(ref count));
+            var sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => Interlocked.Increment(ref count));
 
             await Task.WhenAll(Enumerable.Range(0, 100).Select(_ => Task.Run(() => {
                 for (var i = 0; i < 1_000; i++)
                 {
-                    sut.Invoke();
+                    sut.Reset();
                 }
             })));
 
