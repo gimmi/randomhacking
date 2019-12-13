@@ -10,12 +10,15 @@ namespace SpikeAsyncDebounce
         private readonly Action _action;
 
         private CancellationTokenSource _cts = new CancellationTokenSource();
+        private Task _actionTask = Task.FromCanceled(new CancellationToken(true));
 
         public DelayedAction(TimeSpan interval, Action action)
         {
             _interval = interval;
             _action = action;
         }
+
+        public bool HasBeenInvoked => _actionTask.IsCompletedSuccessfully || _actionTask.IsFaulted;
 
         public void Reset()
         {
@@ -24,7 +27,7 @@ namespace SpikeAsyncDebounce
             var oldCts = Interlocked.Exchange(ref _cts, newCts);
             oldCts.Cancel();
             oldCts.Dispose();
-            Task.Delay(_interval, newCt)
+            _actionTask = Task.Delay(_interval, newCt)
                 .ContinueWith(_ => _action(), newCt, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
         }
 

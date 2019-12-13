@@ -34,33 +34,41 @@ namespace SpikeAsyncDebounce
         {
             var count = 0;
             var sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => Interlocked.Increment(ref count));
+            Assert.That(sut.HasBeenInvoked, Is.False);
 
             await Task.Delay(1_000);
             Assert.That(count, Is.EqualTo(0));
+            Assert.That(sut.HasBeenInvoked, Is.False);
 
             sut.Reset();
 
             await Task.Delay(200);
             Assert.That(count, Is.EqualTo(0));
+            Assert.That(sut.HasBeenInvoked, Is.False);
 
             await Task.Delay(500);
             Assert.That(count, Is.EqualTo(1));
+            Assert.That(sut.HasBeenInvoked, Is.True);
 
             await Task.Delay(1_000);
             Assert.That(count, Is.EqualTo(1));
+            Assert.That(sut.HasBeenInvoked, Is.True);
 
             sut.Reset();
 
             await Task.Delay(250);
             Assert.That(count, Is.EqualTo(1));
+            Assert.That(sut.HasBeenInvoked, Is.False);
 
             sut.Reset();
 
             await Task.Delay(250);
             Assert.That(count, Is.EqualTo(1));
+            Assert.That(sut.HasBeenInvoked, Is.False);
 
             await Task.Delay(500);
             Assert.That(count, Is.EqualTo(2));
+            Assert.That(sut.HasBeenInvoked, Is.True);
 
             sut.Dispose();
         }
