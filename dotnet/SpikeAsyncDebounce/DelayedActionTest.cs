@@ -70,7 +70,7 @@ namespace SpikeAsyncDebounce
             Assert.That(count, Is.EqualTo(2));
             Assert.That(sut.HasBeenInvoked, Is.True);
 
-            await sut.DisposeAsync();
+            sut.Dispose();
         }
 
         [Test]
@@ -85,26 +85,6 @@ namespace SpikeAsyncDebounce
             Assert.That(sut.HasBeenInvoked, Is.True);
 
             sut.Dispose();
-        }
-
-        [Test]
-        public async Task Should_dispose_async()
-        {
-            var called = false;
-            var sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => called = true);
-
-            sut.Reset();
-
-            await sut.DisposeAsync();
-            Assert.That(called, Is.False);
-
-            sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => called = true);
-
-            sut.Reset();
-            await Task.Delay(1_000);
-
-            await sut.DisposeAsync();
-            Assert.That(called, Is.True);
         }
 
         [Test]
