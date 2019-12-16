@@ -74,6 +74,20 @@ namespace SpikeAsyncDebounce
         }
 
         [Test]
+        public async Task Should_tolerate_exception_in_action()
+        {
+            var sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => throw new ApplicationException());
+
+            sut.Reset();
+
+            await Task.Delay(1_000);
+
+            Assert.That(sut.HasBeenInvoked, Is.True);
+
+            sut.Dispose();
+        }
+
+        [Test]
         public async Task Should_dispose_async()
         {
             var called = false;
