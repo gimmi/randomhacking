@@ -88,6 +88,26 @@ namespace SpikeAsyncDebounce
         }
 
         [Test]
+        public async Task Should_cancel()
+        {
+            var invoked = false;
+            var sut = new DelayedAction(TimeSpan.FromSeconds(1), () => invoked = true);
+
+            sut.Reset();
+
+            await Task.Delay(500);
+
+            sut.Cancel();
+
+            await Task.Delay(1_000);
+
+            Assert.That(sut.HasBeenInvoked, Is.False);
+            Assert.That(invoked, Is.False);
+
+            sut.Dispose();
+        }
+
+        [Test]
         public void Should_tolerate_concurrent_invoke_calls()
         {
             var callCount = 0;
