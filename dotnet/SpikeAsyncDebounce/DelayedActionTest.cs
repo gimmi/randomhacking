@@ -76,12 +76,21 @@ namespace SpikeAsyncDebounce
         [Test]
         public async Task Should_dispose_async()
         {
-            var count = 0;
-            var sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => Interlocked.Increment(ref count));
+            var called = false;
+            var sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => called = true);
 
             sut.Reset();
 
             await sut.DisposeAsync();
+            Assert.That(called, Is.False);
+
+            sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => called = true);
+
+            sut.Reset();
+            await Task.Delay(1_000);
+
+            await sut.DisposeAsync();
+            Assert.That(called, Is.True);
         }
 
         [Test]

@@ -31,19 +31,10 @@ namespace SpikeAsyncDebounce
                 .ContinueWith(_ => _action(), newCt, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
         }
 
-        public async Task DisposeAsync()
+        public Task DisposeAsync()
         {
             Dispose();
-            try
-            {
-                await _actionTask;
-            }
-            catch (TaskCanceledException)
-            {
-                // This is normal
-            }
-
-            _actionTask = null;
+            return _actionTask.ContinueWith(_ => { });
         }
 
         public void Dispose()
