@@ -18,7 +18,7 @@ namespace SpikeAsyncDebounce
             _action = action;
         }
 
-        public bool HasBeenInvoked => _actionTask.IsCompletedSuccessfully || _actionTask.IsFaulted;
+        public bool HasBeenInvoked => _actionTask.Status == TaskStatus.RanToCompletion || _actionTask.Status == TaskStatus.Faulted;
 
         public void Reset()
         {
