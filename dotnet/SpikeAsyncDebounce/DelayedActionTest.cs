@@ -74,23 +74,34 @@ namespace SpikeAsyncDebounce
         }
 
         [Test]
-        public async Task Should_tolerate_concurrent_invoke_calls()
+        public void Should_tolerate_concurrent_invoke_calls()
         {
-            var count = 0;
-            var sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => Interlocked.Increment(ref count));
+            var callCount = 0;
+            var sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => Interlocked.Increment(ref callCount));
 
-            await Task.WhenAll(Enumerable.Range(0, 100).Select(_ => Task.Run(() => {
-                for (var i = 0; i < 1_000; i++)
-                {
+            var semaphore = new SemaphoreSlim(0);
+
+            var threads = Enumerable.Range(0, 100)
+                .Select(_ => new Thread(() => {
+                    semaphore.Wait();
                     sut.Reset();
-                }
-            })));
+                }))
+                .ToArray();
+            foreach (var thread in threads)
+            {
+                thread.Start();
+            }
 
-            Assert.That(count, Is.EqualTo(0));
+            semaphore.Release(100);
 
-            await Task.Delay(1_000);
+            Thread.Sleep(1_000);
 
-            Assert.That(count, Is.EqualTo(1));
+            Assert.That(callCount, Is.EqualTo(1));
+
+            foreach (var thread in threads)
+            {
+                thread.Join();
+            }
 
             sut.Dispose();
         }
