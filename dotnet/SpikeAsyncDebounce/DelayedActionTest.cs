@@ -70,7 +70,18 @@ namespace SpikeAsyncDebounce
             Assert.That(count, Is.EqualTo(2));
             Assert.That(sut.HasBeenInvoked, Is.True);
 
-            sut.Dispose();
+            await sut.DisposeAsync();
+        }
+
+        [Test]
+        public async Task Should_dispose_async()
+        {
+            var count = 0;
+            var sut = new DelayedAction(TimeSpan.FromSeconds(.5), () => Interlocked.Increment(ref count));
+
+            sut.Reset();
+
+            await sut.DisposeAsync();
         }
 
         [Test]

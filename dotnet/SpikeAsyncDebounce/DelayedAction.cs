@@ -31,6 +31,21 @@ namespace SpikeAsyncDebounce
                 .ContinueWith(_ => _action(), newCt, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
         }
 
+        public async Task DisposeAsync()
+        {
+            Dispose();
+            try
+            {
+                await _actionTask;
+            }
+            catch (TaskCanceledException)
+            {
+                // This is normal
+            }
+
+            _actionTask = null;
+        }
+
         public void Dispose()
         {
             var oldCts = Interlocked.Exchange(ref _cts, null);
