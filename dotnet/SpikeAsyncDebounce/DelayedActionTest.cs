@@ -139,5 +139,26 @@ namespace SpikeAsyncDebounce
 
             sut.Dispose();
         }
+
+        [Test]
+        public async Task Should_invoke_immediately()
+        {
+            var invokeCount = 0;
+            var sut = new DelayedAction(TimeSpan.FromSeconds(1), () => Interlocked.Increment(ref invokeCount));
+
+            sut.Invoke();
+
+            await Task.Delay(500);
+
+            Assert.That(sut.HasBeenInvoked, Is.True);
+            Assert.That(invokeCount, Is.EqualTo(1));
+
+            await Task.Delay(1000);
+
+            Assert.That(sut.HasBeenInvoked, Is.True);
+            Assert.That(invokeCount, Is.EqualTo(1));
+
+            sut.Dispose();
+        }
     }
 }

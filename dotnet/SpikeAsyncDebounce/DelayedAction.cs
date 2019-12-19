@@ -10,7 +10,7 @@ namespace SpikeAsyncDebounce
         private readonly Action _action;
 
         private CancellationTokenSource _cts = new CancellationTokenSource();
-        private Task _actionTask = Task.FromCanceled(new CancellationToken(true));
+        private Task _invokeTask = Task.FromCanceled(new CancellationToken(true));
 
         public DelayedAction(TimeSpan interval, Action action)
         {
@@ -18,17 +18,19 @@ namespace SpikeAsyncDebounce
             _action = action;
         }
 
-        public bool HasBeenInvoked => _actionTask.Status == TaskStatus.RanToCompletion || _actionTask.Status == TaskStatus.Faulted;
+        public bool HasBeenInvoked => _invokeTask.Status == TaskStatus.RanToCompletion || _invokeTask.Status == TaskStatus.Faulted;
 
         public void Reset()
         {
-            var newCts = new CancellationTokenSource();
-            var newCt = newCts.Token;
-            var oldCts = Interlocked.Exchange(ref _cts, newCts);
-            oldCts.Cancel();
-            oldCts.Dispose();
-            _actionTask = Task.Delay(_interval, newCt)
-                .ContinueWith(_ => _action(), newCt, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
+            var ct = ReplaceCts();
+            _invokeTask = Task.Delay(_interval, ct)
+                .ContinueWith(_ => _action(), ct, TaskContinuationOptions.OnlyOnRanToCompletion, TaskScheduler.Current);
+        }
+
+        public void Invoke()
+        {
+            var ct = ReplaceCts();
+            _invokeTask = Task.Run(_action, ct);
         }
 
         public void Cancel() => _cts.Cancel();
@@ -38,6 +40,16 @@ namespace SpikeAsyncDebounce
             var oldCts = Interlocked.Exchange(ref _cts, null);
             oldCts.Cancel();
             oldCts.Dispose();
+        }
+
+        private CancellationToken ReplaceCts()
+        {
+            var newCts = new CancellationTokenSource();
+            var newCt = newCts.Token;
+            var oldCts = Interlocked.Exchange(ref _cts, newCts);
+            oldCts.Cancel();
+            oldCts.Dispose();
+            return newCt;
         }
     }
 }
