@@ -2,12 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
 
@@ -18,6 +21,7 @@ namespace SpikeGrpc
         public static void Main(string[] args)
         {
             var host = new HostBuilder()
+                .UseEnvironment(Environments.Development)
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .ConfigureHostConfiguration(config => {
                     config.AddEnvironmentVariables(prefix: "DOTNET_");
@@ -75,8 +79,13 @@ namespace SpikeGrpc
                     options.ValidateScopes = isDevelopment;
                     options.ValidateOnBuild = isDevelopment;
                 })
-                .ConfigureWebHostDefaults(webBuilder => {
-                    webBuilder.UseStartup<Startup>();
+                .ConfigureWebHostDefaults(webHost => {
+                    webHost.ConfigureKestrel(kestrel => {
+                        kestrel.Listen(IPAddress.Any, 5052, listen => {
+                            listen.Protocols = HttpProtocols.Http2;
+                        });
+                    });
+                    webHost.UseStartup<Startup>();
                 })
                 .Build();
 
