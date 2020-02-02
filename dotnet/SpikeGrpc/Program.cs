@@ -1,18 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Net;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.EventLog;
 
 namespace SpikeGrpc
 {
@@ -31,13 +24,33 @@ namespace SpikeGrpc
                     options.ValidateScopes = isDevelopment;
                     options.ValidateOnBuild = isDevelopment;
                 })
+                .ConfigureServices(services => {
+                    services.AddGrpc();
+                })
                 .ConfigureWebHostDefaults(webHost => {
                     webHost.ConfigureKestrel(kestrel => {
                         kestrel.Listen(IPAddress.Any, 5052, listen => {
                             listen.Protocols = HttpProtocols.Http2;
                         });
                     });
-                    webHost.UseStartup<Startup>();
+
+                    webHost.Configure((env, app) => {
+                        if (env.HostingEnvironment.IsDevelopment())
+                        {
+                            app.UseDeveloperExceptionPage();
+                        }
+
+                        app.UseRouting();
+
+                        app.UseEndpoints(endpoints => {
+                            endpoints.MapGrpcService<GreeterService>();
+
+                            endpoints.MapGet("/", async context => {
+                                await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
+                            });
+                        });
+
+                    });
                 })
                 .Build();
 
