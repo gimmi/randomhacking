@@ -1,43 +1,86 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using Grpc.Core;
-using Grpc.Core.Interceptors;
-using Grpc.Core.Logging;
-using Spikegrpc.Proto;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.EventLog;
 
 namespace SpikeGrpc
 {
-    public static class Program
+    public class Program
     {
-        public static async Task Main()
+        public static void Main(string[] args)
         {
-            GrpcEnvironment.SetLogger(new LogLevelFilterLogger(new ConsoleLogger(), LogLevel.Debug));
-            
-            const int port = 50052;
-            var server = new Server {
-                Services = { EchoService.BindService(new EchoServiceServer()).Intercept(new ServerInterceptor()) },
-                Ports = { new ServerPort("localhost", port, ServerCredentials.Insecure) },
-            };
-            server.Start();
-            
-            await Console.Out.WriteLineAsync("RouteGuide server listening on port " + port);
+            var host = new HostBuilder()
+                .UseContentRoot(Directory.GetCurrentDirectory())
+                .ConfigureHostConfiguration(config => {
+                    config.AddEnvironmentVariables(prefix: "DOTNET_");
+                    if (args != null)
+                    {
+                        config.AddCommandLine(args);
+                    }
+                })
+                .ConfigureAppConfiguration((hostingContext, config) => {
+                    var env = hostingContext.HostingEnvironment;
 
-            var channel = new Channel("localhost", port, ChannelCredentials.Insecure);
-            var client = new EchoService.EchoServiceClient(channel);
+                    config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
-            var echoRequest = new EchoRequest {Message = "Hello GRPC!"};
-            var echoResponse = await client.EchoAsync(echoRequest);
-            
-            await Console.Out.WriteLineAsync($"EchoService.Echo({echoRequest.Message}) => {echoResponse.Message}");
+                    if (env.IsDevelopment() && !string.IsNullOrEmpty(env.ApplicationName))
+                    {
+                        var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
+                        if (appAssembly != null)
+                        {
+                            config.AddUserSecrets(appAssembly, optional: true);
+                        }
+                    }
 
-            await Console.Out.WriteLineAsync("Press enter to complete...");
-            
-            await Console.In.ReadLineAsync();
+                    config.AddEnvironmentVariables();
 
-            await channel.ShutdownAsync();
-            await server.ShutdownAsync();
-            
-            await Console.Out.WriteLineAsync("Done.");
+                    if (args != null)
+                    {
+                        config.AddCommandLine(args);
+                    }
+                })
+                .ConfigureLogging((hostingContext, logging) => {
+                    var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+                    // IMPORTANT: This needs to be added *before* configuration is loaded, this lets
+                    // the defaults be overridden by the configuration.
+                    if (isWindows)
+                    {
+                        // Default the EventLogLoggerProvider to warning or above
+                        logging.AddFilter<EventLogLoggerProvider>(level => level >= LogLevel.Warning);
+                    }
+
+                    logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
+                    logging.AddConsole();
+                    logging.AddDebug();
+                    logging.AddEventSourceLogger();
+
+                    if (isWindows)
+                    {
+                        // Add the EventLogLoggerProvider on windows machines
+                        logging.AddEventLog();
+                    }
+                })
+                .UseDefaultServiceProvider((context, options) => {
+                    var isDevelopment = context.HostingEnvironment.IsDevelopment();
+                    options.ValidateScopes = isDevelopment;
+                    options.ValidateOnBuild = isDevelopment;
+                })
+                .ConfigureWebHostDefaults(webBuilder => {
+                    webBuilder.UseStartup<Startup>();
+                })
+                .Build();
+
+            host.Run();
         }
     }
 }
