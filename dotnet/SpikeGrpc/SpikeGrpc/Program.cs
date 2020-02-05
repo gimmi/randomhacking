@@ -27,29 +27,18 @@ namespace SpikeGrpc
                 .ConfigureServices(services => {
                     services.AddGrpc();
                 })
-                .ConfigureWebHostDefaults(webHost => {
-                    webHost.ConfigureKestrel(kestrel => {
+                .ConfigureWebHostDefaults(web => {
+                    web.ConfigureKestrel(kestrel => {
                         kestrel.Listen(IPAddress.Any, 5052, listen => {
                             listen.Protocols = HttpProtocols.Http2;
                         });
                     });
 
-                    webHost.Configure((env, app) => {
-                        if (env.HostingEnvironment.IsDevelopment())
-                        {
-                            app.UseDeveloperExceptionPage();
-                        }
-
+                    web.Configure(app => {
                         app.UseRouting();
-
                         app.UseEndpoints(endpoints => {
                             endpoints.MapGrpcService<GreeterService>();
-
-                            endpoints.MapGet("/", async context => {
-                                await context.Response.WriteAsync("Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
-                            });
                         });
-
                     });
                 })
                 .Build();
