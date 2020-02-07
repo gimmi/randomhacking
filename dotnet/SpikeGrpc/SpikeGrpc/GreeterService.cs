@@ -13,10 +13,10 @@ namespace SpikeGrpc
             _logger = logger;
         }
 
-        public override Task<HelloReply> SayHello(HelloRequest request, ServerCallContext context)
+        public override Task<HelloResponse> SayHello(HelloRequest request, ServerCallContext context)
         {
             _logger.LogInformation("SayHello({})", request.Name);
-            return Task.FromResult(new HelloReply {
+            return Task.FromResult(new HelloResponse {
                 Message = "Hello " + request.Name
             });
         }
