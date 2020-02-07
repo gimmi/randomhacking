@@ -1,7 +1,5 @@
-using System.Net;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,9 +26,10 @@ namespace SpikeGrpc
                     services.AddGrpc();
                 })
                 .ConfigureWebHostDefaults(web => {
+                    web.UseUrls("http://0.0.0.0:5052");
                     web.ConfigureKestrel(kestrel => {
-                        kestrel.Listen(IPAddress.Any, 5052, listen => {
-                            listen.Protocols = HttpProtocols.Http2;
+                        kestrel.ConfigureEndpointDefaults(endpoints => {
+                            endpoints.Protocols = HttpProtocols.Http2;
                         });
                     });
 
