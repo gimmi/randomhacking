@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -9,18 +10,16 @@ namespace SpikeGrpc
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = new HostBuilder()
-                .UseEnvironment(Environments.Development)
                 .ConfigureLogging(logging => {
                     logging.SetMinimumLevel(LogLevel.Trace);
                     logging.AddConsole();
                 })
-                .UseDefaultServiceProvider((context, options) => {
-                    var isDevelopment = context.HostingEnvironment.IsDevelopment();
-                    options.ValidateScopes = isDevelopment;
-                    options.ValidateOnBuild = isDevelopment;
+                .UseDefaultServiceProvider(provider => {
+                    provider.ValidateScopes = true;
+                    provider.ValidateOnBuild = true;
                 })
                 .ConfigureServices(services => {
                     services.AddGrpc();
@@ -40,9 +39,12 @@ namespace SpikeGrpc
                         });
                     });
                 })
+                .UseConsoleLifetime(console => {
+                    console.SuppressStatusMessages = true;
+                })
                 .Build();
 
-            host.Run();
+            await host.RunAsync();
         }
     }
 }
