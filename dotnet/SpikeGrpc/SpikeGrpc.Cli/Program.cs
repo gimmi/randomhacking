@@ -13,12 +13,13 @@ namespace SpikeGrpc.Cli
             await CoconaApp.RunAsync<Program>(args);
         }
 
-        public async Task Main()
+        [Command("hello")]
+        public async Task SayHelloAsync(string name = "World")
         {
             var channel = GrpcChannel.ForAddress("http://127.0.0.1:5052");
             var client = new Greeter.GreeterClient(channel);
 
-            var req = new HelloRequest{ Name = "Gimmi" };
+            var req = new HelloRequest{ Name = name };
             var resp = await client.SayHelloAsync(req);
 
             await Console.Out.WriteLineAsync(resp.Message);

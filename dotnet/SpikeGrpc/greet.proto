@@ -6,6 +6,7 @@ package spikegrpc;
 
 service Greeter {
   rpc SayHello (HelloRequest) returns (HelloResponse);
+  rpc Echo (stream EchoRequest) returns (stream EchoResponse);
 }
 
 message HelloRequest {
@@ -13,5 +14,13 @@ message HelloRequest {
 }
 
 message HelloResponse {
+  string message = 1;
+}
+
+message EchoRequest {
+  string message = 1;
+}
+
+message EchoResponse {
   string message = 1;
 }
