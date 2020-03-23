@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -24,7 +25,13 @@ namespace SpikeAzureStorageRest
               tenant: 'TODO'
             }");
 
-            var bytes = await GetBlobAsync(servicePrincipal, "mdlreleases", "configurations", "/rig2/my-module.json");
+            var blobNames = await ListBlobsAsync(servicePrincipal, "mdlreleases", "configurations", "rig2/");
+            foreach (var blobName in blobNames)
+            {
+                Console.WriteLine("Found blob: " + blobName);
+            }
+
+            var bytes = await GetBlobAsync(servicePrincipal, "mdlreleases", "configurations", "rig2/my-module.json");
             if (bytes.Length == 0)
             {
                 Console.WriteLine("Not found");
@@ -59,14 +66,51 @@ namespace SpikeAzureStorageRest
             return accessToken;
         }
 
-        private static async Task<byte[]> GetBlobAsync(ServicePrincipal servicePrincipal, string storageAccountName, string containerName, string blobPath)
+        private static async Task<List<string>> ListBlobsAsync(ServicePrincipal servicePrincipal, string storageAccountName, string containerName, string prefix)
         {
             var resource = $"https://{storageAccountName}.blob.core.windows.net/";
 
             // This require the "Storage Blob Data Reader" role on the service principal
             var accessToken = await GetAccessTokenAsync(servicePrincipal, resource);
 
-            var uri = string.Concat(resource, containerName, blobPath);
+            var uri = string.Concat(resource, containerName, "?restype=container&comp=list&prefix=", prefix);
+
+            var request = new HttpRequestMessage {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(uri),
+                Headers = {
+                    Authorization = new AuthenticationHeaderValue("Bearer", accessToken),
+                    Date = DateTimeOffset.UtcNow
+                }
+            };
+
+            Console.WriteLine($"{request.Method} {request.RequestUri}");
+
+            request.Headers.Add("x-ms-version", "2019-07-07");
+
+            var response = await HttpClient.SendAsync(request);
+
+            response.EnsureSuccessStatusCode();
+
+            var names = new List<string>();
+            var xml = await response.Content.ReadAsStringAsync();
+            var enumerationResultsEl = XElement.Parse(xml);
+            foreach (var blobEl in enumerationResultsEl.Element("Blobs").Elements("Blob"))
+            {
+                names.Add(blobEl.Element("Name").Value);
+            }
+
+            return names;
+        }
+
+        private static async Task<byte[]> GetBlobAsync(ServicePrincipal servicePrincipal, string storageAccountName, string containerName, string blobName)
+        {
+            var resource = $"https://{storageAccountName}.blob.core.windows.net/";
+
+            // This require the "Storage Blob Data Reader" role on the service principal
+            var accessToken = await GetAccessTokenAsync(servicePrincipal, resource);
+
+            var uri = string.Concat(resource, containerName, "/", blobName);
 
             var request = new HttpRequestMessage {
                 Method = HttpMethod.Get,
