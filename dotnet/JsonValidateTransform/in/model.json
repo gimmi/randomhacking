@@ -1,4 +1,11 @@
 {
   "$schema": "http://gimmi.github.com/schemas/sample.schema.json",
-  "name": "ciao"
+  "name": "ciao",
+  "symbols": [{
+    "name": "s1", "tags": ["a", "b", "c"]
+  }, {
+    "name": "s2", "tags": ["a", "b", "c"]
+  }, {
+    "name": "s3", "tags": ["a", "b", "c"]
+  }]
 }
