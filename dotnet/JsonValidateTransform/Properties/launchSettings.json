@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "JsonValidateTransform": {
+      "commandName": "Project",
+      "workingDirectory": "$(ProjectDir)",
+      "commandLineArgs": "--in ./in --out ./out"
+    }
+  }
+}
