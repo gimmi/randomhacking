@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Cocona;
 using DotLiquid;
@@ -24,9 +25,16 @@ namespace JsonValidateTransform
             var schemaJson = await File.ReadAllTextAsync(schemaPath);
             var schema = JSchema.Parse(schemaJson);
 
-            if (!model.IsValid(schema))
+            var errors = new List<string>();
+            model.Validate(schema, (_, e) => errors.Add(e.Message));
+            if (errors.Any())
             {
-                throw new Exception("Model invalid according to schema");
+                foreach (var error in errors)
+                {
+                    await Console.Error.WriteLineAsync(error);
+                }
+
+                return;
             }
 
             Directory.CreateDirectory(outputDir);

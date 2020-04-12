@@ -1,1 +1,4 @@
-{"name":"from-model"}
+{
+  "$schema": "http://gimmi.github.com/schemas/sample.schema.json",
+  "name": "ciao"
+}
