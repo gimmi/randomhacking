@@ -1,9 +1,10 @@
 const commander = require('commander');
-const jsonschema = require('jsonschema');
 const liquid = require('liquid');
 const path = require('path');
 const json5 = require('json5')
 const fs = require('fs').promises;
+
+var Ajv = require('ajv');
 
 async function main() {
     const args = commander.program
@@ -16,10 +17,10 @@ async function main() {
     const modelText = await fs.readFile(path.join(args.inputDir, 'model.json'));
     const model = json5.parse(modelText, 'utf8');
 
-    const validatioResult = jsonschema.validate(model, schema);
-    console.dir(validatioResult)
-    if (validatioResult.errors.length) {
-        validatioResult.errors.forEach(err => console.error(err.stack));
+    var ajv = new Ajv({ schemas: [schema], allErrors: true });
+    if (!ajv.validate(model['$schema'], model)) {
+        //ajv.errors.forEach(err => console.error(err.stack));
+        console.log(ajv.errorsText(null, { dataVar: 'model', separator: '\n' }));
         return 1;
     }
 
