@@ -19,8 +19,7 @@ async function main() {
 
     var ajv = new Ajv({ schemas: [schema], allErrors: true });
     if (!ajv.validate(model['$schema'], model)) {
-        //ajv.errors.forEach(err => console.error(err.stack));
-        console.log(ajv.errorsText(null, { dataVar: 'model', separator: '\n' }));
+        console.error(ajv.errorsText(null, { dataVar: 'model', separator: '\n' }));
         return 1;
     }
 
