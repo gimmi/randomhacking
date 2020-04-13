@@ -11,13 +11,16 @@ async function main() {
       .requiredOption('-o --output-dir <path>', 'output dir')
       .parse(process.argv);
 
-    const schema = json5.parse(await fs.readFile(path.join(args.inputDir, 'schema.json'), 'utf8'));
-    const model = json5.parse(await fs.readFile(path.join(args.inputDir, 'model.json'), 'utf8'));
+    const schemaText = await fs.readFile(path.join(args.inputDir, 'schema.json'));
+    const schema = json5.parse(schemaText, 'utf8');
+    const modelText = await fs.readFile(path.join(args.inputDir, 'model.json'));
+    const model = json5.parse(modelText, 'utf8');
 
-    const validatioResult = jsonschema.validate(model, schema)
+    const validatioResult = jsonschema.validate(model, schema);
+    console.dir(validatioResult)
     if (validatioResult.errors.length) {
-        validatioResult.errors.forEach(console.log);
-        return;
+        validatioResult.errors.forEach(err => console.error(err.stack));
+        return 1;
     }
 
     await fs.mkdir(args.outputDir, { recursive: true });
@@ -29,14 +32,16 @@ async function main() {
         .map(name => path.join(args.inputDir, name))
         .map(async templatePath => {
             const outputPath = path.join(args.outputDir, path.parse(templatePath).name + '.json');
-            console.log(templatePath + ' -> ' + outputPath);
+            console.log(templatePath, '->', outputPath);
 
             const templateText = await fs.readFile(templatePath, 'utf8');
             const resultText = await liquidEng.parseAndRender(templateText, model);
             const resultJson = json5.parse(resultText);
             await fs.writeFile(outputPath, JSON.stringify(resultJson, null, 2));
         }));
-    console.log("Done.");
 }
 
-main().catch(err => console.error(err));
+main().catch(err => {
+    console.error(err)
+    return 1
+}).then(code => process.exit(code));
