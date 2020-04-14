@@ -1,11 +1,28 @@
 {
   "$schema": "./schema.json",
   "name": "ciao",
-  "symbols": [{
-    "name": "s1", "tags": ["a", "b", "c"]
-  }, {
-    "name": "s2", "tags": ["a", "b", "c"]
-  }, {
-    "name": "s3", "tags": ["a", "b", "c"]
-  }]
+  "symbols": [
+    {
+      "name": "s1",
+      "type": "int32"
+    },
+    {
+      "name": "s2",
+      "type": "int32"
+    },
+    {
+      "name": "s3",
+      "type": "int32",
+      "modules": {
+        "xoxox": {
+          "simple_name": "ciao",
+          "simple_value": "vvv"
+        },
+        "www": {
+          "name2": "lala"
+        },
+        "xxx": true
+      }
+    }
+  ]
 }

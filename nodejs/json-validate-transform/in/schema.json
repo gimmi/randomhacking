@@ -1,34 +1,52 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "symbols": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "tags": {
-            "type": "array",
-            "items": {
-              "type": "string"
+  "definitions": {
+    "symbol": {
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "enum": ["string", "int32"] },
+        "modules": {
+          "type": "object",
+          "patternProperties": {
+            "^.+$": { 
+              "anyOf": [
+                { "type": "boolean" },
+                { "$ref": "#/definitions/module1_symbol" },
+                { "$ref": "#/definitions/module2_symbol" }
+              ] 
             }
           }
-        },
-        "required": [
-          "name",
-          "tags"
-        ]
-      }
+        }
+      },
+      "additionalProperties": false,
+      "required": [ "name", "type" ]
+    },
+    "module1_symbol": {
+      "type": "object",
+      "properties": {
+        "simple_name": { "type": "string" },
+        "simple_value": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": [ "simple_name", "simple_value" ]
+    },
+    "module2_symbol": {
+      "type": "object",
+      "properties": {
+        "name2": { "type": "string" }
+      },
+      "additionalProperties": false,
+      "required": [ "name2" ]
     }
   },
-  "required": [
-    "name",
-    "symbols"
-  ]
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "symbols": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/symbol" }
+    }
+  },
+  "required": [ "name", "symbols" ]
 }
