@@ -1,5 +1,5 @@
 {
-  "$schema": "http://gimmi.github.com/schemas/sample.schema.json",
+  "$schema": "./schema.json",
   "name": "ciao",
   "symbols": [{
     "name": "s1", "tags": ["a", "b", "c"]

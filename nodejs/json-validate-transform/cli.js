@@ -12,13 +12,14 @@ async function main() {
       .requiredOption('-o --output-dir <path>', 'output dir')
       .parse(process.argv);
 
-    const schemaText = await fs.readFile(path.join(args.inputDir, 'schema.json'));
-    const schema = json5.parse(schemaText, 'utf8');
     const modelText = await fs.readFile(path.join(args.inputDir, 'model.json'));
     const model = json5.parse(modelText, 'utf8');
 
-    var ajv = new Ajv({ schemas: [schema], allErrors: true });
-    if (!ajv.validate(model['$schema'], model)) {
+    const schemaText = await fs.readFile(path.resolve(args.inputDir, model['$schema']));
+    const schema = json5.parse(schemaText, 'utf8');
+
+    var ajv = new Ajv({ schemas: [], allErrors: true });
+    if (!ajv.validate(schema, model)) {
         console.error(ajv.errorsText(null, { dataVar: 'model', separator: '\n' }));
         return 1;
     }
