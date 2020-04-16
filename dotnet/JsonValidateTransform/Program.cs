@@ -15,7 +15,7 @@ namespace JsonValidateTransform
     {
         public static void Main(string[] args) => CoconaApp.Run<Program>(args);
 
-        public async Task RunAsync([Option("in")] string inputDir, [Option("out")] string outputDir)
+        public async Task RunAsync([Option("in")] string inputDir, [Option("out")] string outputDir, bool checkJson = true)
         {
             var modelPath = Path.Combine(inputDir, "model.json");
             var modelJson = await File.ReadAllTextAsync(modelPath);
@@ -48,7 +48,7 @@ namespace JsonValidateTransform
                 var modelHash = (Hash)JsonToHash(model);
 
                 var outputRaw = template.Render(modelHash);
-                var outputJson = outputRaw; // JObject.Parse(outputRaw).ToString(Formatting.Indented);
+                var outputJson = checkJson ? JObject.Parse(outputRaw).ToString(Formatting.Indented) : outputRaw;
                 await File.WriteAllTextAsync(outputPath, outputJson);
             }
         }
