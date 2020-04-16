@@ -21,7 +21,7 @@ namespace JsonValidateTransform
             var modelJson = await File.ReadAllTextAsync(modelPath);
             var model = JObject.Parse(modelJson);
 
-            var schemaPath = Path.Combine(inputDir, "schema.json");
+            var schemaPath = Path.Combine(inputDir, model.Value<string>("$schema"));
             var schemaJson = await File.ReadAllTextAsync(schemaPath);
             var schema = JSchema.Parse(schemaJson);
 
@@ -45,12 +45,29 @@ namespace JsonValidateTransform
                 var templateText = await File.ReadAllTextAsync(templatePath);
                 var template = Template.Parse(templateText);
 
-                var modelDict = model.ToObject<IDictionary<string, object>>();
-                var modelHash = Hash.FromDictionary(modelDict);
+                var modelHash = (Hash)JsonToHash(model);
 
                 var outputRaw = template.Render(modelHash);
-                var outputJson = JObject.Parse(outputRaw).ToString(Formatting.Indented);
+                var outputJson = outputRaw; // JObject.Parse(outputRaw).ToString(Formatting.Indented);
                 await File.WriteAllTextAsync(outputPath, outputJson);
+            }
+        }
+
+        private object JsonToHash(JToken jToken)
+        {
+            switch (jToken)
+            {
+                case JObject jObject:
+                    return jObject.Properties().Aggregate(new Hash(), (hash, jProperty) => {
+                        hash.Add(jProperty.Name, JsonToHash(jProperty.Value));
+                        return hash;
+                    });
+                case JArray jArray:
+                    return jArray.Select(JsonToHash).ToArray();
+                case JValue jValue:
+                    return jValue.Value;
+                default:
+                    throw new Exception("unknown");
             }
         }
     }
