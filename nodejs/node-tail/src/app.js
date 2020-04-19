@@ -11,7 +11,6 @@ const bus = new EventEmitter();
 const app = express()
 expressWs(app)
 app.use(bodyParser.json())
-app.use(bodyParser.text())
 
 app.post('/api/send', (req, res) => {
     console.log('Publish:', req.body);
@@ -22,7 +21,7 @@ app.post('/api/send', (req, res) => {
 app.ws('/ws', webSocket => {
     const messageListener = message => {
         console.log('WS send:', message);
-        webSocket.send(message);
+        webSocket.send(JSON.stringify(message));
     }
 
     console.log('WS client open');

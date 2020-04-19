@@ -17,7 +17,7 @@
             ws.onmessage = evt => {
                 console.log('ws.onmessage');
                 const divEl = document.createElement('div');
-                divEl.innerText = evt.data;
+                divEl.innerText = `${evt.type}: ${evt.data}`;
                 outputEl.appendChild(divEl);
             };
 
@@ -30,9 +30,9 @@
                 const putResp = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'text/plain'
+                        'Content-Type': 'application/json'
                     },
-                    body: 'Message #' + counter
+                    body: JSON.stringify({ counter })
                 })
             });
         })
