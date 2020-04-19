@@ -37,7 +37,29 @@
             height: 100%;
             width: 100%;
         }
-        /* div { border: 1px solid red; } */
+
+        /*div { border: 1px solid red; }*/
+
+        .main {
+            position: absolute; top: 0; bottom: 0; left: 0; right: 0;
+
+            display: flex; flex-direction: column;
+
+            padding: 0 .5em 0 .5em;
+        }
+
+        .scrollable {
+            flex-grow: 1;
+
+            display: flex; flex-direction: column; justify-content: flex-end;
+
+            overflow: hidden;
+            font-family: monospace;
+        }
+
+        .footer {
+            padding: .5em 0 .5em 0;
+        }
     </style>
 
     <script type="text/javascript">
@@ -81,11 +103,11 @@
 </head>
 
 <body>
-    <div style="height: 100%; display: flex; flex-flow: column nowrap;">
-        <div id="output" style="flex: 1 1 auto; padding: .5em; display: flex; flex-flow: column nowrap; justify-content: flex-end; overflow: auto;">
+    <div class="main">
+        <div id="output" class="scrollable">
         </div>
-        <div style="flex: 0 1 auto; padding: .5em; display: flex; flex-flow: row nowrap;">
-            <button id="update" type="button" style="flex: 0 1 auto; font-size: larger;">Send</button>
+        <div class="footer">
+            <button id="update" type="button" style="font-size: larger;">Send</button>
         </div>
     </div>
 </body>
