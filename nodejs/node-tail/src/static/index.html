@@ -6,17 +6,57 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>client-app</title>
+    <style type="text/css">
+        /* CSS Reset ------------------------------- */
+        html {
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
+        }
+
+        body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+            margin: 0;
+            padding: 0;
+            font-weight: normal;
+        }
+
+        ol, ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+        /* CSS Reset ------------------------------- */
+
+        html, body {
+            height: 100%;
+            width: 100%;
+        }
+        /* div { border: 1px solid red; } */
+    </style>
+
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', async () => {
             const updateEl = document.getElementById('update')
             const outputEl = document.getElementById('output')
+
+            Array.from({ length: 100 }).forEach(() => {
+                const divEl = document.createElement('div');
+                // divEl.innerHTML += '&nbsp;';
+                outputEl.appendChild(divEl);
+            })
 
             var ws = new WebSocket('ws://localhost:3000/ws');
             ws.onopen = () => console.log('ws.open');
 
             ws.onmessage = evt => {
                 console.log('ws.onmessage');
-                const divEl = document.createElement('div');
+                const divEl = outputEl.firstElementChild;
                 divEl.innerText = `${evt.type}: ${evt.data}`;
                 outputEl.appendChild(divEl);
             };
@@ -41,9 +81,13 @@
 </head>
 
 <body>
-    <p>Hello World!</p>
-    <button id="update" type="button">Send</button>
-    <div id="output"></div>
+    <div style="height: 100%; display: flex; flex-flow: column nowrap;">
+        <div id="output" style="flex: 1 1 auto; padding: .5em; display: flex; flex-flow: column nowrap; justify-content: flex-end; overflow: auto;">
+        </div>
+        <div style="flex: 0 1 auto; padding: .5em; display: flex; flex-flow: row nowrap;">
+            <button id="update" type="button" style="flex: 0 1 auto; font-size: larger;">Send</button>
+        </div>
+    </div>
 </body>
 
 </html>
