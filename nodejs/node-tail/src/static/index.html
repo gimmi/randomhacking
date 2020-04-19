@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>client-app</title>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', async () => {
+            const updateEl = document.getElementById('update')
+            const outputEl = document.getElementById('output')
+
+            var ws = new WebSocket('ws://localhost:3000/ws');
+            ws.onopen = () => console.log('ws.open');
+
+            ws.onmessage = evt => {
+                console.log('ws.onmessage');
+                const divEl = document.createElement('div');
+                divEl.innerText = evt.data;
+                outputEl.appendChild(divEl);
+            };
+
+            ws.onclose = () => console.log('ws.onclose');
+
+            let counter = 0;
+            updateEl.addEventListener('click', async () => {
+                counter += 1;
+                const apiUrl = window.location.origin + '/api/send';
+                const putResp = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain'
+                    },
+                    body: 'Message #' + counter
+                })
+            });
+        })
+    </script>
+</head>
+
+<body>
+    <p>Hello World!</p>
+    <button id="update" type="button">Send</button>
+    <div id="output"></div>
+</body>
+
+</html>
