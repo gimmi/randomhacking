@@ -12,18 +12,13 @@ const app = express()
 expressWs(app)
 app.use(bodyParser.json())
 
-app.post('/api/send', (req, res) => {
+app.post('/api/publish', (req, res) => {
     console.log('Publish:', req.body);
     bus.emit('message', req.body)
     res.status(200).end();
 })
 
 app.ws('/ws', webSocket => {
-    const messageListener = message => {
-        console.log('WS send:', message);
-        webSocket.send(JSON.stringify(message));
-    }
-
     console.log('WS client open');
     bus.addListener('message', messageListener);
 
@@ -31,6 +26,11 @@ app.ws('/ws', webSocket => {
         console.log('WS client close');
         bus.removeListener('message', messageListener);
     });
+
+    function messageListener(message) {
+        console.log('WS send:', message);
+        webSocket.send(JSON.stringify(message));
+    }
 });
 
 app.use(express.static(path.join(__dirname, 'static')))

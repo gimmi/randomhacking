@@ -26,13 +26,14 @@
             let counter = 0;
             updateEl.addEventListener('click', async () => {
                 counter += 1;
-                const apiUrl = window.location.origin + '/api/send';
-                const putResp = await fetch(apiUrl, {
+                const apiUrl = window.location.origin + '/api/publish';
+                const body = JSON.stringify({ counter });
+                await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ counter })
+                    body: body
                 })
             });
         })
