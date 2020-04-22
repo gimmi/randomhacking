@@ -1,5 +1,10 @@
 import React from 'react';
 
+function LogEntryComponent(props) {
+    const style = { paddingTop: '.3em' };
+    return <div style={style}>{props.log.text}</div>
+}
+
 export class MainComponent extends React.Component {
     constructor(props) {
         super(props);
@@ -7,7 +12,7 @@ export class MainComponent extends React.Component {
         this.counter = 0;
 
         this.state = { 
-            logs: Array.from({ length: 10 }).map((_, key) => ({ key, val: '' }))
+            logs: Array.from({ length: 10 }).map((_, key) => ({ key, text: '' }))
         };
     }
 
@@ -23,39 +28,32 @@ export class MainComponent extends React.Component {
     }
 
     componentDidMount() {
-        console.log('componentDidMount')
-
         this.ws = new WebSocket('ws://localhost:3000/ws');
         this.ws.onmessage = message => {
-            console.log('ws.onmessage');
-
-            this.setState(state => {
-                const log = state.logs[0];
-                const logs = [];
-
-                state.logs.forEach((log, idx) => {
-                    if (idx) {
-                        logs.push(log)
-                    }
-                });
-                log.val = `${message.type}: ${message.data}`;
-                logs.push(log);
-                
-                return { logs }
-            });
-
-        };
-
+            this.setState(state => this.appendLog(state.logs, message));
+        }
     }
 
     componentWillUnmount() {
-        console.log('componentWillUnmount')
         this.ws.close();
+    }
+
+    appendLog(oldLogs, message) {
+        const log = oldLogs[0];
+        const logs = [];
+        oldLogs.forEach((log, idx) => {
+            if (idx) {
+                logs.push(log);
+            }
+        });
+        log.text = `${message.type}: ${message.data}`;
+        logs.push(log);
+        return { logs };
     }
     
     render() {
         const buttonStyle = { fontSize: 'larger' };
-        const logDivs = this.state.logs.map(log => <div key={log.key}>{log.val}</div>);
+        const logDivs = this.state.logs.map(l => <LogEntryComponent key={l.key} log={l} />);
         return (
             <div className="main">
                 <div id="output" className="scrollable">
