@@ -36,3 +36,14 @@ app.ws('/ws', webSocket => {
 app.use(express.static(path.join(__dirname, 'static')))
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+
+var net = require('net');
+var server = net.createServer();
+
+server.on('connection', socket => {
+    socket.setEncoding('utf8').on('data', data => {
+        console.log(data)
+    });
+});
+
+server.listen(1337, () => console.log(`Listening at 0.0.0.0:1337`));
