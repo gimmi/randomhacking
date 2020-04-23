@@ -7,6 +7,7 @@ const EventEmitter = require('events');
 const port = 3000
 
 const bus = new EventEmitter();
+bus.on('message', msg => console.dir(msg))
 
 const app = express()
 expressWs(app)
@@ -37,13 +38,6 @@ app.use(express.static(path.join(__dirname, 'static')))
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
 
-var net = require('net');
-var server = net.createServer();
-
-server.on('connection', socket => {
-    socket.setEncoding('utf8').on('data', data => {
-        console.log(data)
-    });
-});
-
-server.listen(1337, () => console.log(`Listening at 0.0.0.0:1337`));
+const fluentdForward = require('./fluentd-forward');
+var server = fluentdForward.createServer(bus);
+server.listen(24225, () => console.log(`Listening at 0.0.0.0:24225`));
