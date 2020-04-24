@@ -93,21 +93,39 @@ export class MainComponent extends React.Component {
                 logs.push(log);
             }
         });
-        log.text = `${message.type}: ${message.data}`;
+        log.text = message.data;
         logs.push(log);
         return { logs };
     }
     
     render() {
-        const buttonStyle = { fontSize: 'larger' };
+        const categoriesStyle = {
+            padding: '.5em',
+            margin: 0,
+            borderRight: '1px solid lightgray',
+            display: 'flex',
+            flexDirection: 'column'
+        }
+        const logsStyle = {
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            padding: '.5em',
+            justifyContent: 'flex-end',
+            overflow: 'hidden',
+            fontFamily: 'monospace',
+        }
+
         const logDivs = this.state.logs.map(l => <LogEntryComponent key={l.key} log={l} />);
         return (
-            <div className="main">
-                <div id="output" className="scrollable">
+            <div style={{ flexGrow: 1, display: 'flex' }}>
+                <ul style={categoriesStyle}>
+                    <li><input type="checkbox" /> 123 container-one</li>
+                    <li><input type="checkbox" /> 456 container-two</li>
+                    <li><input type="checkbox" /> 456 container-three</li>
+                </ul>
+                <div id="output" style={logsStyle} onClick={this.handleClick}>
                     {logDivs}
-                </div>
-                <div className="footer">
-                    <button onClick={this.handleClick} type="button" style={buttonStyle}>Send</button>
                 </div>
                 <ConnectionOverlay connected={this.state.connected} />
             </div>
