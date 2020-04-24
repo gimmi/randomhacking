@@ -1,7 +1,8 @@
 const net = require('net');
 const msgpack = require('@msgpack/msgpack');
+const bus = require('./bus');
 
-module.exports.createServer = function(bus) {
+module.exports.createServer = function() {
     const server = net.createServer();
     server.on('connection', async socket => {
         for await (const request of msgpack.decodeStream(socket)) {

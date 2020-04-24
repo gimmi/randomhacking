@@ -1,13 +1,24 @@
+const debug = require('debug')('tail:app')
 const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 const expressWs = require('express-ws');
-const EventEmitter = require('events');
+const bus = require('./bus');
+const fluentd = require('./fluentd-forward');
 
-const port = 3000
+// Debug stuff -----------------------------------------------------------------
+if (debug.enabled) {
+    debug('Enabling debug stuff')
 
-const bus = new EventEmitter();
-bus.on('message', msg => console.dir(msg))
+    let counter = 0;
+    setInterval(() => {
+        counter += 1;
+        bus.emit('message', { counter })
+    }, 1000);
+
+    bus.on('message', msg => debug('Published:', msg));
+}
+// -----------------------------------------------------------------------------
 
 const app = express()
 expressWs(app)
@@ -19,25 +30,28 @@ app.post('/api/publish', (req, res) => {
     res.status(200).end();
 })
 
-app.ws('/ws', webSocket => {
-    console.log('WS client open');
-    bus.addListener('message', messageListener);
+app.ws('/ws', (webSocket, req) => {
+    debug('ws connected:', req.query.id);
+    bus.on('message', messageListener);
 
-    webSocket.addListener('close', function (msg) {
-        console.log('WS client close');
+    webSocket.on('close', function (msg) {
+        debug('ws close:', req.query.id);
+        bus.removeListener('message', messageListener);
+    });
+
+    webSocket.on('disconnect', function (msg) {
+        debug('ws disconnect:', req.query.id);
         bus.removeListener('message', messageListener);
     });
 
     function messageListener(message) {
-        console.log('WS send:', message);
         webSocket.send(JSON.stringify(message));
     }
 });
 
 app.use(express.static(path.join(__dirname, 'static')))
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+app.listen(3000, () => console.log('Listening at http://localhost:3000'))
 
-const fluentdForward = require('./fluentd-forward');
-var server = fluentdForward.createServer(bus);
-server.listen(24225, () => console.log(`Listening at 0.0.0.0:24225`));
+fluentd.createServer()
+    .listen(24225, () => console.log('Listening at ws://0.0.0.0:24225'));
