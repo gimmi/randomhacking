@@ -24,12 +24,6 @@ const app = express()
 expressWs(app)
 app.use(bodyParser.json())
 
-app.post('/api/publish', (req, res) => {
-    console.log('Publish:', req.body);
-    bus.emit('message', req.body)
-    res.status(200).end();
-})
-
 app.ws('/ws', (webSocket, req) => {
     debug('ws connected:', req.query.id);
     bus.on('message', messageListener);

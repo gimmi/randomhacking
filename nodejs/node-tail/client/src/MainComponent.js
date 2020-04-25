@@ -37,25 +37,12 @@ ConnectionOverlay.propTypes = {
 export class MainComponent extends React.Component {
     constructor(props) {
         super(props);
-        this.handleClick = this.handleClick.bind(this);
         this.clientId = Math.random().toString(16).substr(2);
-        this.counter = 0;
 
         this.state = { 
             connected: false,
             logs: Array.from({ length: 100 }).map((_, key) => ({ key, text: '' }))
         };
-    }
-
-    async handleClick() {
-        this.counter += 1;
-        await fetch('/api/publish', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ counter: this.counter })
-        })
     }
 
     componentDidMount() {
@@ -114,7 +101,7 @@ export class MainComponent extends React.Component {
                     <li><input type="checkbox" /> 456 container-two</li>
                     <li><input type="checkbox" /> 456 container-three</li>
                 </ul>
-                <ul style={logsStyle} onClick={this.handleClick}>
+                <ul style={logsStyle}>
                     {logDivs}
                 </ul>
                 <ConnectionOverlay connected={this.state.connected} />
