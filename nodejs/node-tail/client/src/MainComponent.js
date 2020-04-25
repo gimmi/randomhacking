@@ -1,17 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-function LogEntryComponent(props) {
-    const style = { paddingTop: '.3em' };
-    return <div style={style}>{props.log.text}</div>
-}
-
-LogEntryComponent.propTypes = {
-    log: PropTypes.shape({
-        text: PropTypes.string.isRequired
-    })
-}
-
 function ConnectionOverlay(props) {
     const overlayStyle = {
         position: 'fixed',
@@ -107,6 +96,7 @@ export class MainComponent extends React.Component {
             flexDirection: 'column'
         }
         const logsStyle = {
+            margin: 0,
             flexGrow: 1,
             display: 'flex',
             flexDirection: 'column',
@@ -116,7 +106,7 @@ export class MainComponent extends React.Component {
             fontFamily: 'monospace',
         }
 
-        const logDivs = this.state.logs.map(l => <LogEntryComponent key={l.key} log={l} />);
+        const logDivs = this.state.logs.map(l => <li key={l.key}>{l.text}</li>);
         return (
             <div style={{ flexGrow: 1, display: 'flex' }}>
                 <ul style={categoriesStyle}>
@@ -124,9 +114,9 @@ export class MainComponent extends React.Component {
                     <li><input type="checkbox" /> 456 container-two</li>
                     <li><input type="checkbox" /> 456 container-three</li>
                 </ul>
-                <div id="output" style={logsStyle} onClick={this.handleClick}>
+                <ul style={logsStyle} onClick={this.handleClick}>
                     {logDivs}
-                </div>
+                </ul>
                 <ConnectionOverlay connected={this.state.connected} />
             </div>
         );
