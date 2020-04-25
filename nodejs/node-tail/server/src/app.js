@@ -10,10 +10,12 @@ const fluentd = require('./fluentd-forward');
 if (debug.enabled) {
     debug('Enabling debug stuff')
 
+    const containerNames = [ 'container-one', 'container-two', 'container-three', 'container-four' ]
+
     let counter = 0;
     setInterval(() => {
         counter += 1;
-        bus.emit('message', { counter })
+        bus.emit('message', { container_name: containerNames[counter % 4], log: 'Log #' + counter })
     }, 1000);
 
     bus.on('message', msg => debug('Published:', msg));

@@ -9,6 +9,7 @@ export class MainComponent extends React.Component {
 
         this.state = { 
             connected: false,
+            categories: {},
             logs: Array.from({ length: 100 }).map((_, key) => ({ key, text: '' }))
         };
     }
@@ -20,7 +21,7 @@ export class MainComponent extends React.Component {
         this.ws.onerror = () => this.setState({ connected: false });
         this.ws.onmessage = message => {
             this.setState(state => {
-                return this.appendLog(state.logs, message)
+                return this.appendLog(state, JSON.parse(message.data))
             })
         }
     }
@@ -29,17 +30,35 @@ export class MainComponent extends React.Component {
         this.ws.close();
     }
 
-    appendLog(oldLogs, message) {
-        const log = oldLogs[0];
-        const logs = [];
-        oldLogs.forEach((log, idx) => {
+    appendLog(oldState, message) {
+        const category = message.container_name || 'unknown';
+        const text = message.log || 'unknown';
+
+        const newState = {
+            categories: oldState.categories,
+            logs: []
+        }
+        if (newState.categories[category]) {
+            newState.categories[category].count += 1
+        } else {
+            newState.categories[category] = { count: 1, selected: true }
+        }
+        const log = oldState.logs[0];
+        oldState.logs.forEach((log, idx) => {
             if (idx) {
-                logs.push(log);
+                newState.logs.push(log);
             }
         });
-        log.text = message.data;
-        logs.push(log);
-        return { logs };
+        log.text = text;
+        newState.logs.push(log);
+        return newState;
+    }
+
+    toggleCategory(category) {
+        this.setState(state => {
+            state.categories[category].selected = !state.categories[category].selected;
+            return { categories: state.categories }
+        })
     }
     
     render() {
@@ -61,16 +80,19 @@ export class MainComponent extends React.Component {
             fontFamily: 'monospace',
         }
 
-        const logDivs = this.state.logs.map(l => <li key={l.key}>{l.text}</li>);
+        const catEls = Object.keys(this.state.categories).map(key => {
+            const val = this.state.categories[key]
+            return <li key={key}><input type="checkbox" checked={val.selected} onChange={() => this.toggleCategory(key)} /> {val.count} {key}</li>
+        });
+
+        const logEls = this.state.logs.map(l => <li key={l.key}>{l.text}</li>);
         return (
             <div style={{ flexGrow: 1, display: 'flex' }}>
                 <ul style={categoriesStyle}>
-                    <li><input type="checkbox" /> 123 container-one</li>
-                    <li><input type="checkbox" /> 456 container-two</li>
-                    <li><input type="checkbox" /> 456 container-three</li>
+                    {catEls}
                 </ul>
                 <ul style={logsStyle}>
-                    {logDivs}
+                    {logEls}
                 </ul>
                 <ConnectionOverlay connected={this.state.connected} />
             </div>
