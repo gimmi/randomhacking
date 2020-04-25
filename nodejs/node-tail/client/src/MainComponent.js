@@ -30,28 +30,23 @@ export class MainComponent extends React.Component {
         this.ws.close();
     }
 
-    appendLog(oldState, message) {
+    appendLog(state, message) {
         const category = message.container_name || 'unknown';
         const text = message.log || 'unknown';
 
-        const newState = {
-            categories: oldState.categories,
-            logs: []
-        }
-        if (newState.categories[category]) {
-            newState.categories[category].count += 1
+        if (state.categories[category]) {
+            state.categories[category].count += 1
         } else {
-            newState.categories[category] = { count: 1, selected: true }
+            state.categories[category] = { count: 1, selected: true }
         }
-        const log = oldState.logs[0];
-        oldState.logs.forEach((log, idx) => {
-            if (idx) {
-                newState.logs.push(log);
-            }
-        });
-        log.text = text;
-        newState.logs.push(log);
-        return newState;
+
+        if (state.categories[category].selected) {
+            const log = state.logs.shift()
+            log.text = text;
+            state.logs.push(log);
+        }
+
+        return state;
     }
 
     toggleCategory(category) {
