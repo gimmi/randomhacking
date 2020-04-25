@@ -5,7 +5,6 @@ import ConnectionOverlay from './ConnectionOverlay';
 export class MainComponent extends React.Component {
     constructor(props) {
         super(props);
-        this.clientId = Math.random().toString(16).substr(2);
 
         this.state = { 
             connected: false,
@@ -15,7 +14,7 @@ export class MainComponent extends React.Component {
     }
 
     componentDidMount() {
-        this.ws = new WebSocket('ws://localhost:3000/ws?id=' + encodeURIComponent(this.clientId));
+        this.ws = new WebSocket('ws://localhost:3000/ws');
         this.ws.onopen = () => this.setState({ connected: true });
         this.ws.onclose = () => this.setState({ connected: false });
         this.ws.onerror = () => this.setState({ connected: false });

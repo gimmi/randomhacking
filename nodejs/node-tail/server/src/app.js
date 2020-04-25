@@ -26,17 +26,17 @@ const app = express()
 expressWs(app)
 app.use(bodyParser.json())
 
-app.ws('/ws', (webSocket, req) => {
-    debug('ws connected:', req.query.id);
+app.ws('/ws', webSocket => {
+    debug('ws connected');
     bus.on('message', messageListener);
 
     webSocket.on('close', function (msg) {
-        debug('ws close:', req.query.id);
+        debug('ws close');
         bus.removeListener('message', messageListener);
     });
 
     webSocket.on('disconnect', function (msg) {
-        debug('ws disconnect:', req.query.id);
+        debug('ws disconnect');
         bus.removeListener('message', messageListener);
     });
 
