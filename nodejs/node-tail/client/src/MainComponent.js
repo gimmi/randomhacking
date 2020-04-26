@@ -41,6 +41,7 @@ export class MainComponent extends React.Component {
 
         if (state.categories[category].selected) {
             const log = state.logs.length >= 100 ? state.logs.shift() : { key: state.logs.length }
+            log.category = category;
             log.text = text;
             state.logs.push(log);
         }
@@ -79,7 +80,7 @@ export class MainComponent extends React.Component {
             return <li key={key} className="highlight"><input type="checkbox" checked={val.selected} onChange={() => this.toggleCategory(key)} /> {val.count} {key}</li>
         });
 
-        const logEls = this.state.logs.map(l => <li key={l.key} className="highlight">{l.text}</li>);
+        const logEls = this.state.logs.map(l => <li key={l.key} className="highlight">{l.category}: {l.text}</li>);
         return (
             <div style={{ flexGrow: 1, display: 'flex' }}>
                 <ul style={categoriesStyle}>
