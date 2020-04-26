@@ -22,5 +22,5 @@ body {
 }
 
 .highlight {
-    animation: highlight 1s;
+    animation: highlight 1s ease-out;
 }
