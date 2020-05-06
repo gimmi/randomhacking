@@ -6,6 +6,7 @@ export class MainComponent extends React.Component {
     constructor(props) {
         super(props);
 
+        this.exclusions = new Set(JSON.parse(window.localStorage.getItem('exclusions')))
         this.state = { 
             connected: false,
             categories: {},
@@ -36,7 +37,7 @@ export class MainComponent extends React.Component {
         if (state.categories[category]) {
             state.categories[category].count += 1
         } else {
-            state.categories[category] = { count: 1, selected: true }
+            state.categories[category] = { count: 1, selected: !this.exclusions.has(category) }
         }
 
         if (state.categories[category].selected) {
@@ -49,9 +50,17 @@ export class MainComponent extends React.Component {
         return state;
     }
 
-    toggleCategory(category) {
+    toggleCategory(catName) {
         this.setState(state => {
-            state.categories[category].selected = !state.categories[category].selected;
+            const cat = state.categories[catName];
+            if (cat.selected) {
+                cat.selected = false
+                this.exclusions.add(catName)
+            } else {
+                cat.selected = true
+                this.exclusions.delete(catName)
+            }
+            window.localStorage.setItem('exclusions', JSON.stringify(this.exclusions));
             return { categories: state.categories }
         })
     }
