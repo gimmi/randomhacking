@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ConnectionOverlay from './ConnectionOverlay';
 
 export class MainComponent extends React.Component {
