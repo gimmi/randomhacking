@@ -47,7 +47,7 @@ namespace SpikeJint
 
             var outputJsValue = engine.SetValue("input", inputJsValue).Execute(script).GetValue("output");
 
-            return engine.Json.Stringify(Undefined.Instance, new[] {outputJsValue, Undefined.Instance, engine.Number.Construct(4)}).ToString();
+            return engine.Json.Stringify(Undefined.Instance, new[] {outputJsValue, Undefined.Instance, engine.Number.Construct(2)}).ToString();
         }
     }
 }
