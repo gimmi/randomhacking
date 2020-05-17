@@ -77,10 +77,15 @@ namespace JsonMerge
         {
             if (token is JObject obj)
             {
-                var sc = StringComparison.OrdinalIgnoreCase;
-                obj.TryGetValue("id", sc, out var valueToken);
-                obj.TryGetValue("$id", sc, out valueToken);
-                return valueToken;
+                if (obj.TryGetValue("$id", StringComparison.OrdinalIgnoreCase, out var valueToken))
+                {
+                    return valueToken;
+                }
+
+                if (obj.TryGetValue("id", StringComparison.OrdinalIgnoreCase, out valueToken))
+                {
+                    return valueToken;
+                }
             }
 
             return token;

@@ -77,5 +77,38 @@ namespace JsonMerge
             }"));
         }
 
+        [Test]
+        public void Should_merge_equal_objects_without_id()
+        {
+            var first = @"{ a: 1, b: 2 }";
+
+            var second = @"{ a: 1, b: 2 }";
+
+            var actual = JsonMerger.Merge(first, second);
+
+            Assert.That(actual, new JsonEqualConstraint(@"{ a: 1, b: 2 }"));
+        }
+
+        [Test]
+        public void Should_use_id_field_for_identity()
+        {
+            var actual = JsonMerger.Merge("[{ id: 'a', a: 1, b: 2 }]", "[{ id: 'a', a: 1, b: 2 }]");
+            Assert.That(actual, new JsonEqualConstraint("[{ id: 'a', a: 1, b: 2 }]"));
+
+            actual = JsonMerger.Merge("[{ Id: 'a', a: 1, b: 2 }]", "[{ Id: 'a', a: 1, b: 2 }]");
+            Assert.That(actual, new JsonEqualConstraint("[{ Id: 'a', a: 1, b: 2 }]"));
+
+            actual = JsonMerger.Merge("[{ id: [1, 2], a: 1, b: 2 }]", "[{ id: [1, 2], a: 1, b: 2 }]");
+            Assert.That(actual, new JsonEqualConstraint("[{ id: [1, 2], a: 1, b: 2 }]"));
+
+            actual = JsonMerger.Merge("[{ $id: 'a', a: 1, b: 2 }]", "[{ $id: 'a', a: 1, b: 2 }]");
+            Assert.That(actual, new JsonEqualConstraint("[{ $id: 'a', a: 1, b: 2 }]"));
+
+            actual = JsonMerger.Merge("[{ $id: 'a', id: 'x', a: 1, b: 2 }]", "[{ $id: 'a', id: 'y', a: 1, b: 2 }]");
+            Assert.That(actual, new JsonEqualConstraint("[{ $id: 'a', id: 'x', a: 1, b: 2 }]"));
+
+            actual = JsonMerger.Merge("[{ $id: 'x', id: 'a' }]", "[{ $id: 'y', id: 'a' }]");
+            Assert.That(actual, new JsonEqualConstraint("[{ $id: 'x', id: 'a' }, { $id: 'y', id: 'a' }]"));
+        }
     }
 }
