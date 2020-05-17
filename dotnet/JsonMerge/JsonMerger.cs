@@ -5,6 +5,8 @@ namespace JsonMerge
 {
     public static class JsonMerger
     {
+        public static string Merge(string first, string second) => Merge(JToken.Parse(first), JToken.Parse(second)).ToString();
+
         public static JToken Merge(JToken first, JToken second)
         {
             if (first is JArray firstArray && second is JArray secondArray)

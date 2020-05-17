@@ -1,14 +1,13 @@
-﻿using System;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using NUnit.Framework;
 
 namespace JsonMerge
 {
-    public class Program
+    public class JsonMergerTest
     {
-        public static void Main()
+        [Test]
+        public void Should_merge()
         {
-            var firstToken = JToken.Parse(@"{
+            var first = @"{
                 a: 1,
                 b: null,
                 raw_ary: ['a', 'b', 3],
@@ -26,8 +25,9 @@ namespace JsonMerge
                     a: 3,
                     b: 4
                 }]
-            }");
-            var secondToken = JToken.Parse(@"{
+            }";
+
+            var second = @"{
                 a: 3,
                 b: 2,
                 raw_ary: ['a', 4, 'b', 3],
@@ -46,13 +46,36 @@ namespace JsonMerge
                     a: 'ca',
                     b: 'so'
                 }]
-            }");
+            }";
 
-            var resultToken = JsonMerger.Merge(firstToken, secondToken);
+            var actual = JsonMerger.Merge(first, second);
 
-            var resultJson = resultToken.ToString(Formatting.Indented);
-
-            Console.WriteLine(resultJson);
+            Assert.That(actual, new JsonEqualConstraint(@"{
+                a: 1,
+                b: 2,
+                raw_ary: [ 'a', 'b', 3, 4 ],
+                obj: {
+                    a: 1,
+                    b: 2,
+                    c: 3,
+                    d: 4
+                },
+                obj_ary: [{
+                    $id: '1',
+                    a: 1,
+                    b: 2,
+                    c: 'lala'
+                }, {
+                    $id: '2',
+                    a: 3,
+                    b: 4
+                }, {
+                    $id: '4',
+                    a: 'ca',
+                    b: 'so'
+                }]
+            }"));
         }
+
     }
 }
