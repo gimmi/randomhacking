@@ -5,35 +5,35 @@ namespace JsonMerge
 {
     public static class JsonMerger
     {
-        public static string Merge(string first, string second) => Merge(JToken.Parse(first), JToken.Parse(second)).ToString();
+        public static string Extend(string baseline, string extension) => Extend(JToken.Parse(baseline), JToken.Parse(extension)).ToString();
 
-        public static JToken Merge(JToken first, JToken second)
+        public static JToken Extend(JToken baseline, JToken extension)
         {
-            if (first is JArray firstArray && second is JArray secondArray)
+            if (baseline is JArray baselineArray && extension is JArray extensionArray)
             {
                 var resultArray = new JArray();
-                MergeArray(resultArray, firstArray);
-                MergeArray(resultArray, secondArray);
+                ExtendArray(resultArray, baselineArray);
+                ExtendArray(resultArray, extensionArray);
                 return resultArray;
             }
 
-            if (first is JObject firstObject && second is JObject secondObject)
+            if (baseline is JObject baselineObject && extension is JObject extensionObject)
             {
                 var resultObject = new JObject();
-                MergeObject(resultObject, firstObject);
-                MergeObject(resultObject, secondObject);
+                ExtendObject(resultObject, baselineObject);
+                ExtendObject(resultObject, extensionObject);
                 return resultObject;
             }
 
-            if (first.Type == JTokenType.Null)
+            if (baseline.Type == JTokenType.Null)
             {
-                return second;
+                return extension;
             }
 
-            return first;
+            return baseline;
         }
 
-        private static void MergeArray(JArray destArray, JArray newArray)
+        private static void ExtendArray(JArray destArray, JArray newArray)
         {
             foreach (var newToken in newArray)
             {
@@ -45,7 +45,7 @@ namespace JsonMerge
                     var destId = GetTokenId(destToken);
                     if (JToken.DeepEquals(destId, newId))
                     {
-                        destArray[idx] = Merge(destToken, newToken);
+                        destArray[idx] = Extend(destToken, newToken);
                         append = false;
                         break;
                     }
@@ -58,13 +58,13 @@ namespace JsonMerge
             }
         }
 
-        private static void MergeObject(JObject destObject, JObject newObject)
+        private static void ExtendObject(JObject destObject, JObject newObject)
         {
             foreach (var (newId, newToken) in newObject)
             {
                 if (destObject.TryGetValue(newId, out var destToken))
                 {
-                    destObject[newId] = Merge(destToken, newToken);
+                    destObject[newId] = Extend(destToken, newToken);
                 }
                 else
                 {

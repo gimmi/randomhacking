@@ -7,7 +7,7 @@ namespace JsonMerge
         [Test]
         public void Should_merge()
         {
-            var first = @"{
+            var baseline = @"{
                 a: 1,
                 b: null,
                 raw_ary: ['a', 'b', 3],
@@ -27,7 +27,7 @@ namespace JsonMerge
                 }]
             }";
 
-            var second = @"{
+            var extension = @"{
                 a: 3,
                 b: 2,
                 raw_ary: ['a', 4, 'b', 3],
@@ -48,7 +48,7 @@ namespace JsonMerge
                 }]
             }";
 
-            var actual = JsonMerger.Merge(first, second);
+            var actual = JsonMerger.Extend(baseline, extension);
 
             Assert.That(actual, new JsonEqualConstraint(@"{
                 a: 1,
@@ -80,11 +80,11 @@ namespace JsonMerge
         [Test]
         public void Should_merge_equal_objects_without_id()
         {
-            var first = @"{ a: 1, b: 2 }";
+            var baseline = @"{ a: 1, b: 2 }";
 
-            var second = @"{ a: 1, b: 2 }";
+            var extension = @"{ a: 1, b: 2 }";
 
-            var actual = JsonMerger.Merge(first, second);
+            var actual = JsonMerger.Extend(baseline, extension);
 
             Assert.That(actual, new JsonEqualConstraint(@"{ a: 1, b: 2 }"));
         }
@@ -92,22 +92,22 @@ namespace JsonMerge
         [Test]
         public void Should_use_id_field_for_identity()
         {
-            var actual = JsonMerger.Merge("[{ id: 'a', a: 1, b: 2 }]", "[{ id: 'a', a: 1, b: 2 }]");
+            var actual = JsonMerger.Extend("[{ id: 'a', a: 1, b: 2 }]", "[{ id: 'a', a: 1, b: 2 }]");
             Assert.That(actual, new JsonEqualConstraint("[{ id: 'a', a: 1, b: 2 }]"));
 
-            actual = JsonMerger.Merge("[{ Id: 'a', a: 1, b: 2 }]", "[{ Id: 'a', a: 1, b: 2 }]");
+            actual = JsonMerger.Extend("[{ Id: 'a', a: 1, b: 2 }]", "[{ Id: 'a', a: 1, b: 2 }]");
             Assert.That(actual, new JsonEqualConstraint("[{ Id: 'a', a: 1, b: 2 }]"));
 
-            actual = JsonMerger.Merge("[{ id: [1, 2], a: 1, b: 2 }]", "[{ id: [1, 2], a: 1, b: 2 }]");
+            actual = JsonMerger.Extend("[{ id: [1, 2], a: 1, b: 2 }]", "[{ id: [1, 2], a: 1, b: 2 }]");
             Assert.That(actual, new JsonEqualConstraint("[{ id: [1, 2], a: 1, b: 2 }]"));
 
-            actual = JsonMerger.Merge("[{ $id: 'a', a: 1, b: 2 }]", "[{ $id: 'a', a: 1, b: 2 }]");
+            actual = JsonMerger.Extend("[{ $id: 'a', a: 1, b: 2 }]", "[{ $id: 'a', a: 1, b: 2 }]");
             Assert.That(actual, new JsonEqualConstraint("[{ $id: 'a', a: 1, b: 2 }]"));
 
-            actual = JsonMerger.Merge("[{ $id: 'a', id: 'x', a: 1, b: 2 }]", "[{ $id: 'a', id: 'y', a: 1, b: 2 }]");
+            actual = JsonMerger.Extend("[{ $id: 'a', id: 'x', a: 1, b: 2 }]", "[{ $id: 'a', id: 'y', a: 1, b: 2 }]");
             Assert.That(actual, new JsonEqualConstraint("[{ $id: 'a', id: 'x', a: 1, b: 2 }]"));
 
-            actual = JsonMerger.Merge("[{ $id: 'x', id: 'a' }]", "[{ $id: 'y', id: 'a' }]");
+            actual = JsonMerger.Extend("[{ $id: 'x', id: 'a' }]", "[{ $id: 'y', id: 'a' }]");
             Assert.That(actual, new JsonEqualConstraint("[{ $id: 'x', id: 'a' }, { $id: 'y', id: 'a' }]"));
         }
     }
