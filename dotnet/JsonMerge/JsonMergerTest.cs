@@ -5,7 +5,7 @@ namespace JsonMerge
     public class JsonMergerTest
     {
         [Test]
-        public void Should_merge()
+        public void Should_extend()
         {
             var baseline = @"{
                 a: 1,
@@ -87,6 +87,16 @@ namespace JsonMerge
             var actual = JsonMerger.Extend(baseline, extension);
 
             Assert.That(actual, new JsonEqualConstraint(@"{ a: 1, b: 2 }"));
+        }
+
+        [Test]
+        public void Should_keep_existing_fields()
+        {
+            var actual = JsonMerger.Extend("{ a: 1 }", "{ a: 2 }");
+            Assert.That(actual, new JsonEqualConstraint("{ a: 1 }"));
+
+            actual = JsonMerger.Extend("{ anObj: { a: 1 }}", "{ anObj: { a: 2 }}");
+            Assert.That(actual, new JsonEqualConstraint("{ anObj: { a: 1 }}"));
         }
 
         [Test]
