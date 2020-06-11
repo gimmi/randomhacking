@@ -17,10 +17,15 @@ namespace SpikeJint
             }
             Directory.CreateDirectory(baseDir);
             File.WriteAllText(Path.Combine(baseDir, "file.json"), "{ a:1, b:2 /* comment */ }");
-            File.WriteAllText(Path.Combine(baseDir, "file.js"), @"
-                function prefix(val) {
+            File.WriteAllText(Path.Combine(baseDir, "function_in_global_scope.js"), @"
+                function functionInGlobalScope(val) {
                     return 'my' + val;
                 }
+            ");
+            File.WriteAllText(Path.Combine(baseDir, "function_as_return_val.js"), @"
+                (function (val) {
+                    return 'your_' + val;
+                })
             ");
 
             var input = @"{
@@ -39,12 +44,15 @@ namespace SpikeJint
             }".Replace("'", "\"");
 
             var script = @"
-                load('file.js');
+                load('function_in_global_scope.js');
+
+                var fn = load('function_as_return_val.js');
                 var file = load('file.json');
 
                 output = {
                     myString: input.aString,
-                    myArray: input.anArray.map(prefix),
+                    myArray: input.anArray.map(functionInGlobalScope),
+                    yourArray: input.anArray.map(fn),
                     file: file
                 }                
             ";
