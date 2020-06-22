@@ -9,20 +9,20 @@ namespace JsonMerge
 
         public static JToken Extend(JToken baseline, JToken extension)
         {
-            if (baseline is JArray baselineArray && extension is JArray extensionArray)
+            if (baseline is JArray basArray && extension is JArray extArray)
             {
-                var resultArray = new JArray();
-                ExtendArray(resultArray, baselineArray);
-                ExtendArray(resultArray, extensionArray);
-                return resultArray;
+                var resArray = new JArray();
+                ExtendArray(resArray, basArray);
+                ExtendArray(resArray, extArray);
+                return resArray;
             }
 
-            if (baseline is JObject baselineObject && extension is JObject extensionObject)
+            if (baseline is JObject basObject && extension is JObject extObject)
             {
-                var resultObject = new JObject();
-                ExtendObject(resultObject, baselineObject);
-                ExtendObject(resultObject, extensionObject);
-                return resultObject;
+                var resObject = new JObject();
+                ExtendObject(resObject, basObject);
+                ExtendObject(resObject, extObject);
+                return resObject;
             }
 
             if (baseline.Type == JTokenType.Null)
@@ -33,19 +33,19 @@ namespace JsonMerge
             return baseline;
         }
 
-        private static void ExtendArray(JArray baseArray, JArray extArray)
+        private static void ExtendArray(JArray basArray, JArray extArray)
         {
             foreach (var extToken in extArray)
             {
                 var append = true;
                 var extId = GetTokenId(extToken);
-                for (var idx = 0; idx < baseArray.Count; idx++)
+                for (var idx = 0; idx < basArray.Count; idx++)
                 {
-                    var baseToken = baseArray[idx];
-                    var baseId = GetTokenId(baseToken);
-                    if (JToken.DeepEquals(baseId, extId))
+                    var basToken = basArray[idx];
+                    var basId = GetTokenId(basToken);
+                    if (JToken.DeepEquals(basId, extId))
                     {
-                        baseArray[idx] = Extend(baseToken, extToken);
+                        basArray[idx] = Extend(basToken, extToken);
                         append = false;
                         break;
                     }
@@ -53,22 +53,22 @@ namespace JsonMerge
 
                 if (append)
                 {
-                    baseArray.Add(extToken);
+                    basArray.Add(extToken);
                 }
             }
         }
 
-        private static void ExtendObject(JObject baseObject, JObject extObject)
+        private static void ExtendObject(JObject basObject, JObject extObject)
         {
             foreach (var (extId, extToken) in extObject)
             {
-                if (baseObject.TryGetValue(extId, out var baseToken))
+                if (basObject.TryGetValue(extId, out var basToken))
                 {
-                    baseObject[extId] = Extend(baseToken, extToken);
+                    basObject[extId] = Extend(basToken, extToken);
                 }
                 else
                 {
-                    baseObject[extId] = extToken;
+                    basObject[extId] = extToken;
                 }
             }
         }
