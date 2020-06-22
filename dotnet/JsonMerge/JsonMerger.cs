@@ -33,19 +33,19 @@ namespace JsonMerge
             return baseline;
         }
 
-        private static void ExtendArray(JArray destArray, JArray newArray)
+        private static void ExtendArray(JArray baseArray, JArray extArray)
         {
-            foreach (var newToken in newArray)
+            foreach (var extToken in extArray)
             {
                 var append = true;
-                var newId = GetTokenId(newToken);
-                for (var idx = 0; idx < destArray.Count; idx++)
+                var extId = GetTokenId(extToken);
+                for (var idx = 0; idx < baseArray.Count; idx++)
                 {
-                    var destToken = destArray[idx];
-                    var destId = GetTokenId(destToken);
-                    if (JToken.DeepEquals(destId, newId))
+                    var baseToken = baseArray[idx];
+                    var baseId = GetTokenId(baseToken);
+                    if (JToken.DeepEquals(baseId, extId))
                     {
-                        destArray[idx] = Extend(destToken, newToken);
+                        baseArray[idx] = Extend(baseToken, extToken);
                         append = false;
                         break;
                     }
@@ -53,22 +53,22 @@ namespace JsonMerge
 
                 if (append)
                 {
-                    destArray.Add(newToken);
+                    baseArray.Add(extToken);
                 }
             }
         }
 
-        private static void ExtendObject(JObject destObject, JObject newObject)
+        private static void ExtendObject(JObject baseObject, JObject extObject)
         {
-            foreach (var (newId, newToken) in newObject)
+            foreach (var (extId, extToken) in extObject)
             {
-                if (destObject.TryGetValue(newId, out var destToken))
+                if (baseObject.TryGetValue(extId, out var baseToken))
                 {
-                    destObject[newId] = Extend(destToken, newToken);
+                    baseObject[extId] = Extend(baseToken, extToken);
                 }
                 else
                 {
-                    destObject[newId] = newToken;
+                    baseObject[extId] = extToken;
                 }
             }
         }

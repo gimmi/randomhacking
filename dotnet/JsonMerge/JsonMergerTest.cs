@@ -78,6 +78,14 @@ namespace JsonMerge
         }
 
         [Test]
+        public void Anything_is_better_than_null()
+        {
+            var actual = JsonMerger.Extend("null", "{ a: 1 }");
+
+            Assert.That(actual, new JsonEqualConstraint("{ a: 1 }"));
+        }
+
+        [Test]
         public void Should_merge_equal_objects_without_id()
         {
             var baseline = @"{ a: 1, b: 2 }";
