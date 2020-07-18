@@ -7,7 +7,7 @@ namespace ConnectionStateMachine
     public class ConnectionStateMachine : IDisposable
     {
         private readonly SemaphoreSlim _mutex = new SemaphoreSlim(1, 1);
-        private CancellationTokenSource _changeCts = new CancellationTokenSource();
+        private CancellationTokenSource _currentCts = new CancellationTokenSource();
         private ConnectionStates _currentState = ConnectionStates.Disconnected;
 
         public async Task ChangeAsync(ConnectionStates state)
@@ -17,10 +17,13 @@ namespace ConnectionStateMachine
             {
                 if (_currentState != state)
                 {
+                    var previousCts = _currentCts;
+
                     _currentState = state;
-                    _changeCts.Cancel();
-                    _changeCts.Dispose();
-                    _changeCts = new CancellationTokenSource();
+                    _currentCts = new CancellationTokenSource();
+
+                    previousCts.Cancel();
+                    previousCts.Dispose();
                 }
             }
             finally
@@ -50,20 +53,20 @@ namespace ConnectionStateMachine
                 return;
             }
 
-            var (currentState, changeCt) = await AtomicGetAsync(cancellationToken);
+            var (currentState, currentCt) = await AtomicGetAsync(cancellationToken);
             while (currentState != state)
             {
                 var tcs = new TaskCompletionSource<object>();
-                await using var ctr1 = changeCt.Register(() => tcs.TrySetResult(null));
+                await using var ctr1 = currentCt.Register(() => tcs.TrySetResult(null));
                 await using var ctr2 = cancellationToken.Register(() => tcs.TrySetCanceled(cancellationToken));
                 await tcs.Task;
-                (currentState, changeCt) = await AtomicGetAsync(cancellationToken);
+                (currentState, currentCt) = await AtomicGetAsync(cancellationToken);
             }
         }
 
         public void Dispose()
         {
-            _changeCts.Dispose();
+            _currentCts.Dispose();
         }
 
         private async Task<(ConnectionStates, CancellationToken)> AtomicGetAsync(CancellationToken cancellationToken)
@@ -71,7 +74,7 @@ namespace ConnectionStateMachine
             await _mutex.WaitAsync(cancellationToken);
             try
             {
-                return (_currentState, _changeCts.Token);
+                return (_currentState, _currentCts.Token);
             }
             finally
             {
