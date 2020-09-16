@@ -42,10 +42,25 @@ az storage account show-connection-string \
     --resource-group $GROUP \
     --name $SA
 {
-  "connectionString": "DefaultEndpointsProtocol=https;EndpointSuffix=core.windows.net;AccountName=storage5246;AccountKey=KMBEvoFcXqrolc/+xqBfqWDzQNTCqSJ8QuMBt+3v7sQJW2DidHXOyNmQdKLRB16Q43723D0tbP98Zy/fuRx1rg=="
+  "connectionString": "***"
 }
 
 # When done, delete everything
 
 az group delete --name $GROUP
+```
+
+### Run it
+
+```
+dotnet run -- send `
+    --conn "***" `
+    --name iothubevents `
+    "Hello world"
+
+dotnet run -- receive `
+    --conn "***" `
+    --name iothubevents `
+    --bconn "***" `
+    --bname iothubevents-checkpoint-storage
 ```

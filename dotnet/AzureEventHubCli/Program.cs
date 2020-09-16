@@ -59,13 +59,13 @@ namespace AzureEventHubCli
             processor.ProcessEventAsync += ProcessEventAsync;
             processor.ProcessErrorAsync += ProcessErrorAsync;
 
-            // Start the processing
+            await Console.Out.WriteLineAsync("StartProcessing");
             await processor.StartProcessingAsync();
 
             await Console.Out.WriteLineAsync("Listening for events, Ctrl-C to cancel.");
             await WaitForCtrlCAsync();
 
-            // Stop the processing
+            await Console.Out.WriteLineAsync("StopProcessing");
             await processor.StopProcessingAsync();
         }
 
