@@ -18,6 +18,7 @@ az eventhubs eventhub create \
     --resource-group $GROUP \
     --namespace-name $NS \
     --name $HUB \
+    --partition-count 2 \
     --message-retention 1
 
 az eventhubs namespace authorization-rule keys list \
