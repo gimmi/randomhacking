@@ -1,0 +1,1 @@
+INPUT += ' => processed by script 1'

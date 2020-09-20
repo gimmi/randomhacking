@@ -1,0 +1,8 @@
+{
+  "name": "transform-tool",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "commander": "^5.0.0"
+  }
+}
