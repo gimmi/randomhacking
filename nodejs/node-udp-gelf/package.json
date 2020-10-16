@@ -2,5 +2,9 @@
   "name": "node-udp-gelf",
   "version": "0.1.0",
   "private": true,
-  "scripts": {}
+  "scripts": {},
+  "dependencies": {
+    "is-gzip": "^2.0.0",
+    "node-fetch": "^2.6.1"
+  }
 }
