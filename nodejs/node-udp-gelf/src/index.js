@@ -1,5 +1,5 @@
 //const gelfServer = require('./gelf-server').start(12201)
-const AzureMonitorClient = require('./azure-monitor-client')
+const azure = require('./azure-monitor')
 
 const data = [
     {
@@ -23,12 +23,13 @@ const data = [
 }));
 
 async function main() {
-    const client = new AzureMonitorClient()
-    client.customerId = 'TODO'
-    client.sharedKey = 'TODO'
-    client.logType = 'TODO'
+    const config = {
+        customerId: 'TODO',
+        sharedKey: 'TODO',
+        logType: 'TODO'
+    }
 
-    await client.send(data)
+    await azure.send(config, data)
 
     return 0
 }
