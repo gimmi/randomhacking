@@ -18,8 +18,8 @@ const data = [
     }
 ].map(x => ({
     timestamp: new Date(x.timestamp * 1000),
-    message: short_message,
-    container_name: _container_name
+    message: x.short_message,
+    container_name: x._container_name
 }));
 
 async function main() {
