@@ -1,4 +1,3 @@
-const https = require('https')
 const crypto = require('crypto')
 const fetch = require('node-fetch')
 

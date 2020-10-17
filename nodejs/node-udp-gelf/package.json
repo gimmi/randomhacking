@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {},
   "dependencies": {
+    "debug": "^4.2.0",
     "is-gzip": "^2.0.0",
     "node-fetch": "^2.6.1"
   }

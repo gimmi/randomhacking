@@ -1,7 +1,8 @@
-//const gelfServer = require('./gelf-server').start(12201)
+const gelf = require('./gelf-udp-listener')
+const bus = require('./bus')
 const azure = require('./azure-monitor')
 
-const data = [
+/*const data = [
     {
         version: '1.1',
         host: 'dockerhost',
@@ -21,17 +22,42 @@ const data = [
     message: x.short_message,
     container_name: x._container_name
 }));
+*/
 
 async function main() {
     const config = {
         customerId: 'TODO',
         sharedKey: 'TODO',
-        logType: 'TODO'
+        logType: 'TODO',
+        batchMs: 5000,
+        listenPort: 12201
     }
 
-    await azure.send(config, data)
+    gelf.start(config)
 
-    return 0
+    await azureSendLoop(config)
+}
+
+async function azureSendLoop(config) {
+    let batch = []
+
+    bus.on('log', log => batch.push(log))
+
+    for (; ;) {
+        await timeout(config.batchMs)
+
+        if (batch.length) {
+            const data = batch
+            batch = []
+
+            await azure.send(config, data)
+                .catch(console.error)
+        }
+    }
+}
+
+async function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 main().catch(err => {

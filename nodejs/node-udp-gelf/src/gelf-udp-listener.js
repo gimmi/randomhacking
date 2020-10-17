@@ -1,17 +1,18 @@
+const bus = require('./bus')
 const dgram = require('dgram')
 const zlib = require('zlib')
 const isGzip = require('is-gzip')
 
-module.exports.start = function (port) {
+module.exports.start = function (config) {
     return dgram.createSocket('udp4')
         .on('listening', onListening)
         .on('message', onMessage)
-        .bind(port)
+        .bind(config.listenPort)
 }
 
 function onListening() {
     const address = this.address()
-    console.log(`UDP Server listening on ${address.address}:${address.port}`)
+    console.log(`Listening for GELF logs on UDP ${address.address}:${address.port}`)
 }
 
 function onMessage(buffer) {
@@ -36,5 +37,10 @@ function process(buffer) {
     }
 
     const json = buffer.toString('utf8', 0)
-    console.dir(JSON.parse(json))
+    const gelf = JSON.parse(json)
+    bus.emit('log', {
+        timestamp: new Date(gelf.timestamp * 1000),
+        message: gelf.short_message,
+        container_name: gelf._container_name
+    })
 }
