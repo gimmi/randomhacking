@@ -1,9 +1,13 @@
+const debug = require('debug')('app:azure-monitor')
 const crypto = require('crypto')
 const fetch = require('node-fetch')
 
 module.exports.send = async function(config, logs) {
     const date = new Date().toUTCString()
+    const url = `https://${config.customerId}.ods.opinsights.azure.com/api/logs?api-version=2016-04-01`
     const data = Buffer.from(JSON.stringify(logs), 'utf8')
+
+    debug('Sending %d logs to %s', logs.length, url)
 
     let signature = [
         'POST',
@@ -18,7 +22,7 @@ module.exports.send = async function(config, logs) {
         .update(signature)
         .digest('base64')
 
-    const res = await fetch(`https://${config.customerId}.ods.opinsights.azure.com/api/logs?api-version=2016-04-01`, {
+    const res = await fetch(url, {
         method: 'POST',
         headers: {
             'Authorization': `SharedKey ${config.customerId}:${signature}`,

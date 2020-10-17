@@ -3,7 +3,7 @@
 ```
 docker build --pull -t node-udp-gelf:latest .
 
-docker run --rm -it -p 12201:12201/udp node-udp-gelf:latest
+docker run --rm -it -p 12201:12201/udp --env DEBUG=app:* node-udp-gelf:latest
 ```
 
 ### Send test messages

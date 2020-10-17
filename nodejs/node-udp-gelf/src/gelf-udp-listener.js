@@ -1,3 +1,4 @@
+const debug = require('debug')('app:gelf-udp-listener')
 const bus = require('./bus')
 const dgram = require('dgram')
 const zlib = require('zlib')
@@ -38,9 +39,11 @@ function process(buffer) {
 
     const json = buffer.toString('utf8', 0)
     const gelf = JSON.parse(json)
-    bus.emit('log', {
+    const log = {
         ts: new Date(gelf.timestamp * 1000).toISOString(),
         log: gelf.short_message,
         container_name: gelf._container_name
-    })
+    }
+    debug('emit log: %o', log)
+    bus.emit('log', log)
 }
