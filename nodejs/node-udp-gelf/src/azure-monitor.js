@@ -25,7 +25,8 @@ module.exports.send = async function(config, logs) {
             'Content-Type': 'application/json',
             'Content-Length': data.length,
             'x-ms-date': date,
-            'Log-Type': config.logType
+            'Log-Type': config.logType,
+            'time-generated-field': 'ts'
         },
         body: data
     })

@@ -39,8 +39,8 @@ function process(buffer) {
     const json = buffer.toString('utf8', 0)
     const gelf = JSON.parse(json)
     bus.emit('log', {
-        timestamp: new Date(gelf.timestamp * 1000),
-        message: gelf.short_message,
+        ts: new Date(gelf.timestamp * 1000).toISOString(),
+        log: gelf.short_message,
         container_name: gelf._container_name
     })
 }
