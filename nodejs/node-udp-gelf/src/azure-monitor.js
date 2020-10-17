@@ -7,7 +7,7 @@ module.exports.send = async function(config, logs) {
     const url = `https://${config.customerId}.ods.opinsights.azure.com/api/logs?api-version=2016-04-01`
     const data = Buffer.from(JSON.stringify(logs), 'utf8')
 
-    debug('Sending %d logs to %s', logs.length, url)
+    debug('Sending %d logs (%d bytes) to %s', logs.length, data.length, url)
 
     let signature = [
         'POST',
