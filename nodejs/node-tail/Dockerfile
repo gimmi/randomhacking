@@ -1,11 +1,22 @@
-FROM node:alpine3.11
+FROM node:12-alpine3.12 AS client-builder
 
-WORKDIR /app
+COPY client/ /build/client/
 
-COPY server/ ./
+RUN cd /build/client/ \
+ && npm install \
+ && npm run build
+
+FROM node:12-alpine3.12
+
+# https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#handling-kernel-signals
+RUN apk add --no-cache tini
+
+COPY server/ /app
+COPY --from=client-builder /build/server/src/static/ /app/src/static/
 
 ENV NODE_ENV production
 
-RUN npm install
+RUN cd /app/ \
+ && npm install
 
-ENTRYPOINT ["node", "app.js"]
+ENTRYPOINT ["/sbin/tini", "--", "node", "/app/src/app.js"]

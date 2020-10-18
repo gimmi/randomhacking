@@ -1,13 +1,9 @@
 {
   "name": "tail",
   "version": "1.0.0",
-  "description": "",
-  "main": "app.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@msgpack/msgpack": "^1.12.1",
     "body-parser": "^1.19.0",

@@ -1,13 +1,13 @@
 ### Build Docker image
 
 ```
-docker build -t node-tail:latest .
+docker build --no-cache -t node-tail:latest .
 ```
 
 ### Run Docker image
 
 ```
-docker run --rm -it -p 3000:3000 -p 24225:24225 node-tail:latest
+docker run --rm -it -e DEBUG=tail:* -p 3000:3000 -p 24225:24225 node-tail:latest
 ```
 
 ### Send data from fluentd
