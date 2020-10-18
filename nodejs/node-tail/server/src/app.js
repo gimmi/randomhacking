@@ -30,7 +30,7 @@ if (debug.enabled) {
         bus.emit('message', { container_name: containerName, log: sampleText + counter })
     }, 1000);
 
-    bus.on('message', msg => debug('Published:', msg));
+    bus.on('message', msg => debug('Published: %o', msg));
 }
 // -----------------------------------------------------------------------------
 

@@ -7,7 +7,7 @@ export class MainComponent extends React.Component {
         super(props);
 
         settings.exclusions = new Set(settings.exclusions);
-        this.state = { 
+        this.state = {
             connected: false,
             categories: {},
             logs: []
@@ -15,7 +15,7 @@ export class MainComponent extends React.Component {
     }
 
     componentDidMount() {
-        this.ws = new WebSocket('ws://localhost:3000/ws');
+        this.ws = new WebSocket(`ws://${window.location.host}/ws`);
         this.ws.onopen = () => this.setState({ connected: true });
         this.ws.onclose = () => this.setState({ connected: false });
         this.ws.onerror = () => this.setState({ connected: false });
@@ -63,7 +63,7 @@ export class MainComponent extends React.Component {
             return { categories: state.categories }
         })
     }
-    
+
     render() {
         const categoriesStyle = {
             padding: '.5em',
