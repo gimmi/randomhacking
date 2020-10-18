@@ -18,7 +18,7 @@ module.exports = function (env) {
             path: path.resolve(__dirname, '..', 'server', 'src', 'static'),
             filename: ifDev('[name].js', '[hash].js')
         },
-        devtool: ifDev('source-maps', false),
+        devtool: ifDev('source-map', false),
         optimization: {
             nodeEnv: ifDev('development', 'production'),
             minimize: ifDev(false, true)
