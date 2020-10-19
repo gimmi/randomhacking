@@ -1,6 +1,6 @@
 const debug = require('debug')('app:azure-monitor')
 const crypto = require('crypto')
-const fetch = require('node-fetch')
+const fetch = require('./fetch')
 
 module.exports.send = async function(config, logs) {
     const date = new Date().toUTCString()
@@ -34,6 +34,8 @@ module.exports.send = async function(config, logs) {
         },
         body: data
     })
+
+    debug('HTTP %d %s', res.status, res.statusText)
 
     if (!res.ok) {
         throw new Error(`HTTP ${res.status} ${res.statusText}`)
