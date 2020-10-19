@@ -9,9 +9,12 @@ const azure = require('./azure-monitor')
 async function main() {
     const config = await loadConf()
 
-    gelf.start(config)
+    if (config.sharedKey) {
+        console.log(`Starting Azure send loop to customerId: ${config.customerId} logType: ${config.logType}`)
+        azureSendLoop(config).catch(console.error)
+    }
 
-    await azureSendLoop(config)
+    gelf.start(config)
 }
 
 async function loadConf() {
@@ -56,5 +59,5 @@ async function timeout(ms) {
 
 main().catch(err => {
     console.error(err)
-    return 1
-}).then(code => process.exit(code));
+    process.exit(1)
+})

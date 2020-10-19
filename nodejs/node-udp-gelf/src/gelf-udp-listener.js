@@ -8,7 +8,12 @@ module.exports.start = function (config) {
     return dgram.createSocket('udp4')
         .on('listening', onListening)
         .on('message', onMessage)
+        .on('error', onError)
         .bind(config.listenPort)
+}
+
+function onError(err) {
+    console.error(err)
 }
 
 function onListening() {
@@ -40,6 +45,7 @@ function process(buffer) {
     const json = buffer.toString('utf8', 0)
     const gelf = JSON.parse(json)
     const log = {
+        host: gelf.host,
         ts: new Date(gelf.timestamp * 1000).toISOString(),
         log: gelf.short_message,
         container_name: gelf._container_name
