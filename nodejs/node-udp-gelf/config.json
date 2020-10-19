@@ -1,0 +1,7 @@
+{
+    "customerId": "TODO",
+    "sharedKey": "TODO",
+    "logType": "TODO",
+    "batchMs": 5000,
+    "listenPort": 12201
+}
