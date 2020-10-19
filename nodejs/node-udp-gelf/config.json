@@ -1,7 +1,9 @@
 {
+  "azure": {
     "customerId": "",
     "sharedKey": "",
     "logType": "",
-    "batchMs": 5000,
-    "listenPort": 12201
+    "batchMs": 5000
+  },
+  "listenPort": 12201
 }

@@ -9,8 +9,7 @@ const azure = require('./azure-monitor')
 async function main() {
     const config = await loadConf()
 
-    if (config.sharedKey) {
-        console.log(`Starting Azure send loop to customerId: ${config.customerId} logType: ${config.logType}`)
+    if (config.azure) {
         azureSendLoop(config).catch(console.error)
     }
 
@@ -36,12 +35,14 @@ async function loadConf() {
 }
 
 async function azureSendLoop(config) {
+    console.log(`Starting Azure send loop customerId=${config.azure.customerId} logType=${config.azure.logType} batchMs=${config.azure.batchMs}`)
+
     let batch = []
 
     bus.on('log', log => batch.push(log))
 
     for (; ;) {
-        await timeout(config.batchMs)
+        await timeout(config.azure.batchMs)
 
         if (batch.length) {
             const data = batch

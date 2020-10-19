@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:12-alpine3.12
 
 # https://github.com/nodejs/docker-node/blob/master/docs/BestPractices.md#handling-kernel-signals
 RUN apk add --no-cache tini
