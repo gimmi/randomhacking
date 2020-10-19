@@ -4,21 +4,14 @@ const dgram = require('dgram')
 const zlib = require('zlib')
 const isGzip = require('is-gzip')
 
-module.exports.start = function (config) {
+module.exports.create = function () {
     return dgram.createSocket('udp4')
-        .on('listening', onListening)
         .on('message', onMessage)
         .on('error', onError)
-        .bind(config.listenPort)
 }
 
 function onError(err) {
     console.error(err)
-}
-
-function onListening() {
-    const address = this.address()
-    console.log(`Listening for GELF logs on UDP ${address.address}:${address.port}`)
 }
 
 function onMessage(buffer) {

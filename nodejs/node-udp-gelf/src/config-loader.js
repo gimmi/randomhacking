@@ -2,7 +2,7 @@ const { URL, fileURLToPath } = require('url')
 const fs = require('fs').promises
 const fetch = require('./fetch')
 
-module.exports = async function () {
+module.exports.load = async function () {
     const url = new URL(process.argv[2])
 
     if (url.protocol === 'file:') {

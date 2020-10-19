@@ -4,6 +4,5 @@
     "sharedKey": "",
     "logType": "",
     "batchMs": 5000
-  },
-  "listenPort": 12201
+  }
 }

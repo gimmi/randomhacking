@@ -1,8 +1,31 @@
 const debug = require('debug')('app:azure-monitor')
 const crypto = require('crypto')
 const fetch = require('./fetch')
+const bus = require('./bus')
 
-module.exports.send = async function(config, logs) {
+async function sendLoop(config) {
+    let batch = []
+
+    bus.on('log', log => batch.push(log))
+
+    for (; ;) {
+        await timeout(config.azure.batchMs)
+
+        if (batch.length) {
+            const data = batch
+            batch = []
+
+            await send(config, data)
+                .catch(console.error)
+        }
+    }
+}
+
+async function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+async function send(config, logs) {
     const date = new Date().toUTCString()
     const url = `https://${config.azure.customerId}.ods.opinsights.azure.com/api/logs?api-version=2016-04-01`
     const data = Buffer.from(JSON.stringify(logs), 'utf8')
@@ -41,3 +64,5 @@ module.exports.send = async function(config, logs) {
         throw new Error(`HTTP ${res.status} ${res.statusText}`)
     }
 }
+
+Object.assign(module.exports, { sendLoop, send })
