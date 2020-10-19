@@ -13,16 +13,16 @@ module.exports.create = function () {
 
     app.ws('/ws', webSocket => {
         debug('ws connected');
-        bus.on('message', messageListener);
+        bus.on('log', messageListener);
 
-        webSocket.on('close', function (msg) {
+        webSocket.on('close', function () {
             debug('ws close');
-            bus.removeListener('message', messageListener);
+            bus.off('log', messageListener);
         });
 
-        webSocket.on('disconnect', function (msg) {
+        webSocket.on('disconnect', function () {
             debug('ws disconnect');
-            bus.removeListener('message', messageListener);
+            bus.off('log', messageListener);
         });
 
         function messageListener(message) {
