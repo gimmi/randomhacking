@@ -1,0 +1,13 @@
+{
+  // https://stackoverflow.com/a/59787575/66629
+  // https://aka.ms/tsconfig.json
+  "include": ["src/**/*.ts"],
+  "compilerOptions": {
+    "target": "es2019",
+    "module": "commonjs",
+    "lib": ["es2020"],
+    "outDir": "dist",
+    "sourceMap": true,
+    "strict": true
+  }
+}
