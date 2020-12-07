@@ -10,12 +10,11 @@ namespace SpikeDotnetCounters
         public static async Task Main(string[] args)
         {
             var ct = BindCtrlC();
-            var stopwatch = Stopwatch.StartNew();
             while (await DelayAsync(ct))
             {
-                MinimalEventCounterSource.Log.Iteration(stopwatch.ElapsedMilliseconds);
-                stopwatch.Restart();
+                SampleEventSource.Instance.NotifyReceivedLog();
                 await Console.Out.WriteLineAsync("XXX");
+                SampleEventSource.Instance.NotifySentLog();
             }
         }
 
@@ -23,7 +22,7 @@ namespace SpikeDotnetCounters
         {
             try
             {
-                await Task.Delay(1_000, ct);
+                await Task.Delay(500, ct);
                 return true;
             }
             catch (TaskCanceledException)

@@ -13,7 +13,7 @@ dotnet run
 On another terminal
 
 ```
-dotnet counters monitor --name SpikeDotnetCounters --counters SpikeDotnetCounters
+dotnet counters monitor --name SpikeDotnetCounters --counters System.Runtime,SpikeDotnetCounters
 ```
 
 More info
