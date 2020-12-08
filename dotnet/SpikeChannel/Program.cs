@@ -1,34 +1,31 @@
 ﻿using System;
-using System.Data;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 
 namespace SpikeChannel
 {
-    class Program
+    public class Program
     {
-        private static int LossCount = 0;
-        
-        static async Task Main(string[] args)
+        private static int _writeCount;
+        private static int _lostCount;
+        private static int _readCount;
+
+        public static async Task Main()
         {
-            var channel = Channel.CreateUnbounded<string>(new UnboundedChannelOptions {
-                SingleWriter = false,
-                SingleReader = true,
-                AllowSynchronousContinuations = true
-            });
+            var channel = Channel.CreateUnbounded<string>(new UnboundedChannelOptions { SingleReader = true });
 
             var (writer, reader) = (channel.Writer, channel.Reader);
 
-            var ct = BindCtrlC();
+            var ctrlC = BindCtrlC();
 
             await Task.WhenAll(
-                WriteAsync(writer, "Prod1", ct),
-                WriteAsync(writer, "Prod2", ct),
-                ReaderAsync(reader, ct)
+                WriteAsync(writer, "Prod1", ctrlC),
+                WriteAsync(writer, "Prod2", ctrlC),
+                ReaderAsync(reader, ctrlC)
             );
             
-            Console.WriteLine("Done");
+            await Console.Out.WriteLineAsync($"Done, {_writeCount} writes, {_lostCount} lost, {_readCount} read");
         }
 
         private static CancellationToken BindCtrlC()
@@ -43,24 +40,48 @@ namespace SpikeChannel
 
         private static async Task WriteAsync(ChannelWriter<string> writer, string prefix, CancellationToken ct)
         {
-            var counter = 1;
-            while (!ct.IsCancellationRequested)
+            var counter = 0;
+            while (await WaitAsync(ct))
             {
-                if (!writer.TryWrite($"{prefix}: {counter}"))
+                var message = $"{prefix}: {++counter}";
+                if (writer.TryWrite(message))
                 {
-                    LossCount++;
+                    Interlocked.Increment(ref _writeCount);
                 }
-                counter++;
-                await Task.Delay(100, ct);
+                else
+                {
+                    Interlocked.Increment(ref _lostCount);
+                }
             }
         }
 
         private static async Task ReaderAsync(ChannelReader<string> reader, CancellationToken ct)
         {
-            while (!ct.IsCancellationRequested)
+            try
             {
-                var message = await reader.ReadAsync(ct);
-                await Console.Out.WriteLineAsync($"{LossCount} | {message}");
+                while (true)
+                {
+                    var message = await reader.ReadAsync(ct);
+                    Interlocked.Increment(ref _readCount);
+                    await Console.Out.WriteLineAsync(message);
+                }
+            }
+            catch (OperationCanceledException) when (ct.IsCancellationRequested)
+            {
+                // Cancellation requested by caller
+            }
+        }
+
+        private static async Task<bool> WaitAsync(CancellationToken ct)
+        {
+            try
+            {
+                await Task.Delay(1, ct);
+                return true;
+            }
+            catch (TaskCanceledException)
+            {
+                return false;
             }
         }
     }
