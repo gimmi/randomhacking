@@ -31,10 +31,12 @@ namespace ZipJson
 
             foreach (var _ in Enumerable.Range(0, 10))
             {
+                var length = memoryStream.Length;
                 WriteJson(deflateStream);
                 deflateStream.WriteByte(10);
                 deflateStream.Flush();
-                Console.WriteLine(memoryStream.Length);
+                
+                Console.WriteLine($"{length} + {memoryStream.Length - length} = {memoryStream.Length}" );
             }
 
             return memoryStream.ToArray();
