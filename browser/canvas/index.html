@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+		<script type="text/javascript" src="app.js"> </script>
+        <script>
+ 
+            window.onload = function() {
+				var app = new App(document.getElementById("myCanvas"));
+				var blackEnabled = document.getElementById("blackEnabled");
+				var redEnabled = document.getElementById("redEnabled");
+				function draw(){
+					app.drawImage('bg.png', 0, 0);
+					if(blackEnabled.checked){
+						app.drawImage('black.png', 0, 0);
+					}
+					if(redEnabled.checked){
+						app.drawImage('red.png', 0, 0);
+					}
+				}
+				redEnabled.onchange = draw;
+				blackEnabled.onchange = draw;
+            };
+ 
+        </script>
+    </head>
+    <body>
+		<input id="blackEnabled" type="checkbox">Black<br>
+		<input id="redEnabled" type="checkbox">Red<br>
+        <canvas id="myCanvas" width="640" height="480">
+        </canvas>
+    </body>
+</html>
