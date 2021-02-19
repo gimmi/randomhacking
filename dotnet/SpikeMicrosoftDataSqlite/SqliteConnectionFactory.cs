@@ -52,6 +52,7 @@ namespace SpikeMicrosoftDataSqlite
                     cmd.CommandText = "insert into migrations(name) values($name)";
                     cmd.Parameters.Clear();
                     cmd.Parameters.AddWithValue("$name", name);
+                    cmd.ExecuteNonQuery();
                 }
             }
         }

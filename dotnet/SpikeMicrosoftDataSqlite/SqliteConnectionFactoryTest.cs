@@ -6,6 +6,13 @@ namespace SpikeMicrosoftDataSqlite
     public class SqliteConnectionFactoryTest
     {
         [Test]
+        public void Should_migrate_only_once()
+        {
+            TestUtils.ConnFactory.Migrate();
+            TestUtils.ConnFactory.Migrate();
+        }
+
+        [Test]
         public void Should_query()
         {
             using var conn = TestUtils.ConnFactory.Open();
