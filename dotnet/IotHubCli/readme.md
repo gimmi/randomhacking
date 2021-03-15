@@ -1,3 +1,10 @@
+## Some refs
+
+- [Understand and invoke direct methods from IoT Hub](https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-direct-methods)
+- [Communicate with edgeAgent using built-in direct methods](https://docs.microsoft.com/en-us/azure/iot-edge/how-to-edgeagent-direct-method?view=iotedge-2020-11)
+
+## Build
+
 ```
 $Version = Get-Date -Format 'yyy.MM.dd'
 dotnet publish IotHubCli.csproj `

@@ -6,11 +6,11 @@ using Microsoft.Azure.Devices;
 
 namespace IotHubCli
 {
-    [Verb("restart", HelpText = "Restart a module")]
+    [Verb("restart", HelpText = "Restart a module, for detailed info see https://docs.microsoft.com/en-us/azure/iot-edge/how-to-edgeagent-direct-method")]
     public class RestartModuleCommand : BaseCommand
     {
         [Option("module", Required = true, HelpText = "IoT module Id")]
-        public string ModuleId { get; set; }
+        public string ModuleId { get; set; } = "";
 
         public async Task<int> RunAsync()
         {
@@ -22,7 +22,7 @@ namespace IotHubCli
             }));
             var response = await serviceClient.InvokeDeviceMethodAsync(DeviceId, "$edgeAgent", request);
 
-            Console.WriteLine($"\nResponse status: {response.Status}, payload:\n\t{response.GetPayloadAsJson()}");
+            await Console.Out.WriteLineAsync($"Restart {DeviceId}/{ModuleId}: {response.Status}");
 
             return 0;
         }

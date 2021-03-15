@@ -5,7 +5,7 @@ using Microsoft.Azure.Devices;
 
 namespace IotHubCli
 {
-    [Verb("ping", HelpText = "Ping a device")]
+    [Verb("ping", HelpText = "Ping a device, for detailed info see https://docs.microsoft.com/en-us/azure/iot-edge/how-to-edgeagent-direct-method")]
     public class PingCommand : BaseCommand
     {
         public async Task<int> RunAsync()
@@ -13,9 +13,7 @@ namespace IotHubCli
             var serviceClient = CreateClient();
             var request = new CloudToDeviceMethod("ping");
             var response = await serviceClient.InvokeDeviceMethodAsync(DeviceId, "$edgeAgent", request);
-
-            Console.WriteLine($"\nResponse status: {response.Status}, payload:\n\t{response.GetPayloadAsJson()}");
-
+            await Console.Out.WriteLineAsync($"Ping {DeviceId}: {response.Status}");
             return 0;
         }
     }
