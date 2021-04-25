@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <LangVersion>9.0</LangVersion>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <!-- This is the most aggressive mode. All rules are enabled as build warnings -->
+<!--    <AnalysisMode>AllEnabledByDefault</AnalysisMode>-->
+
+  </PropertyGroup>
+</Project>

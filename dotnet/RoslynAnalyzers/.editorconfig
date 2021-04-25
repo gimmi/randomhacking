@@ -1,0 +1,15 @@
+root = true
+
+[*]
+indent_style = space
+indent_size = 4
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.cs]
+csharp_new_line_before_open_brace = accessors, types, methods, properties, indexers, events, control_blocks
+csharp_prefer_braces = true:error
+
+dotnet_diagnostic.CA2012.severity = error # Use ValueTasks correctly
+dotnet_diagnostic.CA2007.severity = error # Do not directly await a Task
+# dotnet_diagnostic.RCS1090.severity = error # Add call to 'ConfigureAwait'
