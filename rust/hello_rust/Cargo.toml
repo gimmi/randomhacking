@@ -1,0 +1,12 @@
+[package]
+name = "hello_rust"
+version = "0.1.0"
+authors = ["Gian Marco Gherardi <gianmarco.gherardi@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+json = "0.12.4"
+log = "0.4.14"
+env_logger = "0.8.3"
