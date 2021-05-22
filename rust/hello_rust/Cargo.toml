@@ -10,3 +10,6 @@ edition = "2018"
 json = "0.12.4"
 log = "0.4.14"
 env_logger = "0.8.3"
+cancellation = "0.1"
+ctrlc = "3.1.9"
+

@@ -3,9 +3,12 @@ use std::net::UdpSocket;
 use std::thread;
 use std::time::{SystemTime, Duration};
 use std::str::from_utf8;
-use std::sync::mpsc;
+use std::sync::{mpsc, Arc};
 use std::sync::mpsc::Receiver;
+use std::sync::mpsc::Sender;
 use std::io::ErrorKind;
+use std::thread::JoinHandle;
+use cancellation::CancellationToken;
 
 #[derive(Debug)]
 pub struct GelfMessage {
@@ -35,19 +38,18 @@ pub fn parse_gelf_message(json: &str) -> Result<GelfMessage, String> {
     });
 }
 
-pub fn listen(addr: &str) -> Result<Receiver<GelfMessage>, Box<dyn Error>> {
+pub fn spawn_producer(addr: &str, sender: Sender<GelfMessage>, ct: Arc<CancellationToken>) -> Result<JoinHandle<()>, Box<dyn Error>> {
     let udp_socket = UdpSocket::bind(addr)?;
     udp_socket.set_read_timeout(Some(Duration::from_secs(1)))?;
-    let (sender, receiver) = mpsc::channel();
     let mut buf = [0; 65_536];
 
-    thread::spawn(move || loop {
+    let thread = thread::spawn(move || while !ct.is_canceled() {
         let count = match udp_socket.recv_from(&mut buf) {
             Ok((res, _)) => res,
             Err(err) => match err.kind() {
                 ErrorKind::TimedOut => continue,
                 ErrorKind::WouldBlock => continue,
-                _ => { log::error!("{:?}", err); continue; }
+                _ => { log::error!("Unexpected error while listening from UDP. {:?}", err); continue; }
             }
         };
         
@@ -66,7 +68,7 @@ pub fn listen(addr: &str) -> Result<Receiver<GelfMessage>, Box<dyn Error>> {
         }
     });
     
-    Ok(receiver)
+    Ok(thread)
 }
 
 #[cfg(test)]
