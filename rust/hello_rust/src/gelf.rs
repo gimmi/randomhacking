@@ -1,9 +1,11 @@
 ﻿use std::error::Error;
 use std::net::UdpSocket;
 use std::thread;
-use std::time::SystemTime;
+use std::time::{SystemTime, Duration};
 use std::str::from_utf8;
 use std::sync::mpsc;
+use std::sync::mpsc::Receiver;
+use std::io::ErrorKind;
 
 #[derive(Debug)]
 pub struct GelfMessage {
@@ -33,33 +35,38 @@ pub fn parse_gelf_message(json: &str) -> Result<GelfMessage, String> {
     });
 }
 
-pub fn listen(addr: &str) -> Result<mpsc::Receiver<GelfMessage>, Box<dyn Error>> {
+pub fn listen(addr: &str) -> Result<Receiver<GelfMessage>, Box<dyn Error>> {
     let udp_socket = UdpSocket::bind(addr)?;
-    let (sender_channel, receiving_channel) = mpsc::channel();
+    udp_socket.set_read_timeout(Some(Duration::from_secs(1)))?;
+    let (sender, receiver) = mpsc::channel();
     let mut buf = [0; 65_536];
 
     thread::spawn(move || loop {
         let count = match udp_socket.recv_from(&mut buf) {
-            Ok((count, _)) => count,
-            Err(err) => { log::error!("{:?}", err); continue; }
+            Ok((res, _)) => res,
+            Err(err) => match err.kind() {
+                ErrorKind::TimedOut => continue,
+                ErrorKind::WouldBlock => continue,
+                _ => { log::error!("{:?}", err); continue; }
+            }
         };
         
         let json = match from_utf8(&buf[..count]) {
-            Ok(json) => json,
+            Ok(res) => res,
             Err(err) => { log::error!("{:?}", err); continue; }
         };
         
         let gelf_message = match parse_gelf_message(json) {
-            Ok(gelf_message) => gelf_message,
+            Ok(res) => res,
             Err(err) => { log::error!("{:?}", err); continue; }
         };
-        
-        if let Err(err) = sender_channel.send(gelf_message) {
+
+        if let Err(err) = sender.send(gelf_message) {
             log::error!("{:?}", err);
         }
     });
     
-    Ok(receiving_channel)
+    Ok(receiver)
 }
 
 #[cfg(test)]
